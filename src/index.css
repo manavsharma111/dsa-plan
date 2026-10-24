@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,500;0,600;1,500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    color: #1f1b16;
+    background-color: #faf7f5;
+  }
+
+  body {
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+}
+
+.bg-grid-pattern {
+  background-image: linear-gradient(rgba(31, 27, 22, 0.06) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(31, 27, 22, 0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
