@@ -149,7 +149,10 @@ export default function CloudSync() {
         {syncKey && (
           <button
             type="button"
-            onClick={() => dispatch(disconnectSync())}
+            onClick={() => {
+              dispatch(disconnectSync());
+              dispatch(showToastNotification('Cloud sync disconnected (progress kept locally)'));
+            }}
             className="font-mono text-xs font-semibold px-3 py-2 rounded-lg border border-paper-border bg-paper-surface-2 hover:bg-paper-border text-paper-dim hover:text-core transition-all flex items-center justify-center gap-1 cursor-pointer whitespace-nowrap"
             title="Disconnect sync"
           >

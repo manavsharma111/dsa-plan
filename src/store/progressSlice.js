@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import { encodeState, decodeState, sanitizeKey } from '../utils/codec';
 
 const KEY = 'dsa-master-v1';
@@ -237,14 +238,19 @@ export const progressSlice = createSlice({
 
 export const { toggleProblem, setToast, clearToast, disconnectSync, mergeCloudState } = progressSlice.actions;
 
-// Toast helper with auto-clear
-let toastTimer = null;
-export const showToastNotification = (msg) => (dispatch) => {
-  dispatch(setToast(msg));
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => {
-    dispatch(clearToast());
-  }, 3400);
+// Toast helper routed via react-toastify
+export const showToastNotification = (msg, type) => () => {
+  if (type && toast[type]) {
+    toast[type](msg);
+  } else if (msg.includes('⚠️') || msg.includes('warning') || msg.includes('Please enter')) {
+    toast.warning(msg.replace(/^⚠️\s*/, ''));
+  } else if (msg.includes('🟢') || msg.includes('🔄') || msg.includes('success') || msg.includes('Synced')) {
+    toast.success(msg.replace(/^[🟢🔄]\s*/, ''));
+  } else if (msg.includes('📋') || msg.includes('copied')) {
+    toast.info(msg.replace(/^📋\s*/, ''));
+  } else {
+    toast.info(msg);
+  }
 };
 
 // Selectors

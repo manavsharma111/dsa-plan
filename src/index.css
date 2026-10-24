@@ -24,3 +24,79 @@
                     linear-gradient(90deg, rgba(31, 27, 22, 0.06) 1px, transparent 1px);
   background-size: 32px 32px;
 }
+
+/* Custom React-Toastify Styling matching Warm Paper theme */
+.Toastify__toast-container {
+  padding: 14px;
+}
+
+.custom-dsa-toast,
+.Toastify__toast {
+  background: rgba(255, 253, 251, 0.98) !important;
+  color: #1f1b16 !important;
+  font-family: 'IBM Plex Sans', system-ui, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 1.45 !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(31, 27, 22, 0.14) !important;
+  box-shadow: 0 12px 32px -4px rgba(31, 27, 22, 0.14), 0 4px 12px -2px rgba(31, 27, 22, 0.08) !important;
+  backdrop-filter: blur(12px) !important;
+  padding: 14px 16px !important;
+  min-height: 52px !important;
+}
+
+.custom-dsa-toast-body,
+.Toastify__toast-body {
+  font-family: 'IBM Plex Sans', system-ui, sans-serif !important;
+  color: #1f1b16 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+/* Close Button */
+.Toastify__close-button {
+  color: #948a80 !important;
+  opacity: 0.65 !important;
+  align-self: center !important;
+  transition: all 0.2s ease !important;
+}
+
+.Toastify__close-button:hover {
+  color: #1f1b16 !important;
+  opacity: 1 !important;
+  transform: scale(1.1) !important;
+}
+
+/* Custom Progress Bars (No rainbow gradient) */
+.custom-dsa-toast-progress,
+.Toastify__progress-bar {
+  height: 3.5px !important;
+  background: linear-gradient(90deg, #ea580c, #c2410c) !important;
+  border-bottom-left-radius: 14px !important;
+  border-bottom-right-radius: 14px !important;
+}
+
+.Toastify__progress-bar--default {
+  background: linear-gradient(90deg, #ea580c, #c2410c) !important;
+}
+
+.Toastify__progress-bar--success {
+  background: linear-gradient(90deg, #4d7c0f, #15803d) !important;
+}
+
+.Toastify__progress-bar--info {
+  background: linear-gradient(90deg, #0369a1, #0284c7) !important;
+}
+
+.Toastify__progress-bar--warning {
+  background: linear-gradient(90deg, #d97706, #b45309) !important;
+}
+
+.Toastify__progress-bar--error {
+  background: linear-gradient(90deg, #dc2626, #b91c1c) !important;
+}
+

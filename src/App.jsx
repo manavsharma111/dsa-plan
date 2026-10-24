@@ -16,7 +16,7 @@ export default function App() {
       <StickyHeader />
 
       {/* Main Container */}
-      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 pb-20">
+      <div className="max-w-[1000px] mx-auto px-3.5 sm:px-6 pb-24 sm:pb-20">
         <Header />
         <CloudSync />
         <ProgressBar />
@@ -31,9 +31,9 @@ export default function App() {
         </div>
 
         {/* Footer */}
-        <footer className="mt-14 pt-5 border-t-2 border-paper-border font-mono text-xs text-paper-faint flex justify-between items-center flex-wrap gap-2">
-          <span>DSA Pattern Master List &middot; 28 patterns</span>
-          <span>practice repeatedly &middot; cover all patterns</span>
+        <footer className="mt-14 pt-6 border-t-2 border-paper-border font-mono text-xs text-paper-faint flex flex-col sm:flex-row justify-between items-center gap-2.5">
+          <span>DSA Pattern Master List &middot; 28 Patterns &middot; 260 Questions</span>
+          <span>Built by <strong className="text-paper-text font-medium">Manav Sharma</strong> &middot; &copy; 2026 All Rights Reserved</span>
         </footer>
       </div>
 
