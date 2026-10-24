@@ -332,10 +332,25 @@
       white-space: nowrap;
     }
 
-    .term-subarr { background: var(--core-bg); color: var(--core); }
-    .term-substr { background: var(--blue-bg); color: var(--blue); }
-    .term-subseq { background: var(--gold-bg); color: var(--gold); }
-    .term-subset { background: var(--sage-bg); color: var(--sage); }
+    .term-subarr {
+      background: var(--core-bg);
+      color: var(--core);
+    }
+
+    .term-substr {
+      background: var(--blue-bg);
+      color: var(--blue);
+    }
+
+    .term-subseq {
+      background: var(--gold-bg);
+      color: var(--gold);
+    }
+
+    .term-subset {
+      background: var(--sage-bg);
+      color: var(--sage);
+    }
 
     .tech-pills {
       display: flex;
@@ -463,6 +478,7 @@
       margin: 22px 0 10px;
       box-shadow: 0 4px 14px rgba(31, 27, 22, 0.04);
     }
+
     .sync-header {
       display: flex;
       align-items: center;
@@ -471,6 +487,7 @@
       gap: 12px;
       margin-bottom: 14px;
     }
+
     .sync-title {
       font-family: var(--serif);
       font-size: 18px;
@@ -480,6 +497,7 @@
       gap: 9px;
       color: var(--text);
     }
+
     .sync-badge {
       font-family: var(--mono);
       font-size: 11px;
@@ -491,6 +509,7 @@
       gap: 6px;
       transition: all .2s ease;
     }
+
     .status-dot {
       width: 7px;
       height: 7px;
@@ -498,17 +517,34 @@
       background: currentColor;
       display: inline-block;
     }
-    .sync-badge.idle { background: var(--surface-2); color: var(--dim); }
-    .sync-badge.syncing { background: var(--gold-bg); color: var(--gold); }
-    .sync-badge.synced { background: var(--sage-bg); color: var(--sage); }
-    .sync-badge.error { background: var(--core-bg); color: var(--core); }
-    
+
+    .sync-badge.idle {
+      background: var(--surface-2);
+      color: var(--dim);
+    }
+
+    .sync-badge.syncing {
+      background: var(--gold-bg);
+      color: var(--gold);
+    }
+
+    .sync-badge.synced {
+      background: var(--sage-bg);
+      color: var(--sage);
+    }
+
+    .sync-badge.error {
+      background: var(--core-bg);
+      color: var(--core);
+    }
+
     .sync-form {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
       align-items: center;
     }
+
     .sync-input {
       font-family: var(--mono);
       font-size: 13px;
@@ -523,9 +559,11 @@
       outline: none;
       transition: border-color .2s;
     }
+
     .sync-input:focus {
       border-color: var(--core);
     }
+
     .sync-btn {
       font-family: var(--mono);
       font-size: 12px;
@@ -542,17 +580,21 @@
       transition: all .15s ease;
       white-space: nowrap;
     }
+
     .sync-btn:hover {
       background: var(--border);
     }
+
     .sync-btn.primary {
       background: var(--core);
       color: #fff;
       border-color: var(--core);
     }
+
     .sync-btn.primary:hover {
       opacity: 0.9;
     }
+
     .sync-info {
       font-size: 12.5px;
       color: var(--dim);
@@ -562,6 +604,7 @@
       flex-wrap: wrap;
       gap: 8px;
     }
+
     .toast {
       position: fixed;
       bottom: 24px;
@@ -572,13 +615,14 @@
       font-size: 12.5px;
       padding: 10px 18px;
       border-radius: 8px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
       z-index: 9999;
       opacity: 0;
       transform: translateY(12px);
       transition: all .25s cubic-bezier(0.16, 1, 0.3, 1);
       pointer-events: none;
     }
+
     .toast.show {
       opacity: 1;
       transform: translateY(0);
@@ -593,6 +637,7 @@
       margin: 18px 0 24px;
       box-shadow: 0 4px 14px rgba(31, 27, 22, 0.04);
     }
+
     .progress-header {
       display: flex;
       justify-content: space-between;
@@ -601,6 +646,7 @@
       gap: 10px;
       margin-bottom: 12px;
     }
+
     .progress-label {
       font-family: var(--serif);
       font-size: 18px;
@@ -610,15 +656,18 @@
       align-items: center;
       gap: 8px;
     }
+
     .progress-stats-num {
       font-family: var(--mono);
       font-size: 13.5px;
       color: var(--dim);
     }
+
     .progress-stats-num b {
       color: var(--text);
       font-size: 15px;
     }
+
     .progress-pct-badge {
       font-family: var(--mono);
       font-size: 11.5px;
@@ -632,10 +681,12 @@
       gap: 4px;
       transition: all .3s ease;
     }
+
     .progress-pct-badge.high {
       background: var(--sage-bg);
       color: var(--sage);
     }
+
     .progress-track {
       width: 100%;
       height: 14px;
@@ -646,6 +697,7 @@
       border: 1px solid rgba(31, 27, 22, 0.08);
       box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
     }
+
     .progress-fill {
       height: 100%;
       width: 0%;
@@ -656,18 +708,29 @@
       position: relative;
       box-shadow: 0 0 10px rgba(194, 65, 12, 0.3);
     }
+
     .progress-fill::after {
       content: "";
       position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.5) 50%, transparent 100%);
       animation: progress-shimmer 2.4s infinite ease-in-out;
       border-radius: 99px;
     }
+
     @keyframes progress-shimmer {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(200%); }
+      0% {
+        transform: translateX(-100%);
+      }
+
+      100% {
+        transform: translateX(200%);
+      }
     }
+
     .progress-milestones {
       display: flex;
       justify-content: space-between;
@@ -677,6 +740,7 @@
       font-size: 10.5px;
       color: var(--faint);
     }
+
     .progress-motivation {
       font-size: 13px;
       color: var(--dim);
@@ -687,32 +751,167 @@
       flex-wrap: wrap;
       gap: 6px;
     }
+
     .progress-quote {
       font-style: italic;
     }
+
     .progress-remaining {
       font-family: var(--mono);
       font-size: 12px;
       color: var(--core);
       font-weight: 600;
     }
-    
-    /* Pinned Top Bar */
-    #top-progress-bar {
+
+    /* Floating Sticky Progress Header */
+    .sticky-progress-bar {
       position: fixed;
       top: 0;
       left: 0;
-      height: 3.5px;
+      right: 0;
+      background: rgba(250, 247, 245, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 4px 18px rgba(31, 27, 22, 0.08);
+      z-index: 9999;
+      transform: translateY(-100%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 9px 0;
+    }
+    .sticky-progress-bar.visible {
+      transform: translateY(0);
+    }
+    .sticky-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      justify-content: space-between;
+    }
+    .sticky-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+      font-size: 13.5px;
+    }
+    .sticky-title {
+      font-family: var(--serif);
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sticky-counts {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--dim);
+    }
+    .sticky-counts b {
+      color: var(--text);
+      font-weight: 700;
+    }
+    .sticky-pct {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      background: var(--core-bg);
+      color: var(--core);
+      padding: 2px 8px;
+      border-radius: 99px;
+      transition: all .2s;
+    }
+    .sticky-pct.high {
+      background: var(--sage-bg);
+      color: var(--sage);
+    }
+    .sticky-track {
+      flex: 1;
+      max-width: 360px;
+      height: 9px;
+      background: var(--surface-2);
+      border-radius: 99px;
+      overflow: hidden;
+      border: 1px solid rgba(31, 27, 22, 0.1);
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.06);
+    }
+    .sticky-fill {
+      height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, var(--core) 0%, #16a34a 100%);
-      z-index: 10000;
+      background: linear-gradient(90deg, #c2410c 0%, #ea580c 40%, #16a34a 100%);
+      border-radius: 99px;
       transition: width 0.4s ease;
-      box-shadow: 0 0 8px rgba(194, 65, 12, 0.4);
+      position: relative;
+    }
+    .sticky-fill::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.6) 50%, transparent 100%);
+      animation: progress-shimmer 2.4s infinite ease-in-out;
+    }
+    .sticky-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sticky-top-btn {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all .15s ease;
+      white-space: nowrap;
+    }
+    .sticky-top-btn:hover {
+      background: var(--surface-2);
+      border-color: var(--core);
+      color: var(--core);
+    }
+    @media(max-width: 640px) {
+      .sticky-track {
+        display: none;
+      }
+      .sticky-inner {
+        padding: 0 16px;
+      }
     }
   </style>
 </head>
 
 <body>
+  <!-- Floating Sticky Progress Header (Slides down when scrolling) -->
+  <div id="sticky-header" class="sticky-progress-bar">
+    <div class="sticky-inner">
+      <div class="sticky-meta">
+        <span class="sticky-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--core)"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          DSA Progress
+        </span>
+        <span class="sticky-counts"><b id="sticky-count">0</b> / <span id="sticky-total">258</span></span>
+        <span id="sticky-pct-badge" class="sticky-pct">0.0%</span>
+      </div>
+      <div class="sticky-track">
+        <div id="sticky-fill-bar" class="sticky-fill" style="width: 0%;"></div>
+      </div>
+      <div class="sticky-actions">
+        <button id="btn-scroll-top" class="sticky-top-btn" type="button" title="Back to top">↑ Top</button>
+      </div>
+    </div>
+  </div>
+
   <div class="wrap">
     <header class="hero">
       <div class="kicker">DSA &middot; Must-Practice Master List</div>
@@ -744,7 +943,11 @@
     <div class="sync-card">
       <div class="sync-header">
         <div class="sync-title">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--core)"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><path d="M12 13v6m-3-3l3 3 3-3"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" style="color:var(--core)">
+            <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
+            <path d="M12 13v6m-3-3l3 3 3-3" />
+          </svg>
           <span>Cross-Device Cloud Sync</span>
         </div>
         <div id="sync-status" class="sync-badge idle">
@@ -752,11 +955,14 @@
         </div>
       </div>
       <div class="sync-form">
-        <input type="text" id="sync-key-input" class="sync-input" placeholder="Enter custom Sync Key (e.g. manav-dsa)" autocomplete="off" spellcheck="false">
+        <input type="text" id="sync-key-input" class="sync-input" placeholder="Enter custom Sync Key (e.g. manav-dsa)"
+          autocomplete="off" spellcheck="false">
         <button id="btn-sync-connect" class="sync-btn primary" type="button">Connect &amp; Sync</button>
         <button id="btn-sync-now" class="sync-btn" type="button" style="display:none">🔄 Sync Now</button>
-        <button id="btn-sync-link" class="sync-btn" type="button" title="Copy shareable link for mobile">📋 Copy Mobile Link</button>
-        <button id="btn-sync-disconnect" class="sync-btn" type="button" style="display:none" title="Disconnect sync">Disconnect</button>
+        <button id="btn-sync-link" class="sync-btn" type="button" title="Copy shareable link for mobile">📋 Copy Mobile
+          Link</button>
+        <button id="btn-sync-disconnect" class="sync-btn" type="button" style="display:none"
+          title="Disconnect sync">Disconnect</button>
       </div>
       <div class="sync-info">
         <span>💡 Enter the same key on phone or laptop. Every question you tick auto-syncs live!</span>
@@ -775,7 +981,11 @@
     <div class="progress-box">
       <div class="progress-header">
         <div class="progress-label">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--core)"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" style="color:var(--core)">
+            <path
+              d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+          </svg>
           <span>Revision Progress</span>
           <span id="prog-pct" class="progress-pct-badge">0%</span>
         </div>
@@ -802,7 +1012,11 @@
     <div class="concept">
       <div class="concept-head">
         <h3>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--core)"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" style="color:var(--core)">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+          </svg>
           Key Concepts &mdash; Know the Difference
         </h3>
         <p class="concept-sub">The four core collection patterns tested in almost every coding interview.</p>
@@ -869,7 +1083,8 @@
         <div class="callout-body">
           <strong>Rule of Thumb:</strong>
           <div class="callout-list">
-            <span>• <b>Contiguous</b> (Subarray / Substring) &rarr; <mark>Sliding Window</mark> or <mark>Prefix Sum</mark></span>
+            <span>• <b>Contiguous</b> (Subarray / Substring) &rarr; <mark>Sliding Window</mark> or <mark>Prefix
+                Sum</mark></span>
             <span>• <b>Ordered, Non-Contiguous</b> (Subsequence) &rarr; <mark>Dynamic Programming (DP)</mark></span>
             <span>• <b>Unordered Selection</b> (Subset) &rarr; <mark>Backtracking / Bitmask</mark></span>
           </div>
@@ -1845,9 +2060,22 @@
           elFill.style.width = pct + '%';
         }
 
-        var elTop = document.getElementById('top-progress-bar');
-        if (elTop) {
-          elTop.style.width = pct + '%';
+        var elStickyCount = document.getElementById('sticky-count');
+        if (elStickyCount) elStickyCount.textContent = d;
+
+        var elStickyTotal = document.getElementById('sticky-total');
+        if (elStickyTotal) elStickyTotal.textContent = total;
+
+        var elStickyPct = document.getElementById('sticky-pct-badge');
+        if (elStickyPct) {
+          elStickyPct.textContent = exactPct + '%';
+          if (pct >= 50) elStickyPct.classList.add('high');
+          else elStickyPct.classList.remove('high');
+        }
+
+        var elStickyFill = document.getElementById('sticky-fill-bar');
+        if (elStickyFill) {
+          elStickyFill.style.width = pct + '%';
         }
 
         var elRemaining = document.getElementById('prog-remaining');
@@ -2138,6 +2366,26 @@
           });
         }
       });
+
+      // Sticky header scroll behavior
+      var stickyHeader = document.getElementById('sticky-header');
+      var progressBox = document.querySelector('.progress-box');
+      window.addEventListener('scroll', function () {
+        if (!stickyHeader) return;
+        var threshold = progressBox ? (progressBox.offsetTop + progressBox.offsetHeight - 40) : 340;
+        if (window.scrollY > threshold) {
+          stickyHeader.classList.add('visible');
+        } else {
+          stickyHeader.classList.remove('visible');
+        }
+      }, { passive: true });
+
+      var btnScrollTop = document.getElementById('btn-scroll-top');
+      if (btnScrollTop) {
+        btnScrollTop.addEventListener('click', function () {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
 
       // On Initial Page Load: Check hash param or stored key
       (function initSync() {
