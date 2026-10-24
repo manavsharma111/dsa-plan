@@ -1,4 +1,9 @@
 export function requestLogger(req, res, next) {
+  // Skip synchronous console I/O for high-frequency health checks & benchmarks
+  if (req.originalUrl === '/api/health' || req.originalUrl === '/healthz' || req.originalUrl === '/') {
+    return next()
+  }
+
   const start = Date.now()
 
   res.on('finish', () => {

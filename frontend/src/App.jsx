@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Header from './components/Header'
 import CloudSync from './components/CloudSync'
@@ -8,12 +8,6 @@ import PatternBreakdown from './components/PatternBreakdown'
 import KeyConcepts from './components/KeyConcepts'
 import StickyHeader from './components/StickyHeader'
 import PatternSection from './components/PatternSection'
-import SpacedRevisionSection from './components/SpacedRevisionSection'
-import WeakPatternAnalytics from './components/WeakPatternAnalytics'
-import InterviewAnalysisSection from './components/InterviewAnalysisSection'
-import InterviewModeModal from './components/InterviewModeModal'
-import RevisionChecklistModal from './components/RevisionChecklistModal'
-import ExtensionGuideModal from './components/ExtensionGuideModal'
 import Toast from './components/Toast'
 import { patternsData } from './data/patternsData'
 import {
@@ -21,6 +15,14 @@ import {
   selectExtensionModalOpen,
   setExtensionModalOpen,
 } from './store/progressSlice'
+
+// Dynamic lazy imports for non-critical views and modals to slash initial JS bundle
+const SpacedRevisionSection = React.lazy(() => import('./components/SpacedRevisionSection'))
+const WeakPatternAnalytics = React.lazy(() => import('./components/WeakPatternAnalytics'))
+const InterviewAnalysisSection = React.lazy(() => import('./components/InterviewAnalysisSection'))
+const InterviewModeModal = React.lazy(() => import('./components/InterviewModeModal'))
+const RevisionChecklistModal = React.lazy(() => import('./components/RevisionChecklistModal'))
+const ExtensionGuideModal = React.lazy(() => import('./components/ExtensionGuideModal'))
 
 export default function App() {
   const dispatch = useDispatch()
@@ -33,20 +35,18 @@ export default function App() {
       <StickyHeader />
 
       {/* Main Container */}
-      <div className="max-w-[1000px] mx-auto px-3.5 sm:px-6 pb-24 sm:pb-20">
+      <main id="main-content" className="max-w-[1000px] mx-auto px-3.5 sm:px-6 pb-24 sm:pb-20">
         <Header />
         <CloudSync />
         <ProgressBar />
         <FeatureBar />
 
         {/* View 1: Spaced Revision View */}
-        {activeTab === 'revision' && <SpacedRevisionSection />}
-
-        {/* View 2: Weak-Pattern Analytics View */}
-        {activeTab === 'analytics' && <WeakPatternAnalytics />}
-
-        {/* View 3: Mock Interview Analysis & Records View */}
-        {activeTab === 'interviews' && <InterviewAnalysisSection />}
+        <Suspense fallback={<div className="py-8 text-center font-mono text-xs text-paper-dim">Loading section...</div>}>
+          {activeTab === 'revision' && <SpacedRevisionSection />}
+          {activeTab === 'analytics' && <WeakPatternAnalytics />}
+          {activeTab === 'interviews' && <InterviewAnalysisSection />}
+        </Suspense>
 
         {/* View 4: All 28 Patterns Master View */}
         {activeTab === 'all' && (
@@ -71,19 +71,17 @@ export default function App() {
             &copy; 2026 All Rights Reserved
           </span>
         </footer>
-      </div>
+      </main>
 
-      {/* Timed Mock Interview Modal */}
-      <InterviewModeModal />
-
-      {/* 5-Point Spaced Revision & Adaptive Outcome Modal */}
-      <RevisionChecklistModal />
-
-      {/* Chrome Extension Setup Guide Modal */}
-      <ExtensionGuideModal
-        isOpen={isExtensionOpen}
-        onClose={() => dispatch(setExtensionModalOpen(false))}
-      />
+      {/* Lazy Modals (Rendered only on-demand) */}
+      <Suspense fallback={null}>
+        <InterviewModeModal />
+        <RevisionChecklistModal />
+        <ExtensionGuideModal
+          isOpen={isExtensionOpen}
+          onClose={() => dispatch(setExtensionModalOpen(false))}
+        />
+      </Suspense>
 
       {/* Global Toast */}
       <Toast />

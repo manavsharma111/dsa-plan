@@ -9,6 +9,7 @@ import { errorHandler } from './middlewares/errorHandler.js'
 import { requestLogger } from './middlewares/requestLogger.js'
 
 const app = express()
+app.disable('x-powered-by')
 
 // 1. Cross-Origin Resource Sharing (CORS)
 app.use(

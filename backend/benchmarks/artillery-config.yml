@@ -1,0 +1,45 @@
+config:
+  target: "http://localhost:5000"
+  phases:
+    - duration: 5
+      arrivalRate: 5
+      name: "Warm-up phase"
+    - duration: 10
+      arrivalRate: 5
+      rampTo: 30
+      name: "Ramp-up load phase"
+    - duration: 10
+      arrivalRate: 30
+      name: "Sustained high load phase"
+  defaults:
+    headers:
+      Content-Type: "application/json"
+
+scenarios:
+  - name: "Health Check API"
+    weight: 40
+    flow:
+      - get:
+          url: "/api/health"
+
+  - name: "User Progress Pull (Cloud Sync)"
+    weight: 35
+    flow:
+      - post:
+          url: "/api/sync/pull"
+          json:
+            syncKey: "benchmark_demo_user"
+
+  - name: "Chrome Extension Auto-Capture Submission"
+    weight: 25
+    flow:
+      - post:
+          url: "/api/sync/extension-submission"
+          json:
+            syncKey: "benchmark_demo_user"
+            problemSlug: "two-sum-ii-input-array-is-sorted"
+            problemTitle: "Two Sum II - Input Array Is Sorted"
+            platform: "LeetCode"
+            runtime: "45ms"
+            memory: "42MB"
+            code: "function twoSum(numbers, target) { return [1, 2]; }"

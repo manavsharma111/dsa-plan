@@ -47,23 +47,25 @@ export default function FeatureBar() {
   })
 
   const updateIndicator = React.useCallback(() => {
-    const container = containerRef.current
-    const activeBtn = tabRefs.current[activeTab]
-    if (!container || !activeBtn) return
+    requestAnimationFrame(() => {
+      const container = containerRef.current
+      const activeBtn = tabRefs.current[activeTab]
+      if (!container || !activeBtn) return
 
-    const containerRect = container.getBoundingClientRect()
-    const btnRect = activeBtn.getBoundingClientRect()
+      const containerRect = container.getBoundingClientRect()
+      const btnRect = activeBtn.getBoundingClientRect()
 
-    setIndicatorStyle({
-      left: btnRect.left - containerRect.left,
-      top: btnRect.top - containerRect.top,
-      width: btnRect.width,
-      height: btnRect.height,
-      ready: true,
+      setIndicatorStyle({
+        left: btnRect.left - containerRect.left,
+        top: btnRect.top - containerRect.top,
+        width: btnRect.width,
+        height: btnRect.height,
+        ready: true,
+      })
     })
   }, [activeTab])
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     updateIndicator()
   }, [updateIndicator, dueCount, hintCount, interviewHistory.length])
 
@@ -166,9 +168,9 @@ export default function FeatureBar() {
             height: `${indicatorStyle.height}px`,
             opacity: indicatorStyle.ready ? 1 : 0,
             transition: indicatorStyle.ready
-              ? 'transform 320ms cubic-bezier(0.16, 1, 0.3, 1), width 320ms cubic-bezier(0.16, 1, 0.3, 1), height 320ms cubic-bezier(0.16, 1, 0.3, 1), opacity 150ms ease'
+              ? 'transform 300ms cubic-bezier(0.16, 1, 0.3, 1), opacity 150ms ease'
               : 'none',
-            willChange: 'transform, width',
+            willChange: 'transform, opacity',
           }}
         />
 

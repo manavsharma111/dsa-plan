@@ -12,8 +12,12 @@ export default function Header() {
       {/* Kicker */}
       <div className="font-mono text-xs tracking-widest uppercase text-core mb-4 flex items-center gap-2">
         <img
-          src="/dsa.jpg"
+          src="/dsa-small.webp"
           alt="DSA"
+          width="20"
+          height="20"
+          loading="eager"
+          decoding="async"
           className="w-5 h-5 rounded-full object-cover border border-core/30 flex-shrink-0"
         />
         <span className="inline-block w-4 h-[2px] bg-core"></span>

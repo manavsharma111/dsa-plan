@@ -46,8 +46,12 @@ export default function StickyHeader() {
         <div className="flex items-center gap-2 sm:gap-2.5 whitespace-nowrap text-xs sm:text-sm">
           <span className="font-serif font-semibold text-paper-text flex items-center gap-1.5">
             <img
-              src="/dsa.jpg"
+              src="/dsa-small.webp"
               alt="DSA"
+              width="16"
+              height="16"
+              loading="lazy"
+              decoding="async"
               className="w-4 h-4 rounded-full object-cover border border-core/30 flex-shrink-0"
             />
             <span>DSA Progress</span>

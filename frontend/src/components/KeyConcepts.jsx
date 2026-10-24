@@ -5,7 +5,7 @@ export default function KeyConcepts() {
   return (
     <div className="bg-paper-surface border border-paper-border rounded-xl p-4 sm:p-6 my-6 shadow-sm">
       <div className="mb-4">
-        <h3 className="font-serif font-semibold text-lg sm:text-xl text-paper-text flex items-center gap-2 mb-1">
+        <h2 className="font-serif font-semibold text-lg sm:text-xl text-paper-text flex items-center gap-2 mb-1">
           <svg
             className="w-5 h-5 text-core"
             fill="none"
@@ -19,7 +19,7 @@ export default function KeyConcepts() {
             <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
           </svg>
           Key Concepts &mdash; Know the Difference
-        </h3>
+        </h2>
         <p className="text-xs sm:text-sm text-paper-dim">
           The four core collection patterns tested in almost every coding interview.
         </p>

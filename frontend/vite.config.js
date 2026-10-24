@@ -28,5 +28,26 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
+    build: {
+      target: 'es2020',
+      cssCodeSplit: true,
+      sourcemap: false,
+      chunkSizeWarningLimit: 600,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+              return 'vendor-react'
+            }
+            if (id.includes('node_modules/@reduxjs') || id.includes('node_modules/react-redux')) {
+              return 'vendor-redux'
+            }
+            if (id.includes('node_modules/react-toastify')) {
+              return 'vendor-toast'
+            }
+          },
+        },
+      },
+    },
   }
 })

@@ -12,7 +12,7 @@ export default function PatternSection({ pattern }) {
   const isCompleted = done === total && total > 0
 
   return (
-    <section id={`pattern-${pattern.id}`} className="mt-8 sm:mt-10 scroll-mt-14">
+    <section id={`pattern-${pattern.id}`} className="mt-8 sm:mt-10 scroll-mt-14 pattern-section-lazy">
       {/* Pattern Header */}
       <div className="flex items-center gap-3 mb-1.5 flex-wrap">
         <h2 className="font-serif font-semibold text-xl sm:text-2xl text-paper-text tracking-tight">

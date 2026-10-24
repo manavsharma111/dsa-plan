@@ -17,6 +17,9 @@ dist-ssr
 backend/.env
 backend/.env.*
 frontend/dist
+.clinic
+*.clinic*
+
 
 # Editor directories and files
 .vscode/*
