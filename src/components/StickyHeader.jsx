@@ -1,31 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { selectTotalSolved } from '../store/progressSlice';
-import { totalQuestions } from '../data/patternsData';
+import React, { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { selectTotalSolved } from '../store/progressSlice'
+import { totalQuestions } from '../data/patternsData'
 
 export default function StickyHeader() {
-  const [isVisible, setIsVisible] = useState(false);
-  const solvedCount = useSelector(selectTotalSolved);
-  const totalCount = totalQuestions;
-  const pct = totalCount > 0 ? Math.round((solvedCount / totalCount) * 100) : 0;
-  const exactPct = totalCount > 0 ? ((solvedCount / totalCount) * 100).toFixed(1) : '0.0';
+  const [isVisible, setIsVisible] = useState(false)
+  const solvedCount = useSelector(selectTotalSolved)
+  const totalCount = totalQuestions
+  const pct = totalCount > 0 ? Math.round((solvedCount / totalCount) * 100) : 0
+  const exactPct = totalCount > 0 ? ((solvedCount / totalCount) * 100).toFixed(1) : '0.0'
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 340) {
-        setIsVisible(true);
+        setIsVisible(true)
       } else {
-        setIsVisible(false);
+        setIsVisible(false)
       }
-    };
+    }
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   return (
     <div
@@ -45,15 +45,21 @@ export default function StickyHeader() {
         {/* Meta Info */}
         <div className="flex items-center gap-2 sm:gap-2.5 whitespace-nowrap text-xs sm:text-sm">
           <span className="font-serif font-semibold text-paper-text flex items-center gap-1.5">
-            <img src="/dsa.jpg" alt="DSA" className="w-4 h-4 rounded-full object-cover border border-core/30 flex-shrink-0" />
+            <img
+              src="/dsa.jpg"
+              alt="DSA"
+              className="w-4 h-4 rounded-full object-cover border border-core/30 flex-shrink-0"
+            />
             <span>DSA Progress</span>
           </span>
           <span className="font-mono text-xs text-paper-dim">
             <b className="text-paper-text font-bold">{solvedCount}</b> / {totalCount}
           </span>
-          <span className={`font-mono text-[10.5px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full transition-colors ${
-            pct >= 50 ? 'bg-sage-bg text-sage' : 'bg-core-bg text-core'
-          }`}>
+          <span
+            className={`font-mono text-[10.5px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full transition-colors ${
+              pct >= 50 ? 'bg-sage-bg text-sage' : 'bg-core-bg text-core'
+            }`}
+          >
             {exactPct}%
           </span>
         </div>
@@ -77,5 +83,5 @@ export default function StickyHeader() {
         </button>
       </div>
     </div>
-  );
+  )
 }

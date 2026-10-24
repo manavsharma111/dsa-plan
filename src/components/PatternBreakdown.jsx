@@ -1,36 +1,36 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectSolved } from '../store/progressSlice';
-import { patternsData } from '../data/patternsData';
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
+import { selectSolved } from '../store/progressSlice'
+import { patternsData } from '../data/patternsData'
 
 export default function PatternBreakdown() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const solvedMap = useSelector(selectSolved);
+  const [isCollapsed, setIsCollapsed] = useState(false)
+  const solvedMap = useSelector(selectSolved)
 
   // Compute pattern-wise stats
-  let masteredCount = 0;
+  let masteredCount = 0
   const patternStats = patternsData.map((pattern) => {
-    const total = pattern.problems.length;
-    const done = pattern.problems.filter((p) => solvedMap[p.id]).length;
-    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-    const isCompleted = done === total && total > 0;
-    if (isCompleted) masteredCount++;
+    const total = pattern.problems.length
+    const done = pattern.problems.filter((p) => solvedMap[p.id]).length
+    const pct = total > 0 ? Math.round((done / total) * 100) : 0
+    const isCompleted = done === total && total > 0
+    if (isCompleted) masteredCount++
     return {
       ...pattern,
       total,
       done,
       pct,
-      isCompleted
-    };
-  });
+      isCompleted,
+    }
+  })
 
   const handleScrollToPattern = (e, id) => {
-    e.preventDefault();
-    const el = document.getElementById(`pattern-${id}`);
+    e.preventDefault()
+    const el = document.getElementById(`pattern-${id}`)
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
-  };
+  }
 
   return (
     <div className="bg-paper-surface border border-paper-border rounded-xl -mt-2 mb-6 shadow-sm overflow-hidden transition-all">
@@ -40,7 +40,15 @@ export default function PatternBreakdown() {
         className="px-4 sm:px-5 py-3.5 flex justify-between items-center cursor-pointer select-none bg-paper-surface hover:bg-paper-surface-2 transition-colors"
       >
         <div className="flex items-center gap-2 font-serif text-sm sm:text-base font-semibold text-paper-text">
-          <svg className="w-4 h-4 text-core" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            className="w-4 h-4 text-core"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <rect x="3" y="3" width="7" height="7" />
             <rect x="14" y="3" width="7" height="7" />
             <rect x="14" y="14" width="7" height="7" />
@@ -53,7 +61,9 @@ export default function PatternBreakdown() {
           <span className="font-mono text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-sage-bg text-sage">
             {masteredCount} / 28 Mastered
           </span>
-          <span className={`text-xs text-paper-dim transition-transform duration-200 ${isCollapsed ? '-rotate-90' : 'rotate-0'}`}>
+          <span
+            className={`text-xs text-paper-dim transition-transform duration-200 ${isCollapsed ? '-rotate-90' : 'rotate-0'}`}
+          >
             ▼
           </span>
         </div>
@@ -75,7 +85,10 @@ export default function PatternBreakdown() {
                 }`}
               >
                 <div className="flex justify-between items-baseline gap-1.5">
-                  <span className="text-xs font-semibold text-paper-text truncate flex-1" title={pat.title}>
+                  <span
+                    className="text-xs font-semibold text-paper-text truncate flex-1"
+                    title={pat.title}
+                  >
                     {pat.title}
                   </span>
                   <span className="font-mono text-[10.5px] text-paper-dim whitespace-nowrap">
@@ -98,5 +111,5 @@ export default function PatternBreakdown() {
         </div>
       )}
     </div>
-  );
+  )
 }

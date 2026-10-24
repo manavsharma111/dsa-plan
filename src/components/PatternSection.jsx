@@ -1,15 +1,15 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { selectSolved } from '../store/progressSlice';
-import ProblemItem from './ProblemItem';
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { selectSolved } from '../store/progressSlice'
+import ProblemItem from './ProblemItem'
 
 export default function PatternSection({ pattern }) {
-  const solvedMap = useSelector(selectSolved);
+  const solvedMap = useSelector(selectSolved)
 
-  const total = pattern.problems.length;
-  const done = pattern.problems.filter((p) => solvedMap[p.id]).length;
-  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-  const isCompleted = done === total && total > 0;
+  const total = pattern.problems.length
+  const done = pattern.problems.filter((p) => solvedMap[p.id]).length
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0
+  const isCompleted = done === total && total > 0
 
   return (
     <section id={`pattern-${pattern.id}`} className="mt-8 sm:mt-10 scroll-mt-14">
@@ -35,9 +35,7 @@ export default function PatternSection({ pattern }) {
             ></div>
           </div>
 
-          <span className="font-semibold text-[11px] text-paper-dim w-7 text-right">
-            {pct}%
-          </span>
+          <span className="font-semibold text-[11px] text-paper-dim w-7 text-right">{pct}%</span>
 
           {isCompleted && (
             <span className="font-mono text-[10px] font-bold text-sage bg-sage-bg px-1.5 py-0.5 rounded-full inline-flex items-center gap-0.5">
@@ -49,9 +47,7 @@ export default function PatternSection({ pattern }) {
 
       {/* Idea / Technique Hint */}
       {pattern.idea && (
-        <p className="text-paper-dim text-xs sm:text-sm mb-3 italic">
-          {pattern.idea}
-        </p>
+        <p className="text-paper-dim text-xs sm:text-sm mb-3 italic">{pattern.idea}</p>
       )}
 
       {/* Problems Grid List */}
@@ -61,5 +57,5 @@ export default function PatternSection({ pattern }) {
         ))}
       </ul>
     </section>
-  );
+  )
 }

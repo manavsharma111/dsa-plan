@@ -1,13 +1,13 @@
-import React from 'react';
-import Header from './components/Header';
-import CloudSync from './components/CloudSync';
-import ProgressBar from './components/ProgressBar';
-import PatternBreakdown from './components/PatternBreakdown';
-import KeyConcepts from './components/KeyConcepts';
-import StickyHeader from './components/StickyHeader';
-import PatternSection from './components/PatternSection';
-import Toast from './components/Toast';
-import { patternsData } from './data/patternsData';
+import React from 'react'
+import Header from './components/Header'
+import CloudSync from './components/CloudSync'
+import ProgressBar from './components/ProgressBar'
+import PatternBreakdown from './components/PatternBreakdown'
+import KeyConcepts from './components/KeyConcepts'
+import StickyHeader from './components/StickyHeader'
+import PatternSection from './components/PatternSection'
+import Toast from './components/Toast'
+import { patternsData } from './data/patternsData'
 
 export default function App() {
   return (
@@ -33,12 +33,15 @@ export default function App() {
         {/* Footer */}
         <footer className="mt-14 pt-6 border-t-2 border-paper-border font-mono text-xs text-paper-faint flex flex-col sm:flex-row justify-between items-center gap-2.5">
           <span>DSA Pattern Master List &middot; 28 Patterns &middot; 260 Questions</span>
-          <span>Built by <strong className="text-paper-text font-medium">Manav Sharma</strong> &middot; &copy; 2026 All Rights Reserved</span>
+          <span>
+            Built by <strong className="text-paper-text font-medium">Manav Sharma</strong> &middot;
+            &copy; 2026 All Rights Reserved
+          </span>
         </footer>
       </div>
 
       {/* Global Toast */}
       <Toast />
     </div>
-  );
+  )
 }

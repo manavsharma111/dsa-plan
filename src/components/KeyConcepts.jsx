@@ -1,12 +1,20 @@
-import React from 'react';
-import { conceptsData, ruleOfThumb } from '../data/conceptsData';
+import React from 'react'
+import { conceptsData, ruleOfThumb } from '../data/conceptsData'
 
 export default function KeyConcepts() {
   return (
     <div className="bg-paper-surface border border-paper-border rounded-xl p-4 sm:p-6 my-6 shadow-sm">
       <div className="mb-4">
         <h3 className="font-serif font-semibold text-lg sm:text-xl text-paper-text flex items-center gap-2 mb-1">
-          <svg className="w-5 h-5 text-core" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            className="w-5 h-5 text-core"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
             <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
           </svg>
@@ -37,7 +45,9 @@ export default function KeyConcepts() {
             {conceptsData.map((item) => (
               <tr key={item.term} className="hover:bg-core/5 transition-colors">
                 <td className="px-3.5 sm:px-4 py-3 align-middle whitespace-nowrap">
-                  <span className={`font-mono text-xs font-semibold px-2 py-0.5 rounded-md inline-block ${item.badgeClass}`}>
+                  <span
+                    className={`font-mono text-xs font-semibold px-2 py-0.5 rounded-md inline-block ${item.badgeClass}`}
+                  >
                     {item.term}
                   </span>
                 </td>
@@ -47,7 +57,10 @@ export default function KeyConcepts() {
                 <td className="px-3.5 sm:px-4 py-3 align-middle">
                   <div className="flex gap-1.5 flex-wrap">
                     {item.techniques.map((tech) => (
-                      <span key={tech} className="font-mono text-[10.5px] font-medium px-2 py-0.5 rounded bg-paper-surface-2 border border-paper-border text-paper-dim whitespace-nowrap">
+                      <span
+                        key={tech}
+                        className="font-mono text-[10.5px] font-medium px-2 py-0.5 rounded bg-paper-surface-2 border border-paper-border text-paper-dim whitespace-nowrap"
+                      >
                         {tech}
                       </span>
                     ))}
@@ -69,12 +82,13 @@ export default function KeyConcepts() {
           <div className="text-paper-dim flex flex-col gap-1">
             {ruleOfThumb.map((r, i) => (
               <span key={i}>
-                • <b>{r.label}</b> &rarr; <span className="font-mono font-semibold text-core text-xs">{r.technique}</span>
+                • <b>{r.label}</b> &rarr;{' '}
+                <span className="font-mono font-semibold text-core text-xs">{r.technique}</span>
               </span>
             ))}
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }

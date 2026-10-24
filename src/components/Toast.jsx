@@ -1,6 +1,6 @@
-import React from 'react';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React from 'react'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function Toast() {
   return (
@@ -18,5 +18,5 @@ export default function Toast() {
       bodyClassName="custom-dsa-toast-body"
       progressClassName="custom-dsa-toast-progress"
     />
-  );
+  )
 }
