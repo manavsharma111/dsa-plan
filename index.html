@@ -318,6 +318,136 @@
       flex-wrap: wrap;
       gap: 8px
     }
+
+    /* Cloud Sync Card */
+    .sync-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 22px;
+      margin: 22px 0 10px;
+      box-shadow: 0 4px 14px rgba(31, 27, 22, 0.04);
+    }
+    .sync-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .sync-title {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--text);
+    }
+    .sync-badge {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 11px;
+      border-radius: 99px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all .2s ease;
+    }
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      display: inline-block;
+    }
+    .sync-badge.idle { background: var(--surface-2); color: var(--dim); }
+    .sync-badge.syncing { background: var(--gold-bg); color: var(--gold); }
+    .sync-badge.synced { background: var(--sage-bg); color: var(--sage); }
+    .sync-badge.error { background: var(--core-bg); color: var(--core); }
+    
+    .sync-form {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .sync-input {
+      font-family: var(--mono);
+      font-size: 13px;
+      padding: 9px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      min-width: 220px;
+      flex: 1;
+      max-width: 320px;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .sync-input:focus {
+      border-color: var(--core);
+    }
+    .sync-btn {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 9px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all .15s ease;
+      white-space: nowrap;
+    }
+    .sync-btn:hover {
+      background: var(--border);
+    }
+    .sync-btn.primary {
+      background: var(--core);
+      color: #fff;
+      border-color: var(--core);
+    }
+    .sync-btn.primary:hover {
+      opacity: 0.9;
+    }
+    .sync-info {
+      font-size: 12.5px;
+      color: var(--dim);
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #1f1b16;
+      color: #faf7f5;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      padding: 10px 18px;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: all .25s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
   </style>
 </head>
 
@@ -348,6 +478,31 @@
         </div>
       </div>
     </header>
+
+    <!-- Cross-Device Cloud Sync Card -->
+    <div class="sync-card">
+      <div class="sync-header">
+        <div class="sync-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--core)"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><path d="M12 13v6m-3-3l3 3 3-3"/></svg>
+          <span>Cross-Device Cloud Sync</span>
+        </div>
+        <div id="sync-status" class="sync-badge idle">
+          <span class="status-dot"></span><span id="sync-status-text">Local only</span>
+        </div>
+      </div>
+      <div class="sync-form">
+        <input type="text" id="sync-key-input" class="sync-input" placeholder="Enter custom Sync Key (e.g. manav-dsa)" autocomplete="off" spellcheck="false">
+        <button id="btn-sync-connect" class="sync-btn primary" type="button">Connect &amp; Sync</button>
+        <button id="btn-sync-now" class="sync-btn" type="button" style="display:none">🔄 Sync Now</button>
+        <button id="btn-sync-link" class="sync-btn" type="button" title="Copy shareable link for mobile">📋 Copy Mobile Link</button>
+        <button id="btn-sync-disconnect" class="sync-btn" type="button" style="display:none" title="Disconnect sync">Disconnect</button>
+      </div>
+      <div class="sync-info">
+        <span>💡 Enter the same key on phone or laptop. Every question you tick auto-syncs live!</span>
+        <span id="last-sync-time"></span>
+      </div>
+    </div>
+
     <div class="legend"><span>Tags:</span>
       <span class="pill g">done</span><span>= you already solved it (revise)</span>
       <span class="pill b">Striver</span><span>= in Striver A2Z</span>
@@ -1334,10 +1489,303 @@
         patterns</span></footer>
     <script>
       var boxes = [].slice.call(document.querySelectorAll('.cbx'));
-      var KEY = 'dsa-master-v1'; var st = {}; try { st = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { }
-      function upd() { var d = boxes.filter(function (b) { return b.checked; }).length; var el = document.getElementById('prog'); if (el) el.textContent = d + ' / ' + boxes.length; }
-      boxes.forEach(function (b) { if (st[b.dataset.id]) b.checked = true; b.addEventListener('change', function () { if (b.checked) st[b.dataset.id] = 1; else delete st[b.dataset.id]; try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) { } upd(); }); });
+      var KEY = 'dsa-master-v1';
+      var SYNC_KEY_STORAGE = 'dsa_sync_key';
+      var APP_ID = 'igz1gl8v';
+      var st = {};
+      try { st = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { }
+
+      function upd() {
+        var d = boxes.filter(function (b) { return b.checked; }).length;
+        var el = document.getElementById('prog');
+        if (el) el.textContent = d + ' / ' + boxes.length;
+      }
+
+      // Bitmask codec: packs 258 questions into exactly 33 bytes (44 chars URL-safe base64)
+      function encodeState(state) {
+        var b = new Uint8Array(33);
+        for (var i = 1; i <= 258; i++) {
+          if (state['c' + i]) {
+            b[Math.floor((i - 1) / 8)] |= (1 << ((i - 1) % 8));
+          }
+        }
+        var s = '';
+        for (var j = 0; j < b.length; j++) s += String.fromCharCode(b[j]);
+        return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+      }
+
+      function decodeState(s) {
+        if (!s || typeof s !== 'string') return {};
+        try {
+          var clean = s.replace(/-/g, '+').replace(/_/g, '/');
+          while (clean.length % 4) clean += '=';
+          var bin = atob(clean);
+          var b = new Uint8Array(bin.length);
+          for (var i = 0; i < bin.length; i++) b[i] = bin.charCodeAt(i);
+          var res = {};
+          for (var k = 1; k <= 258; k++) {
+            var bi = Math.floor((k - 1) / 8), bit = (k - 1) % 8;
+            if (bi < b.length && (b[bi] & (1 << bit)) !== 0) {
+              res['c' + k] = 1;
+            }
+          }
+          return res;
+        } catch (e) {
+          console.error('State decode error', e);
+          return {};
+        }
+      }
+
+      // Checkbox click handlers
+      boxes.forEach(function (b) {
+        if (st[b.dataset.id]) b.checked = true;
+        b.addEventListener('change', function () {
+          if (b.checked) st[b.dataset.id] = 1;
+          else delete st[b.dataset.id];
+          try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) { }
+          upd();
+          triggerAutoSync();
+        });
+      });
       upd();
+
+      // Toast Notification
+      function showToast(msg) {
+        var t = document.getElementById('toast');
+        if (!t) {
+          t = document.createElement('div');
+          t.id = 'toast';
+          t.className = 'toast';
+          document.body.appendChild(t);
+        }
+        t.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(t._timer);
+        t._timer = setTimeout(function () { t.classList.remove('show'); }, 3400);
+      }
+
+      // Cloud Sync Manager
+      var syncKeyInput = document.getElementById('sync-key-input');
+      var syncStatus = document.getElementById('sync-status');
+      var syncStatusText = document.getElementById('sync-status-text');
+      var btnConnect = document.getElementById('btn-sync-connect');
+      var btnSyncNow = document.getElementById('btn-sync-now');
+      var btnSyncLink = document.getElementById('btn-sync-link');
+      var btnDisconnect = document.getElementById('btn-sync-disconnect');
+      var lastSyncTimeEl = document.getElementById('last-sync-time');
+
+      var currentSyncKey = '';
+      var syncTimeout = null;
+
+      function sanitizeKey(k) {
+        return (k || '').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '_');
+      }
+
+      function setStatus(type, text) {
+        if (!syncStatus) return;
+        syncStatus.className = 'sync-badge ' + type;
+        if (syncStatusText) syncStatusText.textContent = text;
+      }
+
+      function updateUIConnected(connected) {
+        if (connected) {
+          btnConnect.textContent = 'Change Key';
+          btnConnect.className = 'sync-btn';
+          btnSyncNow.style.display = 'inline-flex';
+          btnDisconnect.style.display = 'inline-flex';
+          btnSyncLink.style.display = 'inline-flex';
+        } else {
+          btnConnect.textContent = 'Connect & Sync';
+          btnConnect.className = 'sync-btn primary';
+          btnSyncNow.style.display = 'none';
+          btnDisconnect.style.display = 'none';
+          setStatus('idle', 'Local only');
+          if (lastSyncTimeEl) lastSyncTimeEl.textContent = '';
+        }
+      }
+
+      // Pull from Cloud
+      async function pullFromCloud(key) {
+        if (!key) return null;
+        try {
+          var res = await fetch('https://keyvalue.immanuel.co/api/KeyVal/GetValue/' + APP_ID + '/dsakey_' + key);
+          if (!res.ok) throw new Error('Network error');
+          var text = await res.text();
+          var val = text ? JSON.parse(text) : '';
+          return val;
+        } catch (e) {
+          console.warn('Cloud pull failed:', e);
+          return null;
+        }
+      }
+
+      // Push to Cloud
+      async function pushToCloud(key, state) {
+        if (!key) return false;
+        var encoded = encodeState(state);
+        try {
+          var res = await fetch('https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/' + APP_ID + '/dsakey_' + key + '/' + encoded, { method: 'POST' });
+          if (!res.ok) throw new Error('Push failed');
+          return true;
+        } catch (e) {
+          console.warn('Cloud push failed:', e);
+          return false;
+        }
+      }
+
+      // Trigger debounced cloud save
+      function triggerAutoSync() {
+        if (!currentSyncKey) return;
+        setStatus('syncing', 'Syncing...');
+        clearTimeout(syncTimeout);
+        syncTimeout = setTimeout(async function () {
+          var ok = await pushToCloud(currentSyncKey, st);
+          if (ok) {
+            var now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            setStatus('synced', 'Live Synced');
+            if (lastSyncTimeEl) lastSyncTimeEl.textContent = 'Synced at ' + now;
+          } else {
+            setStatus('error', 'Sync failed (saved locally)');
+          }
+        }, 500);
+      }
+
+      // Connect to key & perform initial merge
+      async function connectSync(key, isAuto) {
+        var clean = sanitizeKey(key);
+        if (!clean) {
+          showToast('⚠️ Please enter a sync key');
+          return;
+        }
+        currentSyncKey = clean;
+        syncKeyInput.value = clean;
+        localStorage.setItem(SYNC_KEY_STORAGE, clean);
+        updateUIConnected(true);
+        setStatus('syncing', 'Connecting & Merging...');
+
+        var cloudEncoded = await pullFromCloud(clean);
+        var cloudState = decodeState(cloudEncoded);
+
+        // Union merge: combine local and cloud ticks so nothing is lost
+        var merged = {};
+        for (var k in st) { if (st[k]) merged[k] = 1; }
+        for (var ck in cloudState) { if (cloudState[ck]) merged[ck] = 1; }
+
+        st = merged;
+        try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) { }
+
+        // Update DOM checkboxes
+        boxes.forEach(function (b) {
+          b.checked = !!st[b.dataset.id];
+        });
+        upd();
+
+        // Push merged state back to cloud
+        await pushToCloud(clean, st);
+
+        var now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        setStatus('synced', 'Live Synced');
+        if (lastSyncTimeEl) lastSyncTimeEl.textContent = 'Synced at ' + now;
+
+        if (!isAuto) {
+          showToast('🟢 Connected to "' + clean + '"! Live sync active.');
+        }
+      }
+
+      // Force Sync Now
+      async function manualSync() {
+        if (!currentSyncKey) return;
+        setStatus('syncing', 'Syncing...');
+        var cloudEncoded = await pullFromCloud(currentSyncKey);
+        var cloudState = decodeState(cloudEncoded);
+        var merged = {};
+        for (var k in st) { if (st[k]) merged[k] = 1; }
+        for (var ck in cloudState) { if (cloudState[ck]) merged[ck] = 1; }
+        st = merged;
+        try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) { }
+        boxes.forEach(function (b) { b.checked = !!st[b.dataset.id]; });
+        upd();
+        await pushToCloud(currentSyncKey, st);
+        var now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        setStatus('synced', 'Live Synced');
+        if (lastSyncTimeEl) lastSyncTimeEl.textContent = 'Synced at ' + now;
+        showToast('🔄 Synced with cloud successfully!');
+      }
+
+      // Event Listeners for UI
+      btnConnect.addEventListener('click', function () {
+        connectSync(syncKeyInput.value, false);
+      });
+
+      syncKeyInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          connectSync(syncKeyInput.value, false);
+        }
+      });
+
+      btnSyncNow.addEventListener('click', manualSync);
+
+      btnDisconnect.addEventListener('click', function () {
+        currentSyncKey = '';
+        localStorage.removeItem(SYNC_KEY_STORAGE);
+        syncKeyInput.value = '';
+        updateUIConnected(false);
+        showToast('Cloud sync disconnected (progress kept locally)');
+      });
+
+      btnSyncLink.addEventListener('click', function () {
+        var keyToUse = currentSyncKey || sanitizeKey(syncKeyInput.value);
+        if (!keyToUse) {
+          showToast('⚠️ Please enter a sync key first!');
+          syncKeyInput.focus();
+          return;
+        }
+        var base = window.location.origin + window.location.pathname;
+        var shareUrl = base + '#sync=' + encodeURIComponent(keyToUse);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(shareUrl).then(function () {
+            showToast('📋 Mobile link copied! Open on your phone to sync automatically.');
+          }).catch(function () {
+            prompt('Copy this link to open on your phone:', shareUrl);
+          });
+        } else {
+          prompt('Copy this link to open on your phone:', shareUrl);
+        }
+      });
+
+      // Window focus auto-pull: pulls latest updates when switching back to tab
+      window.addEventListener('focus', function () {
+        if (currentSyncKey) {
+          pullFromCloud(currentSyncKey).then(function (cloudEncoded) {
+            if (!cloudEncoded) return;
+            var cloudState = decodeState(cloudEncoded);
+            var changed = false;
+            for (var k in cloudState) {
+              if (cloudState[k] && !st[k]) { st[k] = 1; changed = true; }
+            }
+            if (changed) {
+              try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) { }
+              boxes.forEach(function (b) { b.checked = !!st[b.dataset.id]; });
+              upd();
+              setStatus('synced', 'Live Synced');
+            }
+          });
+        }
+      });
+
+      // On Initial Page Load: Check hash param or stored key
+      (function initSync() {
+        var hashMatch = window.location.hash.match(/[#&]sync=([^&]+)/);
+        var queryMatch = window.location.search.match(/[?&]sync=([^&]+)/);
+        var urlKey = (hashMatch && hashMatch[1]) || (queryMatch && queryMatch[1]);
+        var savedKey = localStorage.getItem(SYNC_KEY_STORAGE);
+
+        if (urlKey) {
+          connectSync(decodeURIComponent(urlKey), false);
+        } else if (savedKey) {
+          connectSync(savedKey, true);
+        }
+      })();
     </script>
   </div>
 </body>
