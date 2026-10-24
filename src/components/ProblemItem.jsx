@@ -53,18 +53,34 @@ export default function ProblemItem({ problem }) {
         className="w-[18px] h-[18px] sm:w-[19px] sm:h-[19px] accent-sage cursor-pointer flex-shrink-0 rounded"
       />
 
-      {/* Problem Title */}
-      <label htmlFor={problem.id} className={`flex-1 min-w-0 cursor-pointer select-none leading-snug break-words ${
-        isSolved ? 'line-through text-paper-dim' : 'text-paper-text font-medium'
-      }`}>
-        {problem.name}
-      </label>
-
-      {/* Meta Pills */}
-      <div className="flex items-center gap-1.5 flex-shrink-0 flex-wrap justify-end">
-        {problem.lc && problem.lc !== '—' && (
-          <span className="font-mono text-[11px] text-paper-faint">{problem.lc}</span>
+      {/* Problem Title & LC Badge */}
+      <div className="flex-1 min-w-0 flex items-center flex-wrap gap-x-2 gap-y-1">
+        <label htmlFor={problem.id} className={`cursor-pointer select-none leading-snug break-words ${
+          isSolved ? 'line-through text-paper-dim' : 'text-paper-text font-medium'
+        }`}>
+          {problem.name}
+        </label>
+        {problem.lc && (
+          <a
+            href={problem.url || `https://leetcode.com/problems/${problem.slug || ''}/`}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={`Open ${problem.lc}: ${problem.name} on LeetCode`}
+            onClick={(e) => e.stopPropagation()}
+            className={`font-mono text-[11px] font-semibold px-1.5 py-0.5 rounded transition-all inline-flex items-center gap-1 ${
+              isSolved
+                ? 'text-paper-faint bg-paper-border/40 hover:text-paper-muted'
+                : 'text-paper-rust bg-paper-rustBg border border-paper-rustBorder hover:bg-paper-rust hover:text-white shadow-xs'
+            }`}
+          >
+            <span>{problem.lc}</span>
+            <span className="text-[9px] opacity-70">↗</span>
+          </a>
         )}
+      </div>
+
+      {/* Meta Pills (Difficulty & Source Tags) */}
+      <div className="flex items-center gap-1.5 flex-shrink-0 flex-wrap justify-end">
         {getDifficultyBadge(problem.difficulty)}
         {problem.tags && problem.tags.map((tag, i) => getTagPill(tag, i))}
       </div>
