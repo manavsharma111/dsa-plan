@@ -3,7 +3,7 @@ export const conceptsData = [
     term: 'Subarray',
     badgeClass: 'bg-core-bg text-core',
     meaning: 'Contiguous part of an array (order preserved).',
-    techniques: ["Sliding Window", "Prefix Sum", "Kadane's"]
+    techniques: ["Sliding Window", "Prefix Sum", "Kadane's Algorithm"]
   },
   {
     term: 'Substring',

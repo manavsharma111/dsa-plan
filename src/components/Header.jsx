@@ -10,9 +10,10 @@ export default function Header() {
   return (
     <header className="pt-10 pb-6 md:pt-13 md:pb-7 border-b-2 border-paper-border mb-2">
       {/* Kicker */}
-      <div className="font-mono text-xs tracking-widest uppercase text-core mb-4 flex items-center">
-        <span className="inline-block w-6 h-[2px] bg-core mr-2.5"></span>
-        DSA &middot; Must-Practice Master List
+      <div className="font-mono text-xs tracking-widest uppercase text-core mb-4 flex items-center gap-2">
+        <img src="/dsa.jpg" alt="DSA" className="w-5 h-5 rounded-full object-cover border border-core/30 flex-shrink-0" />
+        <span className="inline-block w-4 h-[2px] bg-core"></span>
+        <span>DSA &middot; Must-Practice Master List</span>
       </div>
 
       {/* Main Heading */}

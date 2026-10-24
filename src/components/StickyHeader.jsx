@@ -37,9 +37,7 @@ export default function StickyHeader() {
         {/* Meta Info */}
         <div className="flex items-center gap-2.5 whitespace-nowrap text-xs sm:text-sm">
           <span className="font-serif font-semibold text-paper-text flex items-center gap-1.5">
-            <svg className="w-4 h-4 text-core" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
-            </svg>
+            <img src="/dsa.jpg" alt="DSA" className="w-4 h-4 rounded-full object-cover border border-core/30 flex-shrink-0" />
             DSA Progress
           </span>
           <span className="font-mono text-xs text-paper-dim">
