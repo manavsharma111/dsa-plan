@@ -117,7 +117,7 @@ export default function CloudSync() {
             <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
             <path d="M12 13v6m-3-3l3 3 3-3" />
           </svg>
-          <span>Cross-Device Cloud Sync</span>
+          <span>MongoDB Atlas Cloud Sync</span>
         </div>
         {renderStatus()}
       </div>
@@ -183,7 +183,8 @@ export default function CloudSync() {
 
       <div className="flex flex-col sm:flex-row justify-between text-xs text-paper-dim mt-2.5 gap-1.5">
         <span>
-          💡 Enter the same key on phone or laptop. Every question you tick auto-syncs live!
+          💡 Syncs solved questions, mastery, spaced revisions, mock interviews & pattern analytics
+          to MongoDB Atlas.
         </span>
         {lastSyncTime && (
           <span className="font-mono text-paper-faint">Synced at {lastSyncTime}</span>
