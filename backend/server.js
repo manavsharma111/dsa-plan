@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import { ENV } from './config/env.js'
-import { connectDB, disconnectDB } from './config/db.js'
+import { connectDB, disconnectDB, isDbConnected } from './config/db.js'
 import { APP_CONSTANTS } from './config/constants.js'
 import apiRoutes from './routes/apiRoutes.js'
 import { dbCheck } from './middlewares/dbCheck.js'
@@ -26,6 +26,17 @@ app.use(
 
 // 3. Request logger (development & monitoring)
 app.use(requestLogger)
+
+// Root status endpoint for Render health checks and root pings
+app.get(['/', '/healthz'], (req, res) => {
+  res.json({
+    status: 'online',
+    service: 'DSA Tracker Backend API',
+    database: isDbConnected() ? 'connected' : 'connecting',
+    health: '/api/health',
+    timestamp: new Date().toISOString(),
+  })
+})
 
 // 4. Database readiness middleware
 app.use(dbCheck)
