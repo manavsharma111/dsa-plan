@@ -1,5 +1,15 @@
 {
   "buildCommand": "npm --prefix frontend run build",
   "outputDirectory": "frontend/dist",
-  "framework": "vite"
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://dsa-plan-backend.onrender.com/api/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
