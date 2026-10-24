@@ -11,7 +11,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "two-sum-ii-input-array-is-sorted",
-        "url": "https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/"
+        "url": "https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/",
+        "platform": "LeetCode"
       },
       {
         "id": "c2",
@@ -23,7 +24,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "3sum",
-        "url": "https://leetcode.com/problems/3sum/"
+        "url": "https://leetcode.com/problems/3sum/",
+        "platform": "LeetCode"
       },
       {
         "id": "c3",
@@ -32,7 +34,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "3sum-closest",
-        "url": "https://leetcode.com/problems/3sum-closest/"
+        "url": "https://leetcode.com/problems/3sum-closest/",
+        "platform": "LeetCode"
       },
       {
         "id": "c4",
@@ -43,7 +46,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "container-with-most-water",
-        "url": "https://leetcode.com/problems/container-with-most-water/"
+        "url": "https://leetcode.com/problems/container-with-most-water/",
+        "platform": "LeetCode"
       },
       {
         "id": "c5",
@@ -55,7 +59,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "trapping-rain-water",
-        "url": "https://leetcode.com/problems/trapping-rain-water/"
+        "url": "https://leetcode.com/problems/trapping-rain-water/",
+        "platform": "LeetCode"
       },
       {
         "id": "c6",
@@ -66,7 +71,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "sort-colors",
-        "url": "https://leetcode.com/problems/sort-colors/"
+        "url": "https://leetcode.com/problems/sort-colors/",
+        "platform": "LeetCode"
       },
       {
         "id": "c7",
@@ -77,7 +83,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "4sum",
-        "url": "https://leetcode.com/problems/4sum/"
+        "url": "https://leetcode.com/problems/4sum/",
+        "platform": "LeetCode"
       },
       {
         "id": "c8",
@@ -88,7 +95,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "remove-duplicates-from-sorted-array",
-        "url": "https://leetcode.com/problems/remove-duplicates-from-sorted-array/"
+        "url": "https://leetcode.com/problems/remove-duplicates-from-sorted-array/",
+        "platform": "LeetCode"
       },
       {
         "id": "c9",
@@ -97,7 +105,8 @@ export const patternsData = [
         "difficulty": "E",
         "tags": [],
         "slug": "valid-palindrome-ii",
-        "url": "https://leetcode.com/problems/valid-palindrome-ii/"
+        "url": "https://leetcode.com/problems/valid-palindrome-ii/",
+        "platform": "LeetCode"
       },
       {
         "id": "c10",
@@ -106,7 +115,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "boats-to-save-people",
-        "url": "https://leetcode.com/problems/boats-to-save-people/"
+        "url": "https://leetcode.com/problems/boats-to-save-people/",
+        "platform": "LeetCode"
       },
       {
         "id": "c11",
@@ -115,7 +125,8 @@ export const patternsData = [
         "difficulty": "E",
         "tags": [],
         "slug": "squares-of-a-sorted-array",
-        "url": "https://leetcode.com/problems/squares-of-a-sorted-array/"
+        "url": "https://leetcode.com/problems/squares-of-a-sorted-array/",
+        "platform": "LeetCode"
       }
     ]
   },
@@ -134,7 +145,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "longest-substring-without-repeating-characters",
-        "url": "https://leetcode.com/problems/longest-substring-without-repeating-characters/"
+        "url": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+        "platform": "LeetCode"
       },
       {
         "id": "c13",
@@ -146,7 +158,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "minimum-window-substring",
-        "url": "https://leetcode.com/problems/minimum-window-substring/"
+        "url": "https://leetcode.com/problems/minimum-window-substring/",
+        "platform": "LeetCode"
       },
       {
         "id": "c14",
@@ -157,7 +170,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "longest-repeating-character-replacement",
-        "url": "https://leetcode.com/problems/longest-repeating-character-replacement/"
+        "url": "https://leetcode.com/problems/longest-repeating-character-replacement/",
+        "platform": "LeetCode"
       },
       {
         "id": "c15",
@@ -169,7 +183,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "sliding-window-maximum",
-        "url": "https://leetcode.com/problems/sliding-window-maximum/"
+        "url": "https://leetcode.com/problems/sliding-window-maximum/",
+        "platform": "LeetCode"
       },
       {
         "id": "c16",
@@ -178,7 +193,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "permutation-in-string",
-        "url": "https://leetcode.com/problems/permutation-in-string/"
+        "url": "https://leetcode.com/problems/permutation-in-string/",
+        "platform": "LeetCode"
       },
       {
         "id": "c17",
@@ -187,7 +203,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "fruit-into-baskets",
-        "url": "https://leetcode.com/problems/fruit-into-baskets/"
+        "url": "https://leetcode.com/problems/fruit-into-baskets/",
+        "platform": "LeetCode"
       },
       {
         "id": "c18",
@@ -198,7 +215,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "max-consecutive-ones-iii",
-        "url": "https://leetcode.com/problems/max-consecutive-ones-iii/"
+        "url": "https://leetcode.com/problems/max-consecutive-ones-iii/",
+        "platform": "LeetCode"
       },
       {
         "id": "c19",
@@ -207,7 +225,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "subarrays-with-k-different-integers",
-        "url": "https://leetcode.com/problems/subarrays-with-k-different-integers/"
+        "url": "https://leetcode.com/problems/subarrays-with-k-different-integers/",
+        "platform": "LeetCode"
       },
       {
         "id": "c20",
@@ -216,7 +235,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "minimum-size-subarray-sum",
-        "url": "https://leetcode.com/problems/minimum-size-subarray-sum/"
+        "url": "https://leetcode.com/problems/minimum-size-subarray-sum/",
+        "platform": "LeetCode"
       },
       {
         "id": "c21",
@@ -225,7 +245,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "longest-substring-with-at-most-k-distinct-characters",
-        "url": "https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/"
+        "url": "https://www.geeksforgeeks.org/problems/longest-k-unique-characters-substring0853/1",
+        "platform": "GFG"
       }
     ]
   },
@@ -243,7 +264,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "two-sum",
-        "url": "https://leetcode.com/problems/two-sum/"
+        "url": "https://leetcode.com/problems/two-sum/",
+        "platform": "LeetCode"
       },
       {
         "id": "c23",
@@ -255,7 +277,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "subarray-sum-equals-k",
-        "url": "https://leetcode.com/problems/subarray-sum-equals-k/"
+        "url": "https://leetcode.com/problems/subarray-sum-equals-k/",
+        "platform": "LeetCode"
       },
       {
         "id": "c24",
@@ -266,7 +289,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "longest-consecutive-sequence",
-        "url": "https://leetcode.com/problems/longest-consecutive-sequence/"
+        "url": "https://leetcode.com/problems/longest-consecutive-sequence/",
+        "platform": "LeetCode"
       },
       {
         "id": "c25",
@@ -277,7 +301,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "group-anagrams",
-        "url": "https://leetcode.com/problems/group-anagrams/"
+        "url": "https://leetcode.com/problems/group-anagrams/",
+        "platform": "LeetCode"
       },
       {
         "id": "c26",
@@ -286,7 +311,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "contiguous-array",
-        "url": "https://leetcode.com/problems/contiguous-array/"
+        "url": "https://leetcode.com/problems/contiguous-array/",
+        "platform": "LeetCode"
       },
       {
         "id": "c27",
@@ -295,7 +321,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "4sum-ii",
-        "url": "https://leetcode.com/problems/4sum-ii/"
+        "url": "https://leetcode.com/problems/4sum-ii/",
+        "platform": "LeetCode"
       },
       {
         "id": "c28",
@@ -304,7 +331,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "subarray-sums-divisible-by-k",
-        "url": "https://leetcode.com/problems/subarray-sums-divisible-by-k/"
+        "url": "https://leetcode.com/problems/subarray-sums-divisible-by-k/",
+        "platform": "LeetCode"
       },
       {
         "id": "c29",
@@ -313,7 +341,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "maximum-size-subarray-sum-equals-k",
-        "url": "https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/"
+        "url": "https://www.geeksforgeeks.org/problems/longest-sub-array-with-sum-k0809/1",
+        "platform": "GFG"
       },
       {
         "id": "c30",
@@ -322,7 +351,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "continuous-subarray-sum",
-        "url": "https://leetcode.com/problems/continuous-subarray-sum/"
+        "url": "https://leetcode.com/problems/continuous-subarray-sum/",
+        "platform": "LeetCode"
       },
       {
         "id": "c31",
@@ -331,7 +361,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "contiguous-array",
-        "url": "https://leetcode.com/problems/contiguous-array/"
+        "url": "https://www.geeksforgeeks.org/problems/largest-subarray-with-0-sum/1",
+        "platform": "GFG"
       },
       {
         "id": "c32",
@@ -340,7 +371,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "contiguous-array",
-        "url": "https://leetcode.com/problems/contiguous-array/"
+        "url": "https://leetcode.com/problems/contiguous-array/",
+        "platform": "LeetCode"
       },
       {
         "id": "c33",
@@ -349,7 +381,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "xor-queries-of-a-subarray",
-        "url": "https://leetcode.com/problems/xor-queries-of-a-subarray/"
+        "url": "https://www.geeksforgeeks.org/problems/count-subarray-with-given-xor/1",
+        "platform": "GFG"
       }
     ]
   },
@@ -367,7 +400,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "binary-search",
-        "url": "https://leetcode.com/problems/binary-search/"
+        "url": "https://leetcode.com/problems/binary-search/",
+        "platform": "LeetCode"
       },
       {
         "id": "c35",
@@ -379,7 +413,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "search-in-rotated-sorted-array",
-        "url": "https://leetcode.com/problems/search-in-rotated-sorted-array/"
+        "url": "https://leetcode.com/problems/search-in-rotated-sorted-array/",
+        "platform": "LeetCode"
       },
       {
         "id": "c36",
@@ -390,7 +425,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "find-minimum-in-rotated-sorted-array",
-        "url": "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/"
+        "url": "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/",
+        "platform": "LeetCode"
       },
       {
         "id": "c37",
@@ -402,7 +438,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "median-of-two-sorted-arrays",
-        "url": "https://leetcode.com/problems/median-of-two-sorted-arrays/"
+        "url": "https://leetcode.com/problems/median-of-two-sorted-arrays/",
+        "platform": "LeetCode"
       },
       {
         "id": "c38",
@@ -414,7 +451,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "koko-eating-bananas",
-        "url": "https://leetcode.com/problems/koko-eating-bananas/"
+        "url": "https://leetcode.com/problems/koko-eating-bananas/",
+        "platform": "LeetCode"
       },
       {
         "id": "c39",
@@ -425,7 +463,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "search-a-2d-matrix",
-        "url": "https://leetcode.com/problems/search-a-2d-matrix/"
+        "url": "https://leetcode.com/problems/search-a-2d-matrix/",
+        "platform": "LeetCode"
       },
       {
         "id": "c40",
@@ -434,7 +473,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "median-of-two-sorted-arrays",
-        "url": "https://leetcode.com/problems/median-of-two-sorted-arrays/"
+        "url": "https://www.geeksforgeeks.org/problems/k-th-element-of-two-sorted-array1317/1",
+        "platform": "GFG"
       },
       {
         "id": "c41",
@@ -443,7 +483,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "magnetic-force-between-two-balls",
-        "url": "https://leetcode.com/problems/magnetic-force-between-two-balls/"
+        "url": "https://www.geeksforgeeks.org/problems/aggressive-cows/1",
+        "platform": "GFG"
       },
       {
         "id": "c42",
@@ -452,7 +493,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "time-based-key-value-store",
-        "url": "https://leetcode.com/problems/time-based-key-value-store/"
+        "url": "https://leetcode.com/problems/time-based-key-value-store/",
+        "platform": "LeetCode"
       },
       {
         "id": "c43",
@@ -461,7 +503,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "find-k-closest-elements",
-        "url": "https://leetcode.com/problems/find-k-closest-elements/"
+        "url": "https://leetcode.com/problems/find-k-closest-elements/",
+        "platform": "LeetCode"
       },
       {
         "id": "c44",
@@ -472,7 +515,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "split-array-largest-sum",
-        "url": "https://leetcode.com/problems/split-array-largest-sum/"
+        "url": "https://leetcode.com/problems/split-array-largest-sum/",
+        "platform": "LeetCode"
       },
       {
         "id": "c45",
@@ -481,7 +525,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "capacity-to-ship-packages-within-d-days",
-        "url": "https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/"
+        "url": "https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/",
+        "platform": "LeetCode"
       },
       {
         "id": "c46",
@@ -492,7 +537,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "find-peak-element",
-        "url": "https://leetcode.com/problems/find-peak-element/"
+        "url": "https://leetcode.com/problems/find-peak-element/",
+        "platform": "LeetCode"
       }
     ]
   },
@@ -508,7 +554,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "sort-an-array",
-        "url": "https://leetcode.com/problems/sort-an-array/"
+        "url": "https://www.geeksforgeeks.org/problems/merge-sort/1",
+        "platform": "GFG"
       },
       {
         "id": "c48",
@@ -517,7 +564,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "sort-an-array",
-        "url": "https://leetcode.com/problems/sort-an-array/"
+        "url": "https://www.geeksforgeeks.org/problems/quick-sort/1",
+        "platform": "GFG"
       },
       {
         "id": "c49",
@@ -528,7 +576,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "sort-colors",
-        "url": "https://leetcode.com/problems/sort-colors/"
+        "url": "https://leetcode.com/problems/sort-colors/",
+        "platform": "LeetCode"
       },
       {
         "id": "c50",
@@ -541,7 +590,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "merge-intervals",
-        "url": "https://leetcode.com/problems/merge-intervals/"
+        "url": "https://leetcode.com/problems/merge-intervals/",
+        "platform": "LeetCode"
       },
       {
         "id": "c51",
@@ -553,7 +603,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "kth-largest-element-in-an-array",
-        "url": "https://leetcode.com/problems/kth-largest-element-in-an-array/"
+        "url": "https://leetcode.com/problems/kth-largest-element-in-an-array/",
+        "platform": "LeetCode"
       },
       {
         "id": "c52",
@@ -562,7 +613,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "largest-number",
-        "url": "https://leetcode.com/problems/largest-number/"
+        "url": "https://leetcode.com/problems/largest-number/",
+        "platform": "LeetCode"
       },
       {
         "id": "c53",
@@ -571,7 +623,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "reverse-pairs",
-        "url": "https://leetcode.com/problems/reverse-pairs/"
+        "url": "https://www.geeksforgeeks.org/problems/inversion-of-array-1587115620/1",
+        "platform": "GFG"
       },
       {
         "id": "c54",
@@ -580,7 +633,8 @@ export const patternsData = [
         "difficulty": "E",
         "tags": [],
         "slug": "meeting-rooms",
-        "url": "https://leetcode.com/problems/meeting-rooms/"
+        "url": "https://www.geeksforgeeks.org/problems/attend-all-meetings/1",
+        "platform": "GFG"
       }
     ]
   },
@@ -599,7 +653,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "reverse-linked-list",
-        "url": "https://leetcode.com/problems/reverse-linked-list/"
+        "url": "https://leetcode.com/problems/reverse-linked-list/",
+        "platform": "LeetCode"
       },
       {
         "id": "c56",
@@ -611,7 +666,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "merge-two-sorted-lists",
-        "url": "https://leetcode.com/problems/merge-two-sorted-lists/"
+        "url": "https://leetcode.com/problems/merge-two-sorted-lists/",
+        "platform": "LeetCode"
       },
       {
         "id": "c57",
@@ -622,7 +678,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "linked-list-cycle",
-        "url": "https://leetcode.com/problems/linked-list-cycle/"
+        "url": "https://leetcode.com/problems/linked-list-cycle/",
+        "platform": "LeetCode"
       },
       {
         "id": "c58",
@@ -633,7 +690,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "remove-nth-node-from-end-of-list",
-        "url": "https://leetcode.com/problems/remove-nth-node-from-end-of-list/"
+        "url": "https://leetcode.com/problems/remove-nth-node-from-end-of-list/",
+        "platform": "LeetCode"
       },
       {
         "id": "c59",
@@ -642,7 +700,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "reorder-list",
-        "url": "https://leetcode.com/problems/reorder-list/"
+        "url": "https://leetcode.com/problems/reorder-list/",
+        "platform": "LeetCode"
       },
       {
         "id": "c60",
@@ -653,7 +712,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "add-two-numbers",
-        "url": "https://leetcode.com/problems/add-two-numbers/"
+        "url": "https://leetcode.com/problems/add-two-numbers/",
+        "platform": "LeetCode"
       },
       {
         "id": "c61",
@@ -664,7 +724,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "copy-list-with-random-pointer",
-        "url": "https://leetcode.com/problems/copy-list-with-random-pointer/"
+        "url": "https://leetcode.com/problems/copy-list-with-random-pointer/",
+        "platform": "LeetCode"
       },
       {
         "id": "c62",
@@ -676,7 +737,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "merge-k-sorted-lists",
-        "url": "https://leetcode.com/problems/merge-k-sorted-lists/"
+        "url": "https://leetcode.com/problems/merge-k-sorted-lists/",
+        "platform": "LeetCode"
       },
       {
         "id": "c63",
@@ -688,7 +750,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "lru-cache",
-        "url": "https://leetcode.com/problems/lru-cache/"
+        "url": "https://leetcode.com/problems/lru-cache/",
+        "platform": "LeetCode"
       },
       {
         "id": "c64",
@@ -699,7 +762,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "palindrome-linked-list",
-        "url": "https://leetcode.com/problems/palindrome-linked-list/"
+        "url": "https://leetcode.com/problems/palindrome-linked-list/",
+        "platform": "LeetCode"
       },
       {
         "id": "c65",
@@ -710,7 +774,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "intersection-of-two-linked-lists",
-        "url": "https://leetcode.com/problems/intersection-of-two-linked-lists/"
+        "url": "https://leetcode.com/problems/intersection-of-two-linked-lists/",
+        "platform": "LeetCode"
       },
       {
         "id": "c66",
@@ -721,7 +786,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "rotate-list",
-        "url": "https://leetcode.com/problems/rotate-list/"
+        "url": "https://leetcode.com/problems/rotate-list/",
+        "platform": "LeetCode"
       }
     ]
   },
@@ -739,7 +805,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "valid-parentheses",
-        "url": "https://leetcode.com/problems/valid-parentheses/"
+        "url": "https://leetcode.com/problems/valid-parentheses/",
+        "platform": "LeetCode"
       },
       {
         "id": "c68",
@@ -750,7 +817,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "min-stack",
-        "url": "https://leetcode.com/problems/min-stack/"
+        "url": "https://leetcode.com/problems/min-stack/",
+        "platform": "LeetCode"
       },
       {
         "id": "c69",
@@ -759,7 +827,8 @@ export const patternsData = [
         "difficulty": "E",
         "tags": [],
         "slug": "next-greater-element-i",
-        "url": "https://leetcode.com/problems/next-greater-element-i/"
+        "url": "https://leetcode.com/problems/next-greater-element-i/",
+        "platform": "LeetCode"
       },
       {
         "id": "c70",
@@ -770,7 +839,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "daily-temperatures",
-        "url": "https://leetcode.com/problems/daily-temperatures/"
+        "url": "https://leetcode.com/problems/daily-temperatures/",
+        "platform": "LeetCode"
       },
       {
         "id": "c71",
@@ -782,7 +852,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "largest-rectangle-in-histogram",
-        "url": "https://leetcode.com/problems/largest-rectangle-in-histogram/"
+        "url": "https://leetcode.com/problems/largest-rectangle-in-histogram/",
+        "platform": "LeetCode"
       },
       {
         "id": "c72",
@@ -791,7 +862,8 @@ export const patternsData = [
         "difficulty": "E",
         "tags": [],
         "slug": "implement-queue-using-stacks",
-        "url": "https://leetcode.com/problems/implement-queue-using-stacks/"
+        "url": "https://leetcode.com/problems/implement-queue-using-stacks/",
+        "platform": "LeetCode"
       },
       {
         "id": "c73",
@@ -803,7 +875,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "sliding-window-maximum",
-        "url": "https://leetcode.com/problems/sliding-window-maximum/"
+        "url": "https://leetcode.com/problems/sliding-window-maximum/",
+        "platform": "LeetCode"
       },
       {
         "id": "c74",
@@ -815,7 +888,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "lru-cache",
-        "url": "https://leetcode.com/problems/lru-cache/"
+        "url": "https://leetcode.com/problems/lru-cache/",
+        "platform": "LeetCode"
       },
       {
         "id": "c75",
@@ -824,7 +898,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "car-fleet",
-        "url": "https://leetcode.com/problems/car-fleet/"
+        "url": "https://leetcode.com/problems/car-fleet/",
+        "platform": "LeetCode"
       },
       {
         "id": "c76",
@@ -833,7 +908,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "evaluate-reverse-polish-notation",
-        "url": "https://leetcode.com/problems/evaluate-reverse-polish-notation/"
+        "url": "https://leetcode.com/problems/evaluate-reverse-polish-notation/",
+        "platform": "LeetCode"
       },
       {
         "id": "c77",
@@ -842,7 +918,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "asteroid-collision",
-        "url": "https://leetcode.com/problems/asteroid-collision/"
+        "url": "https://leetcode.com/problems/asteroid-collision/",
+        "platform": "LeetCode"
       },
       {
         "id": "c78",
@@ -851,7 +928,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "remove-k-digits",
-        "url": "https://leetcode.com/problems/remove-k-digits/"
+        "url": "https://leetcode.com/problems/remove-k-digits/",
+        "platform": "LeetCode"
       },
       {
         "id": "c79",
@@ -860,7 +938,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "longest-valid-parentheses",
-        "url": "https://leetcode.com/problems/longest-valid-parentheses/"
+        "url": "https://leetcode.com/problems/longest-valid-parentheses/",
+        "platform": "LeetCode"
       }
     ]
   },
@@ -879,7 +958,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "subsets",
-        "url": "https://leetcode.com/problems/subsets/"
+        "url": "https://leetcode.com/problems/subsets/",
+        "platform": "LeetCode"
       },
       {
         "id": "c81",
@@ -891,7 +971,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "combination-sum",
-        "url": "https://leetcode.com/problems/combination-sum/"
+        "url": "https://leetcode.com/problems/combination-sum/",
+        "platform": "LeetCode"
       },
       {
         "id": "c82",
@@ -900,7 +981,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "permutations",
-        "url": "https://leetcode.com/problems/permutations/"
+        "url": "https://leetcode.com/problems/permutations/",
+        "platform": "LeetCode"
       },
       {
         "id": "c83",
@@ -912,7 +994,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "n-queens",
-        "url": "https://leetcode.com/problems/n-queens/"
+        "url": "https://leetcode.com/problems/n-queens/",
+        "platform": "LeetCode"
       },
       {
         "id": "c84",
@@ -923,7 +1006,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "word-search",
-        "url": "https://leetcode.com/problems/word-search/"
+        "url": "https://leetcode.com/problems/word-search/",
+        "platform": "LeetCode"
       },
       {
         "id": "c85",
@@ -934,7 +1018,8 @@ export const patternsData = [
           "Babbar"
         ],
         "slug": "sudoku-solver",
-        "url": "https://leetcode.com/problems/sudoku-solver/"
+        "url": "https://leetcode.com/problems/sudoku-solver/",
+        "platform": "LeetCode"
       },
       {
         "id": "c86",
@@ -945,7 +1030,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "palindrome-partitioning",
-        "url": "https://leetcode.com/problems/palindrome-partitioning/"
+        "url": "https://leetcode.com/problems/palindrome-partitioning/",
+        "platform": "LeetCode"
       },
       {
         "id": "c87",
@@ -954,7 +1040,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "the-maze",
-        "url": "https://leetcode.com/problems/the-maze/"
+        "url": "https://www.geeksforgeeks.org/problems/rat-in-a-maze-problem/1",
+        "platform": "GFG"
       },
       {
         "id": "c88",
@@ -965,7 +1052,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "letter-combinations-of-a-phone-number",
-        "url": "https://leetcode.com/problems/letter-combinations-of-a-phone-number/"
+        "url": "https://leetcode.com/problems/letter-combinations-of-a-phone-number/",
+        "platform": "LeetCode"
       },
       {
         "id": "c89",
@@ -976,7 +1064,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "combination-sum-ii",
-        "url": "https://leetcode.com/problems/combination-sum-ii/"
+        "url": "https://leetcode.com/problems/combination-sum-ii/",
+        "platform": "LeetCode"
       },
       {
         "id": "c90",
@@ -985,7 +1074,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "restore-ip-addresses",
-        "url": "https://leetcode.com/problems/restore-ip-addresses/"
+        "url": "https://leetcode.com/problems/restore-ip-addresses/",
+        "platform": "LeetCode"
       },
       {
         "id": "c91",
@@ -994,7 +1084,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "word-break-ii",
-        "url": "https://leetcode.com/problems/word-break-ii/"
+        "url": "https://leetcode.com/problems/word-break-ii/",
+        "platform": "LeetCode"
       }
     ]
   },
@@ -1012,7 +1103,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "binary-tree-inorder-traversal",
-        "url": "https://leetcode.com/problems/binary-tree-inorder-traversal/"
+        "url": "https://leetcode.com/problems/binary-tree-inorder-traversal/",
+        "platform": "LeetCode"
       },
       {
         "id": "c93",
@@ -1024,7 +1116,8 @@ export const patternsData = [
           "Babbar"
         ],
         "slug": "binary-tree-level-order-traversal",
-        "url": "https://leetcode.com/problems/binary-tree-level-order-traversal/"
+        "url": "https://leetcode.com/problems/binary-tree-level-order-traversal/",
+        "platform": "LeetCode"
       },
       {
         "id": "c94",
@@ -1035,7 +1128,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "maximum-depth-of-binary-tree",
-        "url": "https://leetcode.com/problems/maximum-depth-of-binary-tree/"
+        "url": "https://leetcode.com/problems/maximum-depth-of-binary-tree/",
+        "platform": "LeetCode"
       },
       {
         "id": "c95",
@@ -1047,7 +1141,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "diameter-of-binary-tree",
-        "url": "https://leetcode.com/problems/diameter-of-binary-tree/"
+        "url": "https://leetcode.com/problems/diameter-of-binary-tree/",
+        "platform": "LeetCode"
       },
       {
         "id": "c96",
@@ -1058,7 +1153,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "lowest-common-ancestor-of-a-binary-tree",
-        "url": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/"
+        "url": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/",
+        "platform": "LeetCode"
       },
       {
         "id": "c97",
@@ -1070,7 +1166,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "binary-tree-maximum-path-sum",
-        "url": "https://leetcode.com/problems/binary-tree-maximum-path-sum/"
+        "url": "https://leetcode.com/problems/binary-tree-maximum-path-sum/",
+        "platform": "LeetCode"
       },
       {
         "id": "c98",
@@ -1081,7 +1178,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "vertical-order-traversal-of-a-binary-tree",
-        "url": "https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree/"
+        "url": "https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree/",
+        "platform": "LeetCode"
       },
       {
         "id": "c99",
@@ -1092,7 +1190,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "serialize-and-deserialize-binary-tree",
-        "url": "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/"
+        "url": "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/",
+        "platform": "LeetCode"
       },
       {
         "id": "c100",
@@ -1103,7 +1202,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "balanced-binary-tree",
-        "url": "https://leetcode.com/problems/balanced-binary-tree/"
+        "url": "https://leetcode.com/problems/balanced-binary-tree/",
+        "platform": "LeetCode"
       },
       {
         "id": "c101",
@@ -1114,7 +1214,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "same-tree",
-        "url": "https://leetcode.com/problems/same-tree/"
+        "url": "https://leetcode.com/problems/same-tree/",
+        "platform": "LeetCode"
       },
       {
         "id": "c102",
@@ -1125,7 +1226,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "symmetric-tree",
-        "url": "https://leetcode.com/problems/symmetric-tree/"
+        "url": "https://leetcode.com/problems/symmetric-tree/",
+        "platform": "LeetCode"
       },
       {
         "id": "c103",
@@ -1134,7 +1236,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "binary-tree-right-side-view",
-        "url": "https://leetcode.com/problems/binary-tree-right-side-view/"
+        "url": "https://leetcode.com/problems/binary-tree-right-side-view/",
+        "platform": "LeetCode"
       },
       {
         "id": "c104",
@@ -1143,7 +1246,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "construct-binary-tree-from-preorder-and-inorder-traversal",
-        "url": "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/"
+        "url": "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/",
+        "platform": "LeetCode"
       },
       {
         "id": "c105",
@@ -1152,7 +1256,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "binary-tree-zigzag-level-order-traversal",
-        "url": "https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/"
+        "url": "https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/",
+        "platform": "LeetCode"
       }
     ]
   },
@@ -1171,7 +1276,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "validate-binary-search-tree",
-        "url": "https://leetcode.com/problems/validate-binary-search-tree/"
+        "url": "https://leetcode.com/problems/validate-binary-search-tree/",
+        "platform": "LeetCode"
       },
       {
         "id": "c107",
@@ -1183,7 +1289,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "kth-smallest-element-in-a-bst",
-        "url": "https://leetcode.com/problems/kth-smallest-element-in-a-bst/"
+        "url": "https://leetcode.com/problems/kth-smallest-element-in-a-bst/",
+        "platform": "LeetCode"
       },
       {
         "id": "c108",
@@ -1192,7 +1299,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "lowest-common-ancestor-of-a-binary-search-tree",
-        "url": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/"
+        "url": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/",
+        "platform": "LeetCode"
       },
       {
         "id": "c109",
@@ -1201,7 +1309,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "insert-into-a-binary-search-tree",
-        "url": "https://leetcode.com/problems/insert-into-a-binary-search-tree/"
+        "url": "https://leetcode.com/problems/insert-into-a-binary-search-tree/",
+        "platform": "LeetCode"
       },
       {
         "id": "c110",
@@ -1210,7 +1319,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "delete-node-in-a-bst",
-        "url": "https://leetcode.com/problems/delete-node-in-a-bst/"
+        "url": "https://leetcode.com/problems/delete-node-in-a-bst/",
+        "platform": "LeetCode"
       },
       {
         "id": "c111",
@@ -1219,7 +1329,8 @@ export const patternsData = [
         "difficulty": "E",
         "tags": [],
         "slug": "convert-sorted-array-to-binary-search-tree",
-        "url": "https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/"
+        "url": "https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/",
+        "platform": "LeetCode"
       },
       {
         "id": "c112",
@@ -1228,7 +1339,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "closest-binary-search-tree-value",
-        "url": "https://leetcode.com/problems/closest-binary-search-tree-value/"
+        "url": "https://www.geeksforgeeks.org/problems/floor-in-bst/1",
+        "platform": "GFG"
       },
       {
         "id": "c113",
@@ -1237,7 +1349,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "inorder-successor-in-bst",
-        "url": "https://leetcode.com/problems/inorder-successor-in-bst/"
+        "url": "https://www.geeksforgeeks.org/problems/inorder-successor-in-bst/1",
+        "platform": "GFG"
       },
       {
         "id": "c114",
@@ -1246,7 +1359,8 @@ export const patternsData = [
         "difficulty": "E",
         "tags": [],
         "slug": "two-sum-iv-input-is-a-bst",
-        "url": "https://leetcode.com/problems/two-sum-iv-input-is-a-bst/"
+        "url": "https://leetcode.com/problems/two-sum-iv-input-is-a-bst/",
+        "platform": "LeetCode"
       },
       {
         "id": "c115",
@@ -1255,7 +1369,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "recover-binary-search-tree",
-        "url": "https://leetcode.com/problems/recover-binary-search-tree/"
+        "url": "https://leetcode.com/problems/recover-binary-search-tree/",
+        "platform": "LeetCode"
       },
       {
         "id": "c116",
@@ -1264,7 +1379,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "largest-bst-subtree",
-        "url": "https://leetcode.com/problems/largest-bst-subtree/"
+        "url": "https://www.geeksforgeeks.org/problems/largest-bst/1",
+        "platform": "GFG"
       }
     ]
   },
@@ -1283,7 +1399,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "kth-largest-element-in-an-array",
-        "url": "https://leetcode.com/problems/kth-largest-element-in-an-array/"
+        "url": "https://leetcode.com/problems/kth-largest-element-in-an-array/",
+        "platform": "LeetCode"
       },
       {
         "id": "c118",
@@ -1294,7 +1411,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "top-k-frequent-elements",
-        "url": "https://leetcode.com/problems/top-k-frequent-elements/"
+        "url": "https://leetcode.com/problems/top-k-frequent-elements/",
+        "platform": "LeetCode"
       },
       {
         "id": "c119",
@@ -1306,7 +1424,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "merge-k-sorted-lists",
-        "url": "https://leetcode.com/problems/merge-k-sorted-lists/"
+        "url": "https://leetcode.com/problems/merge-k-sorted-lists/",
+        "platform": "LeetCode"
       },
       {
         "id": "c120",
@@ -1318,7 +1437,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "find-median-from-data-stream",
-        "url": "https://leetcode.com/problems/find-median-from-data-stream/"
+        "url": "https://leetcode.com/problems/find-median-from-data-stream/",
+        "platform": "LeetCode"
       },
       {
         "id": "c121",
@@ -1327,7 +1447,8 @@ export const patternsData = [
         "difficulty": "E",
         "tags": [],
         "slug": "kth-largest-element-in-a-stream",
-        "url": "https://leetcode.com/problems/kth-largest-element-in-a-stream/"
+        "url": "https://leetcode.com/problems/kth-largest-element-in-a-stream/",
+        "platform": "LeetCode"
       },
       {
         "id": "c122",
@@ -1338,7 +1459,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "task-scheduler",
-        "url": "https://leetcode.com/problems/task-scheduler/"
+        "url": "https://leetcode.com/problems/task-scheduler/",
+        "platform": "LeetCode"
       },
       {
         "id": "c123",
@@ -1347,7 +1469,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "meeting-rooms-ii",
-        "url": "https://leetcode.com/problems/meeting-rooms-ii/"
+        "url": "https://www.geeksforgeeks.org/problems/attend-all-meetings-ii/1",
+        "platform": "GFG"
       },
       {
         "id": "c124",
@@ -1356,7 +1479,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "reorganize-string",
-        "url": "https://leetcode.com/problems/reorganize-string/"
+        "url": "https://leetcode.com/problems/reorganize-string/",
+        "platform": "LeetCode"
       },
       {
         "id": "c125",
@@ -1365,7 +1489,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "find-k-pairs-with-smallest-sums",
-        "url": "https://leetcode.com/problems/find-k-pairs-with-smallest-sums/"
+        "url": "https://leetcode.com/problems/find-k-pairs-with-smallest-sums/",
+        "platform": "LeetCode"
       },
       {
         "id": "c126",
@@ -1374,7 +1499,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "kth-smallest-element-in-a-sorted-matrix",
-        "url": "https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/"
+        "url": "https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/",
+        "platform": "LeetCode"
       },
       {
         "id": "c127",
@@ -1383,7 +1509,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "top-k-frequent-words",
-        "url": "https://leetcode.com/problems/top-k-frequent-words/"
+        "url": "https://leetcode.com/problems/top-k-frequent-words/",
+        "platform": "LeetCode"
       }
     ]
   },
@@ -1402,7 +1529,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "number-of-islands",
-        "url": "https://leetcode.com/problems/number-of-islands/"
+        "url": "https://leetcode.com/problems/number-of-islands/",
+        "platform": "LeetCode"
       },
       {
         "id": "c129",
@@ -1411,7 +1539,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "clone-graph",
-        "url": "https://leetcode.com/problems/clone-graph/"
+        "url": "https://leetcode.com/problems/clone-graph/",
+        "platform": "LeetCode"
       },
       {
         "id": "c130",
@@ -1423,7 +1552,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "rotting-oranges",
-        "url": "https://leetcode.com/problems/rotting-oranges/"
+        "url": "https://leetcode.com/problems/rotting-oranges/",
+        "platform": "LeetCode"
       },
       {
         "id": "c131",
@@ -1432,7 +1562,8 @@ export const patternsData = [
         "difficulty": "E",
         "tags": [],
         "slug": "flood-fill",
-        "url": "https://leetcode.com/problems/flood-fill/"
+        "url": "https://leetcode.com/problems/flood-fill/",
+        "platform": "LeetCode"
       },
       {
         "id": "c132",
@@ -1441,7 +1572,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "01-matrix",
-        "url": "https://leetcode.com/problems/01-matrix/"
+        "url": "https://leetcode.com/problems/01-matrix/",
+        "platform": "LeetCode"
       },
       {
         "id": "c133",
@@ -1452,7 +1584,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "number-of-provinces",
-        "url": "https://leetcode.com/problems/number-of-provinces/"
+        "url": "https://leetcode.com/problems/number-of-provinces/",
+        "platform": "LeetCode"
       },
       {
         "id": "c134",
@@ -1461,7 +1594,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "is-graph-bipartite",
-        "url": "https://leetcode.com/problems/is-graph-bipartite/"
+        "url": "https://leetcode.com/problems/is-graph-bipartite/",
+        "platform": "LeetCode"
       },
       {
         "id": "c135",
@@ -1470,7 +1604,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "graph-valid-tree",
-        "url": "https://leetcode.com/problems/graph-valid-tree/"
+        "url": "https://www.geeksforgeeks.org/problems/detect-cycle-in-an-undirected-graph/1",
+        "platform": "GFG"
       },
       {
         "id": "c136",
@@ -1479,7 +1614,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "max-area-of-island",
-        "url": "https://leetcode.com/problems/max-area-of-island/"
+        "url": "https://leetcode.com/problems/max-area-of-island/",
+        "platform": "LeetCode"
       },
       {
         "id": "c137",
@@ -1490,7 +1626,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "surrounded-regions",
-        "url": "https://leetcode.com/problems/surrounded-regions/"
+        "url": "https://leetcode.com/problems/surrounded-regions/",
+        "platform": "LeetCode"
       },
       {
         "id": "c138",
@@ -1499,7 +1636,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "walls-and-gates",
-        "url": "https://leetcode.com/problems/walls-and-gates/"
+        "url": "https://www.geeksforgeeks.org/problems/distance-of-nearest-cell-having-1-1587115620/1",
+        "platform": "GFG"
       },
       {
         "id": "c139",
@@ -1510,7 +1648,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "word-search",
-        "url": "https://leetcode.com/problems/word-search/"
+        "url": "https://leetcode.com/problems/word-search/",
+        "platform": "LeetCode"
       },
       {
         "id": "c140",
@@ -1519,7 +1658,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "snakes-and-ladders",
-        "url": "https://leetcode.com/problems/snakes-and-ladders/"
+        "url": "https://leetcode.com/problems/snakes-and-ladders/",
+        "platform": "LeetCode"
       }
     ]
   },
@@ -1538,7 +1678,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "course-schedule",
-        "url": "https://leetcode.com/problems/course-schedule/"
+        "url": "https://leetcode.com/problems/course-schedule/",
+        "platform": "LeetCode"
       },
       {
         "id": "c142",
@@ -1549,7 +1690,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "course-schedule-ii",
-        "url": "https://leetcode.com/problems/course-schedule-ii/"
+        "url": "https://leetcode.com/problems/course-schedule-ii/",
+        "platform": "LeetCode"
       },
       {
         "id": "c143",
@@ -1560,7 +1702,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "alien-dictionary",
-        "url": "https://leetcode.com/problems/alien-dictionary/"
+        "url": "https://www.geeksforgeeks.org/problems/alien-dictionary/1",
+        "platform": "GFG"
       },
       {
         "id": "c144",
@@ -1569,7 +1712,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "course-schedule",
-        "url": "https://leetcode.com/problems/course-schedule/"
+        "url": "https://www.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1",
+        "platform": "GFG"
       },
       {
         "id": "c145",
@@ -1578,7 +1722,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "course-schedule-ii",
-        "url": "https://leetcode.com/problems/course-schedule-ii/"
+        "url": "https://www.geeksforgeeks.org/problems/topological-sort/1",
+        "platform": "GFG"
       }
     ]
   },
@@ -1596,7 +1741,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "network-delay-time",
-        "url": "https://leetcode.com/problems/network-delay-time/"
+        "url": "https://leetcode.com/problems/network-delay-time/",
+        "platform": "LeetCode"
       },
       {
         "id": "c147",
@@ -1608,7 +1754,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "cheapest-flights-within-k-stops",
-        "url": "https://leetcode.com/problems/cheapest-flights-within-k-stops/"
+        "url": "https://leetcode.com/problems/cheapest-flights-within-k-stops/",
+        "platform": "LeetCode"
       },
       {
         "id": "c148",
@@ -1620,7 +1767,8 @@ export const patternsData = [
           "Babbar"
         ],
         "slug": "word-ladder",
-        "url": "https://leetcode.com/problems/word-ladder/"
+        "url": "https://leetcode.com/problems/word-ladder/",
+        "platform": "LeetCode"
       },
       {
         "id": "c149",
@@ -1629,7 +1777,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "path-with-minimum-effort",
-        "url": "https://leetcode.com/problems/path-with-minimum-effort/"
+        "url": "https://leetcode.com/problems/path-with-minimum-effort/",
+        "platform": "LeetCode"
       },
       {
         "id": "c150",
@@ -1638,7 +1787,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance",
-        "url": "https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/"
+        "url": "https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/",
+        "platform": "LeetCode"
       },
       {
         "id": "c151",
@@ -1647,7 +1797,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "shortest-path-in-binary-matrix",
-        "url": "https://leetcode.com/problems/shortest-path-in-binary-matrix/"
+        "url": "https://leetcode.com/problems/shortest-path-in-binary-matrix/",
+        "platform": "LeetCode"
       }
     ]
   },
@@ -1663,7 +1814,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "number-of-connected-components-in-an-undirected-graph",
-        "url": "https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/"
+        "url": "https://www.geeksforgeeks.org/problems/number-of-provinces/1",
+        "platform": "GFG"
       },
       {
         "id": "c153",
@@ -1672,7 +1824,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "redundant-connection",
-        "url": "https://leetcode.com/problems/redundant-connection/"
+        "url": "https://leetcode.com/problems/redundant-connection/",
+        "platform": "LeetCode"
       },
       {
         "id": "c154",
@@ -1681,7 +1834,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "min-cost-to-connect-all-points",
-        "url": "https://leetcode.com/problems/min-cost-to-connect-all-points/"
+        "url": "https://leetcode.com/problems/min-cost-to-connect-all-points/",
+        "platform": "LeetCode"
       },
       {
         "id": "c155",
@@ -1692,7 +1846,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "accounts-merge",
-        "url": "https://leetcode.com/problems/accounts-merge/"
+        "url": "https://leetcode.com/problems/accounts-merge/",
+        "platform": "LeetCode"
       },
       {
         "id": "c156",
@@ -1701,7 +1856,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "graph-valid-tree",
-        "url": "https://leetcode.com/problems/graph-valid-tree/"
+        "url": "https://www.geeksforgeeks.org/problems/is-it-a-tree/1",
+        "platform": "GFG"
       },
       {
         "id": "c157",
@@ -1710,7 +1866,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "min-cost-to-connect-all-points",
-        "url": "https://leetcode.com/problems/min-cost-to-connect-all-points/"
+        "url": "https://www.geeksforgeeks.org/problems/minimum-spanning-tree/1",
+        "platform": "GFG"
       }
     ]
   },
@@ -1729,7 +1886,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "jump-game",
-        "url": "https://leetcode.com/problems/jump-game/"
+        "url": "https://leetcode.com/problems/jump-game/",
+        "platform": "LeetCode"
       },
       {
         "id": "c159",
@@ -1740,7 +1898,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "jump-game-ii",
-        "url": "https://leetcode.com/problems/jump-game-ii/"
+        "url": "https://leetcode.com/problems/jump-game-ii/",
+        "platform": "LeetCode"
       },
       {
         "id": "c160",
@@ -1753,7 +1912,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "merge-intervals",
-        "url": "https://leetcode.com/problems/merge-intervals/"
+        "url": "https://leetcode.com/problems/merge-intervals/",
+        "platform": "LeetCode"
       },
       {
         "id": "c161",
@@ -1764,7 +1924,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "non-overlapping-intervals",
-        "url": "https://leetcode.com/problems/non-overlapping-intervals/"
+        "url": "https://leetcode.com/problems/non-overlapping-intervals/",
+        "platform": "LeetCode"
       },
       {
         "id": "c162",
@@ -1775,7 +1936,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "insert-interval",
-        "url": "https://leetcode.com/problems/insert-interval/"
+        "url": "https://leetcode.com/problems/insert-interval/",
+        "platform": "LeetCode"
       },
       {
         "id": "c163",
@@ -1784,7 +1946,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "gas-station",
-        "url": "https://leetcode.com/problems/gas-station/"
+        "url": "https://leetcode.com/problems/gas-station/",
+        "platform": "LeetCode"
       },
       {
         "id": "c164",
@@ -1793,7 +1956,8 @@ export const patternsData = [
         "difficulty": "E",
         "tags": [],
         "slug": "non-overlapping-intervals",
-        "url": "https://leetcode.com/problems/non-overlapping-intervals/"
+        "url": "https://www.geeksforgeeks.org/problems/activity-selection-1587115620/1",
+        "platform": "GFG"
       },
       {
         "id": "c165",
@@ -1802,7 +1966,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "meeting-rooms-ii",
-        "url": "https://leetcode.com/problems/meeting-rooms-ii/"
+        "url": "https://www.geeksforgeeks.org/problems/minimum-platforms-1587115620/1",
+        "platform": "GFG"
       }
     ]
   },
@@ -1820,7 +1985,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "climbing-stairs",
-        "url": "https://leetcode.com/problems/climbing-stairs/"
+        "url": "https://leetcode.com/problems/climbing-stairs/",
+        "platform": "LeetCode"
       },
       {
         "id": "c167",
@@ -1831,7 +1997,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "house-robber",
-        "url": "https://leetcode.com/problems/house-robber/"
+        "url": "https://leetcode.com/problems/house-robber/",
+        "platform": "LeetCode"
       },
       {
         "id": "c168",
@@ -1840,7 +2007,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "house-robber-ii",
-        "url": "https://leetcode.com/problems/house-robber-ii/"
+        "url": "https://leetcode.com/problems/house-robber-ii/",
+        "platform": "LeetCode"
       },
       {
         "id": "c169",
@@ -1852,7 +2020,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "coin-change",
-        "url": "https://leetcode.com/problems/coin-change/"
+        "url": "https://leetcode.com/problems/coin-change/",
+        "platform": "LeetCode"
       },
       {
         "id": "c170",
@@ -1864,7 +2033,8 @@ export const patternsData = [
           "Babbar"
         ],
         "slug": "longest-increasing-subsequence",
-        "url": "https://leetcode.com/problems/longest-increasing-subsequence/"
+        "url": "https://leetcode.com/problems/longest-increasing-subsequence/",
+        "platform": "LeetCode"
       },
       {
         "id": "c171",
@@ -1875,7 +2045,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "word-break",
-        "url": "https://leetcode.com/problems/word-break/"
+        "url": "https://leetcode.com/problems/word-break/",
+        "platform": "LeetCode"
       },
       {
         "id": "c172",
@@ -1884,7 +2055,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "decode-ways",
-        "url": "https://leetcode.com/problems/decode-ways/"
+        "url": "https://leetcode.com/problems/decode-ways/",
+        "platform": "LeetCode"
       },
       {
         "id": "c173",
@@ -1895,7 +2067,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "maximum-product-subarray",
-        "url": "https://leetcode.com/problems/maximum-product-subarray/"
+        "url": "https://leetcode.com/problems/maximum-product-subarray/",
+        "platform": "LeetCode"
       },
       {
         "id": "c174",
@@ -1904,7 +2077,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "perfect-squares",
-        "url": "https://leetcode.com/problems/perfect-squares/"
+        "url": "https://leetcode.com/problems/perfect-squares/",
+        "platform": "LeetCode"
       },
       {
         "id": "c175",
@@ -1913,7 +2087,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "minimum-cost-for-tickets",
-        "url": "https://leetcode.com/problems/minimum-cost-for-tickets/"
+        "url": "https://leetcode.com/problems/minimum-cost-for-tickets/",
+        "platform": "LeetCode"
       },
       {
         "id": "c176",
@@ -1922,7 +2097,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "delete-and-earn",
-        "url": "https://leetcode.com/problems/delete-and-earn/"
+        "url": "https://leetcode.com/problems/delete-and-earn/",
+        "platform": "LeetCode"
       }
     ]
   },
@@ -1941,7 +2117,8 @@ export const patternsData = [
           "Babbar"
         ],
         "slug": "longest-common-subsequence",
-        "url": "https://leetcode.com/problems/longest-common-subsequence/"
+        "url": "https://leetcode.com/problems/longest-common-subsequence/",
+        "platform": "LeetCode"
       },
       {
         "id": "c178",
@@ -1954,7 +2131,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "edit-distance",
-        "url": "https://leetcode.com/problems/edit-distance/"
+        "url": "https://leetcode.com/problems/edit-distance/",
+        "platform": "LeetCode"
       },
       {
         "id": "c179",
@@ -1963,7 +2141,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "partition-equal-subset-sum",
-        "url": "https://leetcode.com/problems/partition-equal-subset-sum/"
+        "url": "https://www.geeksforgeeks.org/problems/0-1-knapsack-problem0945/1",
+        "platform": "GFG"
       },
       {
         "id": "c180",
@@ -1974,7 +2153,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "partition-equal-subset-sum",
-        "url": "https://leetcode.com/problems/partition-equal-subset-sum/"
+        "url": "https://leetcode.com/problems/partition-equal-subset-sum/",
+        "platform": "LeetCode"
       },
       {
         "id": "c181",
@@ -1985,7 +2165,8 @@ export const patternsData = [
           "Babbar"
         ],
         "slug": "longest-palindromic-subsequence",
-        "url": "https://leetcode.com/problems/longest-palindromic-subsequence/"
+        "url": "https://leetcode.com/problems/longest-palindromic-subsequence/",
+        "platform": "LeetCode"
       },
       {
         "id": "c182",
@@ -1996,7 +2177,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "distinct-subsequences",
-        "url": "https://leetcode.com/problems/distinct-subsequences/"
+        "url": "https://leetcode.com/problems/distinct-subsequences/",
+        "platform": "LeetCode"
       },
       {
         "id": "c183",
@@ -2005,7 +2187,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "wildcard-matching",
-        "url": "https://leetcode.com/problems/wildcard-matching/"
+        "url": "https://leetcode.com/problems/wildcard-matching/",
+        "platform": "LeetCode"
       },
       {
         "id": "c184",
@@ -2014,7 +2197,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "burst-balloons",
-        "url": "https://leetcode.com/problems/burst-balloons/"
+        "url": "https://leetcode.com/problems/burst-balloons/",
+        "platform": "LeetCode"
       },
       {
         "id": "c185",
@@ -2023,7 +2207,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "regular-expression-matching",
-        "url": "https://leetcode.com/problems/regular-expression-matching/"
+        "url": "https://leetcode.com/problems/regular-expression-matching/",
+        "platform": "LeetCode"
       },
       {
         "id": "c186",
@@ -2032,7 +2217,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "interleaving-string",
-        "url": "https://leetcode.com/problems/interleaving-string/"
+        "url": "https://leetcode.com/problems/interleaving-string/",
+        "platform": "LeetCode"
       },
       {
         "id": "c187",
@@ -2041,7 +2227,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "longest-increasing-path-in-a-matrix",
-        "url": "https://leetcode.com/problems/longest-increasing-path-in-a-matrix/"
+        "url": "https://leetcode.com/problems/longest-increasing-path-in-a-matrix/",
+        "platform": "LeetCode"
       },
       {
         "id": "c188",
@@ -2050,7 +2237,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "russian-doll-envelopes",
-        "url": "https://leetcode.com/problems/russian-doll-envelopes/"
+        "url": "https://leetcode.com/problems/russian-doll-envelopes/",
+        "platform": "LeetCode"
       },
       {
         "id": "c189",
@@ -2059,7 +2247,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "stone-game",
-        "url": "https://leetcode.com/problems/stone-game/"
+        "url": "https://leetcode.com/problems/stone-game/",
+        "platform": "LeetCode"
       },
       {
         "id": "c190",
@@ -2068,7 +2257,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "stone-game-ii",
-        "url": "https://leetcode.com/problems/stone-game-ii/"
+        "url": "https://leetcode.com/problems/stone-game-ii/",
+        "platform": "LeetCode"
       },
       {
         "id": "c191",
@@ -2079,7 +2269,8 @@ export const patternsData = [
           "Babbar"
         ],
         "slug": "burst-balloons",
-        "url": "https://leetcode.com/problems/burst-balloons/"
+        "url": "https://www.geeksforgeeks.org/problems/matrix-chain-multiplication0303/1",
+        "platform": "GFG"
       }
     ]
   },
@@ -2098,7 +2289,8 @@ export const patternsData = [
           "Babbar"
         ],
         "slug": "best-time-to-buy-and-sell-stock",
-        "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/"
+        "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/",
+        "platform": "LeetCode"
       },
       {
         "id": "c193",
@@ -2107,7 +2299,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "best-time-to-buy-and-sell-stock-ii",
-        "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/"
+        "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/",
+        "platform": "LeetCode"
       },
       {
         "id": "c194",
@@ -2116,7 +2309,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "best-time-to-buy-and-sell-stock-iii",
-        "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/"
+        "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/",
+        "platform": "LeetCode"
       },
       {
         "id": "c195",
@@ -2125,7 +2319,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "best-time-to-buy-and-sell-stock-iv",
-        "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/"
+        "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/",
+        "platform": "LeetCode"
       },
       {
         "id": "c196",
@@ -2134,7 +2329,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "best-time-to-buy-and-sell-stock-with-cooldown",
-        "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/"
+        "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/",
+        "platform": "LeetCode"
       },
       {
         "id": "c197",
@@ -2143,7 +2339,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "best-time-to-buy-and-sell-stock-with-transaction-fee",
-        "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/"
+        "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/",
+        "platform": "LeetCode"
       }
     ]
   },
@@ -2162,7 +2359,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "implement-trie-prefix-tree",
-        "url": "https://leetcode.com/problems/implement-trie-prefix-tree/"
+        "url": "https://leetcode.com/problems/implement-trie-prefix-tree/",
+        "platform": "LeetCode"
       },
       {
         "id": "c199",
@@ -2171,7 +2369,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "word-search-ii",
-        "url": "https://leetcode.com/problems/word-search-ii/"
+        "url": "https://leetcode.com/problems/word-search-ii/",
+        "platform": "LeetCode"
       },
       {
         "id": "c200",
@@ -2180,7 +2379,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "longest-word-in-dictionary",
-        "url": "https://leetcode.com/problems/longest-word-in-dictionary/"
+        "url": "https://leetcode.com/problems/longest-word-in-dictionary/",
+        "platform": "LeetCode"
       },
       {
         "id": "c201",
@@ -2189,7 +2389,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "maximum-xor-of-two-numbers-in-an-array",
-        "url": "https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/"
+        "url": "https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/",
+        "platform": "LeetCode"
       },
       {
         "id": "c202",
@@ -2198,7 +2399,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "number-of-distinct-substrings-in-a-string",
-        "url": "https://leetcode.com/problems/number-of-distinct-substrings-in-a-string/"
+        "url": "https://www.geeksforgeeks.org/problems/count-of-distinct-substrings/1",
+        "platform": "GFG"
       },
       {
         "id": "c203",
@@ -2207,7 +2409,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "replace-words",
-        "url": "https://leetcode.com/problems/replace-words/"
+        "url": "https://leetcode.com/problems/replace-words/",
+        "platform": "LeetCode"
       },
       {
         "id": "c204",
@@ -2216,7 +2419,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "camelcase-matching",
-        "url": "https://leetcode.com/problems/camelcase-matching/"
+        "url": "https://leetcode.com/problems/camelcase-matching/",
+        "platform": "LeetCode"
       },
       {
         "id": "c205",
@@ -2225,7 +2429,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "palindrome-pairs",
-        "url": "https://leetcode.com/problems/palindrome-pairs/"
+        "url": "https://leetcode.com/problems/palindrome-pairs/",
+        "platform": "LeetCode"
       }
     ]
   },
@@ -2243,7 +2448,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "single-number",
-        "url": "https://leetcode.com/problems/single-number/"
+        "url": "https://leetcode.com/problems/single-number/",
+        "platform": "LeetCode"
       },
       {
         "id": "c207",
@@ -2254,7 +2460,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "number-of-1-bits",
-        "url": "https://leetcode.com/problems/number-of-1-bits/"
+        "url": "https://leetcode.com/problems/number-of-1-bits/",
+        "platform": "LeetCode"
       },
       {
         "id": "c208",
@@ -2263,7 +2470,8 @@ export const patternsData = [
         "difficulty": "E",
         "tags": [],
         "slug": "counting-bits",
-        "url": "https://leetcode.com/problems/counting-bits/"
+        "url": "https://leetcode.com/problems/counting-bits/",
+        "platform": "LeetCode"
       },
       {
         "id": "c209",
@@ -2274,7 +2482,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "subsets",
-        "url": "https://leetcode.com/problems/subsets/"
+        "url": "https://leetcode.com/problems/subsets/",
+        "platform": "LeetCode"
       },
       {
         "id": "c210",
@@ -2283,7 +2492,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "maximum-xor-of-two-numbers-in-an-array",
-        "url": "https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/"
+        "url": "https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/",
+        "platform": "LeetCode"
       },
       {
         "id": "c211",
@@ -2294,7 +2504,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "divide-two-integers",
-        "url": "https://leetcode.com/problems/divide-two-integers/"
+        "url": "https://leetcode.com/problems/divide-two-integers/",
+        "platform": "LeetCode"
       },
       {
         "id": "c212",
@@ -2307,7 +2518,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "subsets",
-        "url": "https://leetcode.com/problems/subsets/"
+        "url": "https://leetcode.com/problems/subsets/",
+        "platform": "LeetCode"
       }
     ]
   },
@@ -2325,7 +2537,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "set-matrix-zeroes",
-        "url": "https://leetcode.com/problems/set-matrix-zeroes/"
+        "url": "https://leetcode.com/problems/set-matrix-zeroes/",
+        "platform": "LeetCode"
       },
       {
         "id": "c214",
@@ -2336,7 +2549,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "spiral-matrix",
-        "url": "https://leetcode.com/problems/spiral-matrix/"
+        "url": "https://leetcode.com/problems/spiral-matrix/",
+        "platform": "LeetCode"
       },
       {
         "id": "c215",
@@ -2347,7 +2561,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "rotate-image",
-        "url": "https://leetcode.com/problems/rotate-image/"
+        "url": "https://leetcode.com/problems/rotate-image/",
+        "platform": "LeetCode"
       },
       {
         "id": "c216",
@@ -2358,7 +2573,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "search-a-2d-matrix-ii",
-        "url": "https://leetcode.com/problems/search-a-2d-matrix-ii/"
+        "url": "https://leetcode.com/problems/search-a-2d-matrix-ii/",
+        "platform": "LeetCode"
       },
       {
         "id": "c217",
@@ -2370,7 +2586,8 @@ export const patternsData = [
           "Plan"
         ],
         "slug": "number-of-islands",
-        "url": "https://leetcode.com/problems/number-of-islands/"
+        "url": "https://leetcode.com/problems/number-of-islands/",
+        "platform": "LeetCode"
       },
       {
         "id": "c218",
@@ -2381,7 +2598,8 @@ export const patternsData = [
           "Babbar"
         ],
         "slug": "burst-balloons",
-        "url": "https://leetcode.com/problems/burst-balloons/"
+        "url": "https://www.geeksforgeeks.org/problems/matrix-chain-multiplication0303/1",
+        "platform": "GFG"
       }
     ]
   },
@@ -2399,7 +2617,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "valid-palindrome",
-        "url": "https://leetcode.com/problems/valid-palindrome/"
+        "url": "https://leetcode.com/problems/valid-palindrome/",
+        "platform": "LeetCode"
       },
       {
         "id": "c220",
@@ -2411,7 +2630,8 @@ export const patternsData = [
           "Babbar"
         ],
         "slug": "longest-palindromic-substring",
-        "url": "https://leetcode.com/problems/longest-palindromic-substring/"
+        "url": "https://leetcode.com/problems/longest-palindromic-substring/",
+        "platform": "LeetCode"
       },
       {
         "id": "c221",
@@ -2422,7 +2642,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "reverse-words-in-a-string",
-        "url": "https://leetcode.com/problems/reverse-words-in-a-string/"
+        "url": "https://leetcode.com/problems/reverse-words-in-a-string/",
+        "platform": "LeetCode"
       },
       {
         "id": "c222",
@@ -2433,7 +2654,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "string-to-integer-atoi",
-        "url": "https://leetcode.com/problems/string-to-integer-atoi/"
+        "url": "https://leetcode.com/problems/string-to-integer-atoi/",
+        "platform": "LeetCode"
       },
       {
         "id": "c223",
@@ -2442,7 +2664,8 @@ export const patternsData = [
         "difficulty": "E",
         "tags": [],
         "slug": "roman-to-integer",
-        "url": "https://leetcode.com/problems/roman-to-integer/"
+        "url": "https://leetcode.com/problems/roman-to-integer/",
+        "platform": "LeetCode"
       },
       {
         "id": "c224",
@@ -2451,7 +2674,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "find-the-index-of-the-first-occurrence-in-a-string",
-        "url": "https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/"
+        "url": "https://www.geeksforgeeks.org/problems/search-pattern-rabin-karp-algorithm--141631/1",
+        "platform": "GFG"
       },
       {
         "id": "c225",
@@ -2460,7 +2684,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "minimum-insertion-steps-to-make-a-string-palindrome",
-        "url": "https://leetcode.com/problems/minimum-insertion-steps-to-make-a-string-palindrome/"
+        "url": "https://leetcode.com/problems/minimum-insertion-steps-to-make-a-string-palindrome/",
+        "platform": "LeetCode"
       },
       {
         "id": "c226",
@@ -2471,7 +2696,8 @@ export const patternsData = [
           "Babbar"
         ],
         "slug": "longest-common-prefix",
-        "url": "https://leetcode.com/problems/longest-common-prefix/"
+        "url": "https://leetcode.com/problems/longest-common-prefix/",
+        "platform": "LeetCode"
       },
       {
         "id": "c227",
@@ -2482,7 +2708,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "valid-anagram",
-        "url": "https://leetcode.com/problems/valid-anagram/"
+        "url": "https://leetcode.com/problems/valid-anagram/",
+        "platform": "LeetCode"
       },
       {
         "id": "c228",
@@ -2491,7 +2718,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "multiply-strings",
-        "url": "https://leetcode.com/problems/multiply-strings/"
+        "url": "https://leetcode.com/problems/multiply-strings/",
+        "platform": "LeetCode"
       },
       {
         "id": "c229",
@@ -2500,7 +2728,8 @@ export const patternsData = [
         "difficulty": "E",
         "tags": [],
         "slug": "is-subsequence",
-        "url": "https://leetcode.com/problems/is-subsequence/"
+        "url": "https://leetcode.com/problems/is-subsequence/",
+        "platform": "LeetCode"
       }
     ]
   },
@@ -2516,7 +2745,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "count-primes",
-        "url": "https://leetcode.com/problems/count-primes/"
+        "url": "https://www.geeksforgeeks.org/problems/sieve-of-eratosthenes5242/1",
+        "platform": "GFG"
       },
       {
         "id": "c231",
@@ -2525,7 +2755,8 @@ export const patternsData = [
         "difficulty": "E",
         "tags": [],
         "slug": "find-greatest-common-divisor-of-array",
-        "url": "https://leetcode.com/problems/find-greatest-common-divisor-of-array/"
+        "url": "https://www.geeksforgeeks.org/problems/gcd-of-two-numbers3459/1",
+        "platform": "GFG"
       },
       {
         "id": "c232",
@@ -2536,7 +2767,8 @@ export const patternsData = [
           "done"
         ],
         "slug": "powx-n",
-        "url": "https://leetcode.com/problems/powx-n/"
+        "url": "https://leetcode.com/problems/powx-n/",
+        "platform": "LeetCode"
       },
       {
         "id": "c233",
@@ -2547,7 +2779,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "count-primes",
-        "url": "https://leetcode.com/problems/count-primes/"
+        "url": "https://leetcode.com/problems/count-primes/",
+        "platform": "LeetCode"
       },
       {
         "id": "c234",
@@ -2556,7 +2789,8 @@ export const patternsData = [
         "difficulty": "E",
         "tags": [],
         "slug": "happy-number",
-        "url": "https://leetcode.com/problems/happy-number/"
+        "url": "https://leetcode.com/problems/happy-number/",
+        "platform": "LeetCode"
       },
       {
         "id": "c235",
@@ -2565,7 +2799,8 @@ export const patternsData = [
         "difficulty": "E",
         "tags": [],
         "slug": "excel-sheet-column-number",
-        "url": "https://leetcode.com/problems/excel-sheet-column-number/"
+        "url": "https://leetcode.com/problems/excel-sheet-column-number/",
+        "platform": "LeetCode"
       }
     ]
   },
@@ -2581,7 +2816,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "critical-connections-in-a-network",
-        "url": "https://leetcode.com/problems/critical-connections-in-a-network/"
+        "url": "https://www.geeksforgeeks.org/problems/strongly-connected-components-kosarajus-algo/1",
+        "platform": "GFG"
       },
       {
         "id": "c237",
@@ -2590,7 +2826,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "critical-connections-in-a-network",
-        "url": "https://leetcode.com/problems/critical-connections-in-a-network/"
+        "url": "https://leetcode.com/problems/critical-connections-in-a-network/",
+        "platform": "LeetCode"
       },
       {
         "id": "c238",
@@ -2599,7 +2836,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "critical-connections-in-a-network",
-        "url": "https://leetcode.com/problems/critical-connections-in-a-network/"
+        "url": "https://www.geeksforgeeks.org/problems/articulation-point-1/1",
+        "platform": "GFG"
       },
       {
         "id": "c239",
@@ -2608,7 +2846,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "redundant-connection-ii",
-        "url": "https://leetcode.com/problems/redundant-connection-ii/"
+        "url": "https://leetcode.com/problems/redundant-connection-ii/",
+        "platform": "LeetCode"
       },
       {
         "id": "c240",
@@ -2619,7 +2858,8 @@ export const patternsData = [
           "Striver"
         ],
         "slug": "accounts-merge",
-        "url": "https://leetcode.com/problems/accounts-merge/"
+        "url": "https://leetcode.com/problems/accounts-merge/",
+        "platform": "LeetCode"
       },
       {
         "id": "c241",
@@ -2628,7 +2868,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "minimum-number-of-vertices-to-reach-all-nodes",
-        "url": "https://leetcode.com/problems/minimum-number-of-vertices-to-reach-all-nodes/"
+        "url": "https://leetcode.com/problems/minimum-number-of-vertices-to-reach-all-nodes/",
+        "platform": "LeetCode"
       }
     ]
   },
@@ -2644,7 +2885,8 @@ export const patternsData = [
         "difficulty": "E",
         "tags": [],
         "slug": "find-the-index-of-the-first-occurrence-in-a-string",
-        "url": "https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/"
+        "url": "https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/",
+        "platform": "LeetCode"
       },
       {
         "id": "c243",
@@ -2653,7 +2895,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "shortest-palindrome",
-        "url": "https://leetcode.com/problems/shortest-palindrome/"
+        "url": "https://leetcode.com/problems/shortest-palindrome/",
+        "platform": "LeetCode"
       },
       {
         "id": "c244",
@@ -2662,7 +2905,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "find-the-index-of-the-first-occurrence-in-a-string",
-        "url": "https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/"
+        "url": "https://www.geeksforgeeks.org/problems/search-pattern-z-algorithm--141631/1",
+        "platform": "GFG"
       },
       {
         "id": "c245",
@@ -2671,7 +2915,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "palindromic-substrings",
-        "url": "https://leetcode.com/problems/palindromic-substrings/"
+        "url": "https://leetcode.com/problems/palindromic-substrings/",
+        "platform": "LeetCode"
       },
       {
         "id": "c246",
@@ -2680,7 +2925,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "stream-of-characters",
-        "url": "https://leetcode.com/problems/stream-of-characters/"
+        "url": "https://leetcode.com/problems/stream-of-characters/",
+        "platform": "LeetCode"
       },
       {
         "id": "c247",
@@ -2689,7 +2935,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "longest-happy-prefix",
-        "url": "https://leetcode.com/problems/longest-happy-prefix/"
+        "url": "https://leetcode.com/problems/longest-happy-prefix/",
+        "platform": "LeetCode"
       }
     ]
   },
@@ -2705,7 +2952,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "range-sum-query-mutable",
-        "url": "https://leetcode.com/problems/range-sum-query-mutable/"
+        "url": "https://leetcode.com/problems/range-sum-query-mutable/",
+        "platform": "LeetCode"
       },
       {
         "id": "c249",
@@ -2714,7 +2962,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "count-of-smaller-numbers-after-self",
-        "url": "https://leetcode.com/problems/count-of-smaller-numbers-after-self/"
+        "url": "https://leetcode.com/problems/count-of-smaller-numbers-after-self/",
+        "platform": "LeetCode"
       },
       {
         "id": "c250",
@@ -2723,7 +2972,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "range-sum-query-2d-mutable",
-        "url": "https://leetcode.com/problems/range-sum-query-2d-mutable/"
+        "url": "https://www.geeksforgeeks.org/problems/sum-of-query-ii5310/1",
+        "platform": "GFG"
       },
       {
         "id": "c251",
@@ -2732,7 +2982,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "range-sum-query-mutable",
-        "url": "https://leetcode.com/problems/range-sum-query-mutable/"
+        "url": "https://www.geeksforgeeks.org/problems/sum-of-query-ii5310/1",
+        "platform": "GFG"
       },
       {
         "id": "c252",
@@ -2741,7 +2992,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "range-sum-query-mutable",
-        "url": "https://leetcode.com/problems/range-sum-query-mutable/"
+        "url": "https://www.geeksforgeeks.org/problems/range-minimum-query/1",
+        "platform": "GFG"
       },
       {
         "id": "c259",
@@ -2753,7 +3005,8 @@ export const patternsData = [
           "Greedy"
         ],
         "slug": "minimize-the-total-price-of-the-trips",
-        "url": "https://leetcode.com/problems/minimize-the-total-price-of-the-trips/"
+        "url": "https://leetcode.com/problems/minimize-the-total-price-of-the-trips/",
+        "platform": "LeetCode"
       },
       {
         "id": "c260",
@@ -2765,7 +3018,8 @@ export const patternsData = [
           "SegTree"
         ],
         "slug": "minimum-edge-weight-equilibrium-queries-in-a-tree",
-        "url": "https://leetcode.com/problems/minimum-edge-weight-equilibrium-queries-in-a-tree/"
+        "url": "https://leetcode.com/problems/minimum-edge-weight-equilibrium-queries-in-a-tree/",
+        "platform": "LeetCode"
       }
     ]
   },
@@ -2781,7 +3035,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "partition-to-k-equal-sum-subsets",
-        "url": "https://leetcode.com/problems/partition-to-k-equal-sum-subsets/"
+        "url": "https://leetcode.com/problems/partition-to-k-equal-sum-subsets/",
+        "platform": "LeetCode"
       },
       {
         "id": "c254",
@@ -2790,7 +3045,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "minimum-number-of-work-sessions-to-finish-the-tasks",
-        "url": "https://leetcode.com/problems/minimum-number-of-work-sessions-to-finish-the-tasks/"
+        "url": "https://leetcode.com/problems/minimum-number-of-work-sessions-to-finish-the-tasks/",
+        "platform": "LeetCode"
       },
       {
         "id": "c255",
@@ -2799,7 +3055,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "count-numbers-with-unique-digits",
-        "url": "https://leetcode.com/problems/count-numbers-with-unique-digits/"
+        "url": "https://leetcode.com/problems/count-numbers-with-unique-digits/",
+        "platform": "LeetCode"
       },
       {
         "id": "c256",
@@ -2808,7 +3065,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "numbers-at-most-n-given-digit-set",
-        "url": "https://leetcode.com/problems/numbers-at-most-n-given-digit-set/"
+        "url": "https://leetcode.com/problems/numbers-at-most-n-given-digit-set/",
+        "platform": "LeetCode"
       },
       {
         "id": "c257",
@@ -2817,7 +3075,8 @@ export const patternsData = [
         "difficulty": "M",
         "tags": [],
         "slug": "fibonacci-number",
-        "url": "https://leetcode.com/problems/fibonacci-number/"
+        "url": "https://www.geeksforgeeks.org/problems/nth-fibonacci-number1359/1",
+        "platform": "GFG"
       },
       {
         "id": "c258",
@@ -2826,7 +3085,8 @@ export const patternsData = [
         "difficulty": "H",
         "tags": [],
         "slug": "shortest-path-visiting-all-nodes",
-        "url": "https://leetcode.com/problems/shortest-path-visiting-all-nodes/"
+        "url": "https://www.geeksforgeeks.org/problems/travelling-salesman-problem2732/1",
+        "platform": "GFG"
       }
     ]
   }

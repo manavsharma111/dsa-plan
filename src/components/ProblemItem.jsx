@@ -65,15 +65,17 @@ export default function ProblemItem({ problem }) {
             href={problem.url || `https://leetcode.com/problems/${problem.slug || ''}/`}
             target="_blank"
             rel="noopener noreferrer"
-            title={`Open ${problem.lc}: ${problem.name} on LeetCode`}
+            title={problem.platform === 'GFG' ? `Open free GeeksforGeeks practice (alternative to ${problem.lc} Premium)` : `Open ${problem.lc}: ${problem.name} on LeetCode`}
             onClick={(e) => e.stopPropagation()}
             className={`font-mono text-[11px] font-semibold px-1.5 py-0.5 rounded transition-all inline-flex items-center gap-1 ${
               isSolved
                 ? 'text-paper-faint bg-paper-border/40 hover:text-paper-muted'
-                : 'text-paper-rust bg-paper-rustBg border border-paper-rustBorder hover:bg-paper-rust hover:text-white shadow-xs'
+                : problem.platform === 'GFG'
+                  ? 'text-emerald-700 bg-emerald-50 border border-emerald-300 hover:bg-emerald-600 hover:text-white shadow-xs'
+                  : 'text-paper-rust bg-paper-rustBg border border-paper-rustBorder hover:bg-paper-rust hover:text-white shadow-xs'
             }`}
           >
-            <span>{problem.lc}</span>
+            <span>{problem.platform === 'GFG' ? `${problem.lc} · GFG` : problem.lc}</span>
             <span className="text-[9px] opacity-70">↗</span>
           </a>
         )}

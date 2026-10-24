@@ -64,6 +64,10 @@ export default function Header() {
           <span className="font-mono text-[9.5px] font-semibold tracking-wide uppercase px-2 py-0.5 rounded-full text-core bg-core-bg">Plan</span>
           <span>= in your Pattern-Mastery Plan</span>
         </div>
+        <div className="flex items-center gap-1.5">
+          <span className="font-mono text-[9.5px] font-semibold tracking-wide px-2 py-0.5 rounded-full text-emerald-700 bg-emerald-50 border border-emerald-300">GFG</span>
+          <span>= Free GeeksforGeeks alternative (unlocks LC Premium)</span>
+        </div>
       </div>
     </header>
   );
