@@ -67,16 +67,16 @@ export default function ProblemItem({ problem }) {
             rel="noopener noreferrer"
             title={problem.platform === 'GFG' ? `Open free GeeksforGeeks practice (alternative to ${problem.lc} Premium)` : `Open ${problem.lc}: ${problem.name} on LeetCode`}
             onClick={(e) => e.stopPropagation()}
-            className={`font-mono text-[11px] font-semibold px-1.5 py-0.5 rounded transition-all inline-flex items-center gap-1 ${
+            className={`font-mono text-[11px] font-semibold px-2 py-0.5 rounded transition-all inline-flex items-center gap-1 shadow-xs ${
               isSolved
-                ? 'text-paper-faint bg-paper-border/40 hover:text-paper-muted'
+                ? 'text-paper-faint bg-paper-surface-2 border border-paper-border/60 hover:text-paper-dim hover:bg-paper-border/40'
                 : problem.platform === 'GFG'
-                  ? 'text-emerald-700 bg-emerald-50 border border-emerald-300 hover:bg-emerald-600 hover:text-white shadow-xs'
-                  : 'text-paper-rust bg-paper-rustBg border border-paper-rustBorder hover:bg-paper-rust hover:text-white shadow-xs'
+                  ? 'text-emerald-700 bg-emerald-50 border border-emerald-200 hover:bg-emerald-600 hover:text-white hover:border-emerald-600'
+                  : 'text-orange-700 bg-orange-50 border border-orange-200 hover:bg-orange-600 hover:text-white hover:border-orange-600'
             }`}
           >
             <span>{problem.platform === 'GFG' ? `${problem.lc} · GFG` : problem.lc}</span>
-            <span className="text-[9px] opacity-70">↗</span>
+            <span className="text-[9px] opacity-80">↗</span>
           </a>
         )}
       </div>
