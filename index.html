@@ -244,25 +244,160 @@
       color: var(--dim)
     }
 
+    /* Key Concepts Card & Table */
     .concept {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 18px 22px;
-      margin: 20px 0 4px
+      padding: 22px 24px;
+      margin: 24px 0 28px;
+      box-shadow: 0 4px 14px rgba(31, 27, 22, 0.04);
+    }
+
+    .concept-head {
+      margin-bottom: 16px;
     }
 
     .concept h3 {
       font-family: var(--serif);
-      font-size: 19px;
-      margin: 0 0 10px;
-      font-weight: 600
+      font-size: 20px;
+      margin: 0 0 6px;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 9px;
     }
 
-    .cnote {
-      color: var(--dim);
+    .concept-sub {
       font-size: 13.5px;
-      margin: 10px 0 0
+      color: var(--dim);
+      margin: 0;
+    }
+
+    .twrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+      margin: 16px 0 16px;
+    }
+
+    .concept-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .concept-table thead {
+      background: var(--surface-2);
+      border-bottom: 1.5px solid var(--border);
+    }
+
+    .concept-table th {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dim);
+      padding: 12px 18px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .concept-table td {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .concept-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .concept-table tbody tr:hover {
+      background: rgba(194, 65, 12, 0.02);
+    }
+
+    .term-badge {
+      font-family: var(--mono);
+      font-weight: 600;
+      font-size: 13px;
+      padding: 3px 9px;
+      border-radius: 6px;
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    .term-subarr { background: var(--core-bg); color: var(--core); }
+    .term-substr { background: var(--blue-bg); color: var(--blue); }
+    .term-subseq { background: var(--gold-bg); color: var(--gold); }
+    .term-subset { background: var(--sage-bg); color: var(--sage); }
+
+    .tech-pills {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tech-pill {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--dim);
+      white-space: nowrap;
+    }
+
+    /* Rule of Thumb Callout Box */
+    .concept-callout {
+      background: var(--surface-2);
+      border-left: 3.5px solid var(--core);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-top: 14px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      font-size: 13.5px;
+      line-height: 1.55;
+    }
+
+    .callout-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-top: -1px;
+    }
+
+    .callout-body strong {
+      color: var(--text);
+      font-size: 12.5px;
+      font-family: var(--mono);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .callout-list {
+      color: var(--dim);
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .callout-list span mark {
+      background: transparent;
+      color: var(--core);
+      font-weight: 600;
+      font-family: var(--mono);
+      font-size: 12.5px;
     }
 
     .pname {
@@ -665,43 +800,81 @@
     </div>
 
     <div class="concept">
-      <h3>Key Concepts &mdash; know the difference</h3>
+      <div class="concept-head">
+        <h3>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--core)"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          Key Concepts &mdash; Know the Difference
+        </h3>
+        <p class="concept-sub">The four core collection patterns tested in almost every coding interview.</p>
+      </div>
+
       <div class="twrap">
-        <table>
+        <table class="concept-table">
           <thead>
             <tr>
-              <th>Term</th>
+              <th style="width: 140px;">Term</th>
               <th>Meaning</th>
-              <th>Typical technique</th>
+              <th style="width: 280px;">Typical Technique</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><b>Subarray</b></td>
-              <td>Contiguous part of an <b>array</b> (order kept).</td>
-              <td>Sliding window, prefix sum, Kadane</td>
+              <td><span class="term-badge term-subarr">Subarray</span></td>
+              <td>Contiguous part of an <b>array</b> (order preserved).</td>
+              <td>
+                <div class="tech-pills">
+                  <span class="tech-pill">Sliding Window</span>
+                  <span class="tech-pill">Prefix Sum</span>
+                  <span class="tech-pill">Kadane's</span>
+                </div>
+              </td>
             </tr>
             <tr>
-              <td><b>Substring</b></td>
+              <td><span class="term-badge term-substr">Substring</span></td>
               <td>Contiguous part of a <b>string</b>.</td>
-              <td>Sliding window, two pointers</td>
+              <td>
+                <div class="tech-pills">
+                  <span class="tech-pill">Sliding Window</span>
+                  <span class="tech-pill">Two Pointers</span>
+                </div>
+              </td>
             </tr>
             <tr>
-              <td><b>Subsequence</b></td>
+              <td><span class="term-badge term-subseq">Subsequence</span></td>
               <td>Delete some elements; <b>order kept</b>, not necessarily contiguous.</td>
-              <td>DP (LCS, LIS)</td>
+              <td>
+                <div class="tech-pills">
+                  <span class="tech-pill">DP (LCS)</span>
+                  <span class="tech-pill">DP (LIS)</span>
+                  <span class="tech-pill">Recursion</span>
+                </div>
+              </td>
             </tr>
             <tr>
-              <td><b>Subset</b></td>
-              <td>Any selection of elements (order doesn't matter).</td>
-              <td>Backtracking, bitmask</td>
+              <td><span class="term-badge term-subset">Subset</span></td>
+              <td>Any selection of elements (<b>order does not matter</b>).</td>
+              <td>
+                <div class="tech-pills">
+                  <span class="tech-pill">Backtracking</span>
+                  <span class="tech-pill">Bitmask</span>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <p class="cnote">Rule of thumb: <b>contiguous</b> (subarray / substring) &rarr; window or prefix-sum;
-        <b>non-contiguous but ordered</b> (subsequence) &rarr; DP; <b>unordered selection</b> (subset) &rarr; recursion
-        / bitmask.</p>
+
+      <div class="concept-callout">
+        <span class="callout-icon">💡</span>
+        <div class="callout-body">
+          <strong>Rule of Thumb:</strong>
+          <div class="callout-list">
+            <span>• <b>Contiguous</b> (Subarray / Substring) &rarr; <mark>Sliding Window</mark> or <mark>Prefix Sum</mark></span>
+            <span>• <b>Ordered, Non-Contiguous</b> (Subsequence) &rarr; <mark>Dynamic Programming (DP)</mark></span>
+            <span>• <b>Unordered Selection</b> (Subset) &rarr; <mark>Backtracking / Bitmask</mark></span>
+          </div>
+        </div>
+      </div>
     </div>
     <section class="pat">
       <div class="pat-head">
