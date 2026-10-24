@@ -1,6 +1,20 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
 import { encodeState, decodeState, sanitizeKey } from '../utils/codec'
+import { patternsData } from '../data/patternsData'
+
+const canonicalProblemIds = new Set()
+const slugToCanonicalId = {}
+patternsData.forEach((pat) => {
+  pat.problems.forEach((p) => {
+    canonicalProblemIds.add(p.id)
+    if (p.slug) slugToCanonicalId[p.slug.toLowerCase().trim()] = p.id
+    if (p.name) {
+      const clean = p.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')
+      slugToCanonicalId[clean] = p.id
+    }
+  })
+})
 
 const KEY = 'dsa-master-v1'
 const KEY_MASTERY = 'dsa_mastery_v1'
@@ -127,20 +141,9 @@ export const connectAndSync = createAsyncThunk(
       console.warn('MongoDB API pull failed, falling back to KV:', e)
     }
 
-    // 2. If MongoDB was not reached, fallback to KeyVal
+    // 2. If MongoDB was not reached, rely on localStorage state (soft offline fallback)
     if (!mongoSuccess) {
-      try {
-        const res = await fetch(
-          `https://keyvalue.immanuel.co/api/KeyVal/GetValue/${APP_ID}/dsakey_${cleanKey}`
-        )
-        if (res.ok) {
-          const text = await res.text()
-          const val = text ? JSON.parse(text) : ''
-          cloudSolved = decodeState(val)
-        }
-      } catch (err) {
-        console.warn('Fallback KV pull failed:', err)
-      }
+      console.warn('MongoDB sync offline or unreachable, using local device storage.')
     }
 
     // 3. Union Merge with local state
@@ -187,15 +190,6 @@ export const connectAndSync = createAsyncThunk(
       } catch (e) {}
     }
 
-    // 6. Push bitmask to KeyVal for cross-compatibility
-    const encoded = encodeState(mergedSolved)
-    try {
-      await fetch(
-        `https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${APP_ID}/dsakey_${cleanKey}/${encoded}`,
-        { method: 'POST' }
-      )
-    } catch (err) {}
-
     const time = new Date().toLocaleTimeString([], {
       hour: '2-digit',
       minute: '2-digit',
@@ -205,7 +199,7 @@ export const connectAndSync = createAsyncThunk(
     if (!isSilent) {
       dispatch(
         showToastNotification(
-          `Connected to "${cleanKey}"! ${mongoSuccess ? 'MongoDB Atlas' : 'Cloud'} sync active.`
+          `Connected to "${cleanKey}"! ${mongoSuccess ? 'MongoDB Atlas' : 'Local'} sync active.`
         )
       )
     }
@@ -231,60 +225,63 @@ export const manualSync = createAsyncThunk(
       return null
     }
 
-    // Push to MongoDB
     try {
+      // 1. Fetch latest from MongoDB
+      let cloudSolved = {}
+      let cloudMastery = {}
+      let cloudRevision = {}
+      try {
+        const fetchRes = await fetch(`/api/sync/fetch?syncKey=${encodeURIComponent(syncKey)}`)
+        if (fetchRes.ok) {
+          const json = await fetchRes.json()
+          if (json.success && json.data) {
+            cloudSolved = json.data.solved || {}
+            cloudMastery = json.data.mastery || {}
+            cloudRevision = json.data.revision || {}
+          }
+        }
+      } catch (e) {}
+
+      // 2. Union Merge
+      const merged = { ...cloudSolved, ...solved }
+      const mergedMastery = { ...cloudMastery, ...mastery }
+      const mergedRevision = { ...cloudRevision, ...revision }
+
+      // 3. Save to localStorage
+      try {
+        localStorage.setItem(KEY, JSON.stringify(merged))
+        localStorage.setItem(KEY_MASTERY, JSON.stringify(mergedMastery))
+        localStorage.setItem(KEY_REVISION, JSON.stringify(mergedRevision))
+      } catch (e) {}
+
+      // 4. Push to MongoDB
       await fetch('/api/sync/push', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           syncKey,
-          solved,
-          mastery,
-          revision,
+          solved: merged,
+          mastery: mergedMastery,
+          revision: mergedRevision,
         }),
       })
-    } catch (e) {}
 
-    // Pull from cloud KV
-    let cloudState = {}
-    try {
-      const res = await fetch(
-        `https://keyvalue.immanuel.co/api/KeyVal/GetValue/${APP_ID}/dsakey_${syncKey}`
-      )
-      if (res.ok) {
-        const text = await res.text()
-        const val = text ? JSON.parse(text) : ''
-        cloudState = decodeState(val)
+      const time = new Date().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      })
+      dispatch(showToastNotification('Synced with MongoDB Atlas successfully!'))
+
+      return {
+        merged,
+        mergedMastery,
+        mergedRevision,
+        lastSyncTime: time,
       }
     } catch (err) {
-      console.warn('Manual cloud pull failed:', err)
-    }
-
-    // Merge
-    const merged = { ...solved, ...cloudState }
-    try {
-      localStorage.setItem(KEY, JSON.stringify(merged))
-    } catch (e) {}
-
-    // Push to KeyVal
-    const encoded = encodeState(merged)
-    const pushRes = await fetch(
-      `https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${APP_ID}/dsakey_${syncKey}/${encoded}`,
-      { method: 'POST' }
-    )
-
-    if (!pushRes.ok) throw new Error('Cloud push failed')
-
-    const time = new Date().toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    })
-    dispatch(showToastNotification('Synced with cloud successfully!'))
-
-    return {
-      merged,
-      lastSyncTime: time,
+      dispatch(showToastNotification(`Sync note: ${err.message}`))
+      throw err
     }
   }
 )
@@ -297,31 +294,21 @@ export const autoSaveToCloud = createAsyncThunk(
     const { syncKey, solved, mastery, revision } = getState().progress
     if (!syncKey) return
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       clearTimeout(autoSaveTimer)
       autoSaveTimer = setTimeout(async () => {
         try {
-          // Push to MongoDB
-          try {
-            await fetch('/api/sync/push', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                syncKey,
-                solved,
-                mastery,
-                revision,
-              }),
-            })
-          } catch (e) {}
-
-          // Push to KeyVal KV
-          const encoded = encodeState(solved)
-          const res = await fetch(
-            `https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${APP_ID}/dsakey_${syncKey}/${encoded}`,
-            { method: 'POST' }
-          )
-          if (!res.ok) throw new Error('Auto-save failed')
+          const res = await fetch('/api/sync/push', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              syncKey,
+              solved,
+              mastery,
+              revision,
+            }),
+          })
+          if (!res.ok) throw new Error('Auto-save to MongoDB returned non-ok')
           const time = new Date().toLocaleTimeString([], {
             hour: '2-digit',
             minute: '2-digit',
@@ -329,7 +316,9 @@ export const autoSaveToCloud = createAsyncThunk(
           })
           resolve(time)
         } catch (err) {
-          reject(err)
+          // Soft fail without throwing red console crashes
+          console.warn('[AutoSave] Cloud sync saved locally:', err.message)
+          resolve(null)
         }
       }, 500)
     })
@@ -365,6 +354,7 @@ export const progressSlice = createSlice({
     selectedInterviewDetailId: null,
     activeTab: 'all', // 'all' | 'revision' | 'analytics' | 'interviews'
     interviewModalOpen: false,
+    extensionModalOpen: false,
     revisionModalProblem: null, // Problem object currently opened in 5-Point Revision Checklist
     syncKey: getInitialSyncKey(),
     syncStatus: 'idle',
@@ -404,24 +394,48 @@ export const progressSlice = createSlice({
       } else {
         state.solved[id] = true
         state.mastery[id] = level
+        const now = Date.now()
+        let days = 3
+        let stg = 2
+        if (level === 'hint') {
+          days = 1
+          stg = 1
+        } else if (level === 'mastered') {
+          days = 28
+          stg = 5
+        }
+
         if (!state.revision[id]) {
-          const now = Date.now()
           state.revision[id] = {
-            stage: level === 'mastered' ? 5 : 1,
+            stage: stg,
             count: 1,
             lastRevised: now,
-            nextDue: now + (level === 'mastered' ? 28 : 1) * 86400000,
+            nextDue: now + days * 86400000,
             lastOutcome: 'manual',
           }
-        } else if (level === 'mastered') {
-          state.revision[id].stage = 5
+        } else {
+          state.revision[id].stage = stg
+          state.revision[id].nextDue = now + days * 86400000
+          state.revision[id].lastOutcome = 'manual'
         }
       }
       persistState(state)
     },
 
     recordRevision: (state, action) => {
-      const { id, outcome } = action.payload
+      const {
+        id,
+        outcome,
+        checklistCount = 0,
+        checklist = {},
+        timeSpent = '',
+        mistakeTags = [],
+        notes = '',
+        codeSnippet = '',
+        codeAnalysis = null,
+        aiReview = null,
+      } = action.payload
+
       const now = Date.now()
       const current = state.revision[id] || { stage: 0, count: 0 }
 
@@ -430,27 +444,27 @@ export const progressSlice = createSlice({
       let newMastery = state.mastery[id] || 'independent'
 
       if (outcome === 'efficient') {
-        // Bina help ke efficiently solve -> 7 din baad or next higher stage
+        // Solved efficiently without hints -> 7 days or next higher stage
         nextStage = Math.min((current.stage || 0) + 1, 5)
         daysToAdd = Math.max(7, REVISION_INTERVALS_DAYS[nextStage - 1] || 7)
         newMastery = nextStage >= 5 ? 'mastered' : 'independent'
       } else if (outcome === 'slow') {
-        // Solve hua, lekin kaafi time laga -> 2-3 din baad (3 days)
+        // Solved, but took too much time -> In 3 days
         nextStage = Math.max(2, current.stage || 2)
         daysToAdd = 3
         newMastery = 'independent'
       } else if (outcome === 'hint') {
-        // Hint dekhna pada -> Agle din (1 din baad)
+        // Needed a hint -> Next day (1 day)
         nextStage = 1
         daysToAdd = 1
         newMastery = 'hint'
       } else if (outcome === 'solution') {
-        // Solution dekhkar samjha -> 1 din baad dobara independently
+        // Had to view solution -> Next day independently
         nextStage = 1
         daysToAdd = 1
         newMastery = 'hint'
       } else if (outcome === 'repeat_mistake') {
-        // Same mistake baar-baar -> Agle din, phir 3 din baad (Reset stage to 1)
+        // Repeated same mistake -> Next day, then in 3 days (Reset stage to 1)
         nextStage = 1
         daysToAdd = 1
         newMastery = 'hint'
@@ -466,12 +480,77 @@ export const progressSlice = createSlice({
       state.solved[id] = true
       state.mastery[id] = newMastery
 
+      const previousHistory = Array.isArray(current.history) ? current.history : []
+      const newHistoryEntry = {
+        date: now,
+        stage: current.stage || 1,
+        outcome: outcome || 'normal',
+        checklistCount,
+        timeSpent,
+        mistakeTags,
+        notes,
+        codeSnippet: codeSnippet ? codeSnippet.slice(0, 15000) : '',
+        codeAnalysis,
+        aiReview: aiReview || current.aiReview || null,
+      }
+
       state.revision[id] = {
         stage: nextStage,
         count: (current.count || 0) + 1,
         lastRevised: now,
         nextDue: now + daysToAdd * 86400000,
         lastOutcome: outcome || 'normal',
+        checklistCount,
+        checklist,
+        timeSpent,
+        mistakeTags,
+        notes,
+        codeSnippet: codeSnippet ? codeSnippet.slice(0, 15000) : current.codeSnippet || '',
+        codeAnalysis: codeAnalysis || current.codeAnalysis || null,
+        aiReview: aiReview !== undefined && aiReview !== null ? aiReview : current.aiReview || null,
+        history: [...previousHistory.slice(-9), newHistoryEntry],
+      }
+      persistState(state)
+    },
+
+    saveProblemSolution: (state, action) => {
+      const {
+        id,
+        codeSnippet = '',
+        codeAnalysis = null,
+        notes = '',
+        aiReview = null,
+      } = action.payload
+
+      if (!id) return
+
+      const current = state.revision[id] || {
+        stage: 1,
+        count: 1,
+        lastRevised: Date.now(),
+        nextDue: Date.now() + 86400000,
+        lastOutcome: 'manual',
+        checklistCount: 0,
+        checklist: {},
+        timeSpent: '',
+        mistakeTags: [],
+        notes: '',
+        codeSnippet: '',
+        codeAnalysis: null,
+        history: [],
+      }
+
+      state.solved[id] = true
+      if (!state.mastery[id]) {
+        state.mastery[id] = 'independent'
+      }
+
+      state.revision[id] = {
+        ...current,
+        codeSnippet: codeSnippet !== undefined ? (codeSnippet ? codeSnippet.slice(0, 15000) : '') : current.codeSnippet || '',
+        codeAnalysis: codeAnalysis !== undefined ? codeAnalysis : current.codeAnalysis || null,
+        notes: notes !== undefined ? notes : current.notes || '',
+        aiReview: aiReview !== undefined && aiReview !== null ? aiReview : current.aiReview || null,
       }
       persistState(state)
     },
@@ -486,6 +565,10 @@ export const progressSlice = createSlice({
 
     setInterviewModalOpen: (state, action) => {
       state.interviewModalOpen = action.payload
+    },
+
+    setExtensionModalOpen: (state, action) => {
+      state.extensionModalOpen = action.payload
     },
 
     startInterviewSession: (state, action) => {
@@ -689,9 +772,11 @@ export const {
   toggleProblem,
   setMastery,
   recordRevision,
+  saveProblemSolution,
   setRevisionModalProblem,
   setActiveTab,
   setInterviewModalOpen,
+  setExtensionModalOpen,
   startInterviewSession,
   tickInterviewTimer,
   toggleInterviewTimer,
@@ -729,15 +814,31 @@ export const showToastNotification = (msg, type) => () => {
 
 // Selectors
 export const selectSolved = (state) => state.progress.solved
-export const selectIsSolved = (id) => (state) => !!state.progress.solved[id]
-export const selectTotalSolved = (state) => Object.keys(state.progress.solved).length
+export const selectIsSolved = (id, slug) => (state) =>
+  !!state.progress.solved[id] || (slug ? !!state.progress.solved[slug] : false)
+export const selectTotalSolved = (state) => {
+  const solved = state.progress.solved || {}
+  const counted = new Set()
+  for (const key of Object.keys(solved)) {
+    if (!solved[key]) continue
+    if (canonicalProblemIds.has(key)) {
+      counted.add(key)
+    } else if (slugToCanonicalId[key]) {
+      counted.add(slugToCanonicalId[key])
+    } else {
+      counted.add(key)
+    }
+  }
+  return counted.size
+}
 export const selectMastery = (state) => state.progress.mastery || {}
-export const selectProblemMastery = (id) => (state) =>
-  (state.progress.mastery && state.progress.mastery[id]) ||
-  (state.progress.solved[id] ? 'independent' : 'none')
+export const selectProblemMastery = (id, slug) => (state) =>
+  (state.progress.mastery && (state.progress.mastery[id] || (slug && state.progress.mastery[slug]))) ||
+  (state.progress.solved[id] || (slug && state.progress.solved[slug]) ? 'independent' : 'none')
 export const selectRevision = (state) => state.progress.revision || {}
 export const selectActiveTab = (state) => state.progress.activeTab || 'all'
 export const selectInterviewModalOpen = (state) => state.progress.interviewModalOpen
+export const selectExtensionModalOpen = (state) => state.progress.extensionModalOpen
 export const selectInterviewSession = (state) => state.progress.interviewSession
 export const selectInterviewHistory = (state) => state.progress.interviewHistory || []
 export const selectSelectedInterviewDetailId = (state) => state.progress.selectedInterviewDetailId

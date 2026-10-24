@@ -14,11 +14,11 @@ import {
 
 export default function ProblemItem({ problem }) {
   const dispatch = useDispatch()
-  const isSolved = useSelector(selectIsSolved(problem.id))
-  const masteryLevel = useSelector(selectProblemMastery(problem.id))
+  const isSolved = useSelector(selectIsSolved(problem.id, problem.slug))
+  const masteryLevel = useSelector(selectProblemMastery(problem.id, problem.slug))
   const revision = useSelector(selectRevision)
 
-  const revData = revision[problem.id]
+  const revData = revision[problem.id] || (problem.slug && revision[problem.slug])
   const isDueForRevision = isSolved && revData && revData.nextDue && revData.nextDue <= Date.now()
 
   const handleChange = () => {
@@ -29,28 +29,6 @@ export default function ProblemItem({ problem }) {
   const handleOpenChecklist = (e) => {
     e.stopPropagation()
     dispatch(setRevisionModalProblem(problem))
-  }
-
-  const handleCycleMastery = (e) => {
-    e.stopPropagation()
-    let nextLevel = 'independent'
-    if (masteryLevel === 'independent') nextLevel = 'mastered'
-    else if (masteryLevel === 'mastered') nextLevel = 'hint'
-    else nextLevel = 'independent'
-
-    dispatch(setMastery({ id: problem.id, level: nextLevel }))
-    dispatch(autoSaveToCloud())
-    dispatch(
-      showToastNotification(
-        `Status updated: ${
-          nextLevel === 'hint'
-            ? '💡 Needed Hints'
-            : nextLevel === 'mastered'
-              ? '⚡ Mastered'
-              : '🧠 Solved Solo'
-        }`
-      )
-    )
   }
 
   // Format next revision date
@@ -195,18 +173,22 @@ export default function ProblemItem({ problem }) {
           </a>
         )}
 
-        {/* Interactive Mastery Status Pill (Only when solved) */}
+        {/* Mastery Status Badge (Status is set accurately via Revision Checklist) */}
         {isSolved && (
-          <button
-            type="button"
-            onClick={handleCycleMastery}
-            title={`Mastery: ${masteryLevel}. Click to cycle: 💡 Needed Hints -> 🧠 Solved Independently -> ⚡ Mastered`}
-            className={`font-mono text-[10.5px] font-semibold px-2 py-0.5 rounded-full transition-all inline-flex items-center gap-1 cursor-pointer shadow-2xs border ${
+          <span
+            title={`Status: ${
               masteryLevel === 'hint'
-                ? 'text-amber-800 bg-amber-50 border-amber-300 hover:bg-amber-100'
+                ? '💡 Needed Hints'
                 : masteryLevel === 'mastered'
-                  ? 'text-emerald-800 bg-emerald-50 border-emerald-300 hover:bg-emerald-100'
-                  : 'text-blue-800 bg-blue-50 border-blue-300 hover:bg-blue-100'
+                  ? '⚡ Mastered'
+                  : '🧠 Solved Solo'
+            } (Update outcome via Revision Checklist to adjust revision schedule)`}
+            className={`font-mono text-[10.5px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1 shadow-2xs border select-none cursor-default ${
+              masteryLevel === 'hint'
+                ? 'text-amber-800 bg-amber-50 border-amber-300'
+                : masteryLevel === 'mastered'
+                  ? 'text-emerald-800 bg-emerald-50 border-emerald-300'
+                  : 'text-blue-800 bg-blue-50 border-blue-300'
             }`}
           >
             <span>
@@ -216,7 +198,7 @@ export default function ProblemItem({ problem }) {
                   ? '⚡ Mastered'
                   : '🧠 Solo'}
             </span>
-          </button>
+          </span>
         )}
 
         {/* Due Spaced Revision Pulsing Badge -> Opens 5-Point Checklist */}
@@ -245,6 +227,29 @@ export default function ProblemItem({ problem }) {
             </button>
           )
         )}
+
+        {/* Direct AI Review Button for ANY problem */}
+        <button
+          type="button"
+          onClick={handleOpenChecklist}
+          title={
+            revData?.aiReview?.score
+              ? `Saved AI Review Score: ${revData.aiReview.score}/10 (${revData.aiReview.provider || 'AI'}). Click to open.`
+              : 'Open AI Code Reviewer & Checklist'
+          }
+          className={`font-mono text-[10px] font-semibold px-2 py-0.5 rounded-full border transition-all cursor-pointer inline-flex items-center gap-1 shadow-2xs ${
+            revData?.aiReview?.score
+              ? 'border-purple-300 text-purple-800 bg-purple-50/80 hover:bg-purple-100'
+              : 'border-paper-border/80 text-paper-dim hover:text-purple-700 hover:border-purple-300 hover:bg-purple-50'
+          }`}
+        >
+          <span>🤖 AI Review</span>
+          {revData?.aiReview?.score && (
+            <span className="text-[9px] bg-purple-200 text-purple-900 font-bold px-1.5 py-0.2 rounded-full">
+              {revData.aiReview.score}
+            </span>
+          )}
+        </button>
       </div>
 
       {/* Meta Pills (Difficulty & Source Tags) */}

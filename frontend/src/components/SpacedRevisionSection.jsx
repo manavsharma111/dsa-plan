@@ -18,11 +18,13 @@ export default function SpacedRevisionSection() {
   const revision = useSelector(selectRevision)
   const mastery = useSelector(selectMastery)
 
-  // Map all problems by id for instant lookup
+  // Map all problems by id and slug for instant lookup
   const problemMap = {}
   patternsData.forEach((pat) => {
     pat.problems.forEach((p) => {
-      problemMap[p.id] = { ...p, patternTitle: pat.title }
+      const item = { ...p, patternTitle: pat.title }
+      problemMap[p.id] = item
+      if (p.slug) problemMap[p.slug] = item
     })
   })
 
@@ -30,12 +32,16 @@ export default function SpacedRevisionSection() {
   const dueProblems = []
   const upcomingProblems = []
   const graduatedProblems = []
+  const seenProblemIds = new Set()
 
   Object.keys(solved).forEach((id) => {
+    if (!solved[id]) return
     const prob = problemMap[id]
-    if (!prob) return
-    const rev = revision[id] || { stage: 1, nextDue: now }
-    const currentMastery = mastery[id] || 'independent'
+    if (!prob || seenProblemIds.has(prob.id)) return
+    seenProblemIds.add(prob.id)
+
+    const rev = revision[prob.id] || (prob.slug && revision[prob.slug]) || { stage: 1, nextDue: now }
+    const currentMastery = mastery[prob.id] || (prob.slug && mastery[prob.slug]) || 'independent'
 
     const item = {
       ...prob,
@@ -153,7 +159,7 @@ export default function SpacedRevisionSection() {
 
         {/* 5-Stage Interval Roadmap */}
         <div className="font-mono text-xs uppercase tracking-wider font-bold text-paper-text mb-2.5">
-          1. Question Kitne Din Baad Dobara Karna Hai?
+          1. Revision Roadmap: When to Re-attempt Problems?
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 text-xs">
           <div className="p-3 rounded-xl border border-amber-200/80 bg-amber-50/50 flex flex-col justify-between gap-1">
@@ -162,11 +168,11 @@ export default function SpacedRevisionSection() {
                 Day 1 &middot; Revision 1
               </span>
               <span className="font-serif font-medium text-xs text-paper-text block mt-0.5">
-                Bina solution dekhe solve
+                Solve without looking at solutions
               </span>
             </div>
             <span className="text-paper-dim text-[11px] leading-snug">
-              Approach aur code khud recall karne ki koshish karo.
+              Recall intuition, constraints, and approach independently.
             </span>
           </div>
 
@@ -176,11 +182,11 @@ export default function SpacedRevisionSection() {
                 Day 3 &middot; Revision 2
               </span>
               <span className="font-serif font-medium text-xs text-paper-text block mt-0.5">
-                Pattern recall karo
+                Identify core pattern
               </span>
             </div>
             <span className="text-paper-dim text-[11px] leading-snug">
-              Pehchaano ki optimized approach nikaal pa rahe ho ya nahi.
+              Verify if you can deduce the optimal approach without tags.
             </span>
           </div>
 
@@ -190,11 +196,11 @@ export default function SpacedRevisionSection() {
                 Day 7 &middot; Revision 3
               </span>
               <span className="font-serif font-medium text-xs text-paper-text block mt-0.5">
-                Independent coding
+                Independent Coding
               </span>
             </div>
             <span className="text-paper-dim text-[11px] leading-snug">
-              Edge cases, correctness aur time/space complexity check karo.
+              Check edge cases, time/space complexity, and code clarity.
             </span>
           </div>
 
@@ -204,11 +210,11 @@ export default function SpacedRevisionSection() {
                 Day 14 &middot; Revision 4
               </span>
               <span className="font-serif font-medium text-xs text-paper-text block mt-0.5">
-                Interview-style attempt
+                Interview Simulation
               </span>
             </div>
             <span className="text-paper-dim text-[11px] leading-snug">
-              Bina hints ke time limit ke andar fluently solve karo.
+              Solve fluently within the time limit without hints.
             </span>
           </div>
 
@@ -218,11 +224,11 @@ export default function SpacedRevisionSection() {
                 Day 28 &middot; Revision 5
               </span>
               <span className="font-serif font-medium text-xs text-paper-text block mt-0.5">
-                Long-term retention
+                Long-term Mastery
               </span>
             </div>
             <span className="text-paper-dim text-[11px] leading-snug">
-              Agar easily solve ho jaata hai, toh ise ⚡ Mastered mark karo.
+              If solved effortlessly, mark as ⚡ Mastered.
             </span>
           </div>
         </div>
@@ -238,7 +244,7 @@ export default function SpacedRevisionSection() {
             </span>
           </div>
           <span className="font-mono text-xs text-paper-dim">
-            Har problem par 5-point checklist ya 1-click outcome select karo
+            Complete the 5-point checklist or select a 1-click outcome for each problem
           </span>
         </div>
 
@@ -321,55 +327,55 @@ export default function SpacedRevisionSection() {
           <div>
             <div className="flex items-center justify-between gap-2 mb-2">
               <h3 className="font-serif text-base sm:text-lg font-semibold text-paper-text">
-                2. Agar Question Solve Nahi Hota Toh?
+                2. Adaptive Rules: What If You Get Stuck?
               </h3>
               <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-bold">
                 Adaptive Rules
               </span>
             </div>
             <p className="text-xs text-paper-dim mb-3">
-              Performance ke hisaab se intervals badlo taaki weak concepts solid ban sakein:
+              Adjust revision intervals dynamically based on your recall accuracy:
             </p>
 
             <div className="overflow-x-auto">
               <table className="w-full text-xs text-left border-collapse">
                 <thead>
                   <tr className="border-b border-paper-border text-paper-faint font-mono text-[11px]">
-                    <th className="py-2 pr-3 font-semibold">Attempt Ka Result</th>
-                    <th className="py-2 font-semibold">Agla Revision</th>
+                    <th className="py-2 pr-3 font-semibold">Attempt Outcome</th>
+                    <th className="py-2 font-semibold">Next Revision</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-paper-border/50 text-paper-text font-sans">
                   <tr>
                     <td className="py-2.5 pr-3 font-medium flex items-center gap-1.5 text-emerald-800">
-                      <span>⚡ Bina help ke efficiently solve</span>
+                      <span>⚡ Solved efficiently without hints</span>
                     </td>
-                    <td className="py-2.5 font-mono text-emerald-700 font-semibold">7 din baad</td>
+                    <td className="py-2.5 font-mono text-emerald-700 font-semibold">In 7 days</td>
                   </tr>
                   <tr>
                     <td className="py-2.5 pr-3 font-medium text-blue-800">
-                      ⏱️ Solve hua, lekin kaafi time laga
+                      ⏱️ Solved, but took too long
                     </td>
-                    <td className="py-2.5 font-mono text-blue-700 font-semibold">2–3 din baad</td>
+                    <td className="py-2.5 font-mono text-blue-700 font-semibold">In 2–3 days</td>
                   </tr>
                   <tr>
-                    <td className="py-2.5 pr-3 font-medium text-amber-800">💡 Hint dekhna pada</td>
-                    <td className="py-2.5 font-mono text-amber-700 font-semibold">Agle din</td>
+                    <td className="py-2.5 pr-3 font-medium text-amber-800">💡 Needed a hint / peek</td>
+                    <td className="py-2.5 font-mono text-amber-700 font-semibold">Next day (+1d)</td>
                   </tr>
                   <tr>
                     <td className="py-2.5 pr-3 font-medium text-orange-800">
-                      📖 Solution dekhkar samjha
+                      📖 Had to read the solution
                     </td>
                     <td className="py-2.5 font-mono text-orange-700 font-semibold">
-                      1 din baad dobara
+                      Re-attempt next day
                     </td>
                   </tr>
                   <tr>
                     <td className="py-2.5 pr-3 font-medium text-rose-800">
-                      ⚠️ Same mistake baar-baar
+                      ⚠️ Repeated same mistake
                     </td>
                     <td className="py-2.5 font-mono text-rose-700 font-semibold">
-                      Agle din, phir 3 din baad
+                      Next day + 3 days later
                     </td>
                   </tr>
                 </tbody>
@@ -378,8 +384,9 @@ export default function SpacedRevisionSection() {
           </div>
 
           <div className="mt-4 p-3 rounded-xl bg-paper-surface-2 border border-paper-border text-paper-dim text-[11.5px] leading-relaxed">
-            <strong className="text-paper-text">Important:</strong> Solution dekhne ke turant baad
-            code copy karke likhna revision nahi hai. Thoda gap do aur phir khud implement karo.
+            <strong className="text-paper-text">Important:</strong> Copying code immediately after
+            reading a solution does not build recall. Give yourself a short gap and implement the
+            solution independently from scratch.
           </div>
         </div>
 
@@ -388,14 +395,14 @@ export default function SpacedRevisionSection() {
           <div>
             <div className="flex items-center justify-between gap-2 mb-2">
               <h3 className="font-serif text-base sm:text-lg font-semibold text-paper-text">
-                3. Revision Mein Exactly Kya Karna Hai?
+                3. Revision Protocol: 5-Step Execution
               </h3>
               <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold">
                 0/5 Checklist
               </span>
             </div>
             <p className="text-xs text-paper-dim mb-3">
-              Har baar poora solution ratne ki zarurat nahi hai. Yeh 5 core steps follow karo:
+              Do not memorize code line-by-line. Follow this structured 5-step checklist:
             </p>
 
             <ul className="space-y-2 text-xs text-paper-text">
@@ -403,10 +410,10 @@ export default function SpacedRevisionSection() {
                 <span className="font-mono font-bold text-core text-[12px] mt-0.5">1.</span>
                 <div>
                   <strong className="block text-paper-text">
-                    Question ka pattern identify karna
+                    Identify the core problem pattern
                   </strong>
                   <span className="text-paper-dim text-[11px]">
-                    Bina topic label dekhe pehchaano: Two Pointers, Sliding Window, Top K, etc.
+                    Identify the pattern without seeing tags: Two Pointers, Sliding Window, Top K, etc.
                   </span>
                 </div>
               </li>
@@ -414,10 +421,10 @@ export default function SpacedRevisionSection() {
                 <span className="font-mono font-bold text-core text-[12px] mt-0.5">2.</span>
                 <div>
                   <strong className="block text-paper-text">
-                    Brute force approach explain karna
+                    Explain the brute force approach
                   </strong>
                   <span className="text-paper-dim text-[11px]">
-                    Naive solution aur uski limitation (O(N^2), extra space) verbally bolo.
+                    Articulate the naive solution and its limitations (O(N²), excessive space).
                   </span>
                 </div>
               </li>
@@ -425,19 +432,19 @@ export default function SpacedRevisionSection() {
                 <span className="font-mono font-bold text-core text-[12px] mt-0.5">3.</span>
                 <div>
                   <strong className="block text-paper-text">
-                    Optimized approach aur uska logic batana
+                    Explain the optimized approach & core intuition
                   </strong>
                   <span className="text-paper-dim text-[11px]">
-                    Core invariant, data structure choice (Heap, Monotonic Stack), and algorithm.
+                    State the core invariant, data structure choice (Heap, Monotonic Stack), and algorithm.
                   </span>
                 </div>
               </li>
               <li className="p-2.5 rounded-xl bg-paper-surface-2/60 border border-paper-border flex items-start gap-2.5">
                 <span className="font-mono font-bold text-core text-[12px] mt-0.5">4.</span>
                 <div>
-                  <strong className="block text-paper-text">Bina solution dekhe code likhna</strong>
+                  <strong className="block text-paper-text">Code cleanly without references</strong>
                   <span className="text-paper-dim text-[11px]">
-                    Clean, readable code bina kisi reference ke direct code karo.
+                    Write clean, production-grade code directly without looking at any reference.
                   </span>
                 </div>
               </li>
@@ -445,10 +452,10 @@ export default function SpacedRevisionSection() {
                 <span className="font-mono font-bold text-core text-[12px] mt-0.5">5.</span>
                 <div>
                   <strong className="block text-paper-text">
-                    Time/space complexity aur edge cases batana
+                    Analyze time/space complexity & edge cases
                   </strong>
                   <span className="text-paper-dim text-[11px]">
-                    Big-O analysis aur corner cases (empty input, negatives, duplicates).
+                    Provide Big-O bounds and test corner cases (empty inputs, negatives, duplicates).
                   </span>
                 </div>
               </li>
@@ -460,16 +467,16 @@ export default function SpacedRevisionSection() {
       {/* Practical Strategy Card for 260 Questions */}
       <div className="bg-paper-surface border border-paper-border rounded-2xl p-5 sm:p-6 shadow-sm">
         <div className="flex items-center gap-2 mb-2 font-serif text-lg font-semibold text-paper-text">
-          <span>🎯 4. 260 Questions Ke Liye Practical Strategy</span>
+          <span>🎯 4. Practical Strategy for 260 Questions</span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs mb-3">
           <div className="p-3.5 rounded-xl bg-paper-surface-2 border border-paper-border flex flex-col justify-between gap-1">
             <span className="font-mono font-bold text-core uppercase text-[11px]">Daily Habit</span>
             <span className="font-serif font-medium text-paper-text text-sm">
-              2–3 Purane Questions
+              2–3 Previous Problems
             </span>
             <p className="text-paper-dim text-[11.5px] leading-snug">
-              Apne schedule ke hisaab se 2–3 purane questions revise karo aur naye solve karo.
+              Revise 2–3 scheduled problems daily alongside solving new patterns.
             </p>
           </div>
 
@@ -478,11 +485,10 @@ export default function SpacedRevisionSection() {
               Weekly Review
             </span>
             <span className="font-serif font-medium text-paper-text text-sm">
-              Weak & Hint Questions
+              Weak & Hint Problems
             </span>
             <p className="text-paper-dim text-[11.5px] leading-snug">
-              Jo questions galat hue ya hints dekh kar solve hue, unhe dobara independently attempt
-              karo.
+              Re-attempt problems where hints were used or mistakes were made, completely from scratch.
             </p>
           </div>
 
@@ -494,16 +500,15 @@ export default function SpacedRevisionSection() {
               Blind Pattern Test
             </span>
             <p className="text-paper-dim text-[11.5px] leading-snug">
-              Har major pattern se random questions bina topic label dekhe solve karo (Mock
-              Interview se).
+              Solve random problems from major patterns without topic labels (via Timed Mock Interview).
             </p>
           </div>
         </div>
 
         <div className="p-3 rounded-xl bg-sage-bg/30 border border-sage/40 text-paper-text text-xs leading-relaxed">
-          <strong>Key Philosophy:</strong> Ek question ko 5 baar solve kar lena sufficient nahi hai
-          agar tum sirf uska code yaad kar rahe ho. Goal yeh hai ki question dekhte hi approach
-          samajh aaye, lekin code khud likhna pade.
+          <strong>Key Philosophy:</strong> Solving a problem 5 times is ineffective if you are merely
+          memorizing code. The goal is instant pattern recognition and deriving the implementation
+          from fundamental principles.
         </div>
       </div>
 

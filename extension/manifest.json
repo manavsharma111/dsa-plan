@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "DSA Tracker Auto-Sync",
+  "version": "1.0.0",
+  "description": "Auto-captures LeetCode & GeeksForGeeks submissions and syncs with your DSA Tracker cloud",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://leetcode.com/*",
+    "https://*.geeksforgeeks.org/*",
+    "http://localhost:5000/*",
+    "https://dsa-plan-backend.onrender.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://leetcode.com/problems/*",
+        "https://*.geeksforgeeks.org/problems/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "DSA Tracker Sync Settings"
+  }
+}

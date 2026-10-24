@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   selectInterviewHistory,
@@ -8,6 +8,7 @@ import {
   clearInterviewHistory,
   setInterviewModalOpen,
   setRevisionModalProblem,
+  selectRevision,
   showToastNotification,
 } from '../store/progressSlice'
 
@@ -15,10 +16,17 @@ export default function InterviewAnalysisSection() {
   const dispatch = useDispatch()
   const history = useSelector(selectInterviewHistory)
   const selectedId = useSelector(selectSelectedInterviewDetailId)
+  const revision = useSelector(selectRevision)
+
+  // Local UI filters
+  const [listFilter, setListFilter] = useState('all') // 'all' | 'perfect' | 'partial' | 'needs_work'
+  const [detailQuestionTab, setDetailQuestionTab] = useState('all') // 'all' | 'solved' | 'left'
+  const [expandedCardId, setExpandedCardId] = useState(null) // Quick breakdown in main list
+  const [expandedCodeProblemId, setExpandedCodeProblemId] = useState(null) // Code preview in detail view
 
   const selectedInterview = history.find((h) => h.id === selectedId)
 
-  // Overall statistics
+  // Overall summary statistics
   const totalInterviews = history.length
   let totalProblemsAttempted = 0
   let totalProblemsSolved = 0
@@ -66,6 +74,22 @@ export default function InterviewAnalysisSection() {
     dispatch(setRevisionModalProblem(prob))
   }
 
+  // Filtered interviews for the main list
+  const filteredHistory = useMemo(() => {
+    if (listFilter === 'perfect') {
+      return history.filter((h) => h.solvedProblems === h.totalProblems && h.totalProblems > 0)
+    }
+    if (listFilter === 'partial') {
+      return history.filter(
+        (h) => h.solvedProblems > 0 && h.solvedProblems < h.totalProblems
+      )
+    }
+    if (listFilter === 'needs_work') {
+      return history.filter((h) => h.solvedProblems === 0 && h.totalProblems > 0)
+    }
+    return history
+  }, [history, listFilter])
+
   // ----------------------------------------------------
   // VIEW MODE B: Detailed Particular Interview Breakdown
   // ----------------------------------------------------
@@ -76,9 +100,9 @@ export default function InterviewAnalysisSection() {
       completedAt,
       durationMinutes,
       timeTakenSeconds,
-      totalProblems,
-      solvedProblems,
-      scorePercent,
+      totalProblems = 0,
+      solvedProblems = 0,
+      scorePercent = 0,
       problems = [],
       notes,
     } = selectedInterview
@@ -86,21 +110,48 @@ export default function InterviewAnalysisSection() {
     const isAllSolved = solvedProblems === totalProblems && totalProblems > 0
     const isHalfOrMore = scorePercent >= 50
 
+    // Separate attempted vs left questions
+    const solvedQuestions = problems.filter((p) => p.solved)
+    const leftQuestions = problems.filter((p) => !p.solved)
+
+    // Filter displayed questions based on active tab
+    const displayedQuestions =
+      detailQuestionTab === 'solved'
+        ? solvedQuestions
+        : detailQuestionTab === 'left'
+          ? leftQuestions
+          : problems
+
     return (
       <div className="space-y-6 my-6 animate-fadeIn">
         {/* Navigation Breadcrumb */}
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center justify-between gap-3 flex-wrap">
           <button
             type="button"
-            onClick={() => dispatch(setSelectedInterviewDetailId(null))}
+            onClick={() => {
+              dispatch(setSelectedInterviewDetailId(null))
+              setDetailQuestionTab('all')
+            }}
             className="font-mono text-xs sm:text-sm font-semibold text-core hover:underline flex items-center gap-1.5 cursor-pointer"
           >
             <span>← Back to All Interviews</span>
           </button>
 
-          <span className="font-mono text-xs text-paper-dim">
-            Session ID: #{selectedInterview.id.toString().slice(-6)}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-xs text-paper-dim">
+              Session ID: #{selectedInterview.id.toString().slice(-6)}
+            </span>
+            <button
+              type="button"
+              onClick={(e) => {
+                handleDelete(e, selectedInterview.id)
+                dispatch(setSelectedInterviewDetailId(null))
+              }}
+              className="text-xs text-rose-600 hover:text-rose-800 font-mono px-2 py-0.5 rounded border border-rose-200 hover:bg-rose-50 cursor-pointer"
+            >
+              Delete Record
+            </button>
+          </div>
         </div>
 
         {/* Detailed Header Card */}
@@ -208,95 +259,269 @@ export default function InterviewAnalysisSection() {
           </div>
           <p className="text-xs sm:text-sm leading-relaxed opacity-90">
             {isAllSolved
-              ? 'Aapne time limit ke andar saare questions independently solve kar liye. Code aur approach ka speed kaafi accha hai. Next time Hard rounds ya shorter timer (20m/question) attempt karein!'
+              ? 'All problems solved independently within the allotted time! Execution speed and code fluency were exceptional. Challenge yourself next with Hard rounds or tighter timers (20m/problem)!'
               : isHalfOrMore
-                ? 'Aapne majority questions time par nikaal liye! Jin questions mein time laga ya solve nahi ho paye, unke core pattern aur edge-cases ko revise karein.'
-                : 'Time pressure mein recall karne mein dikkat aayi. Pehle un patterns ko Spaced Revision (1, 3, 7, 28 din) se solid karein, phir is format ko re-attempt karein!'}
+                ? 'Strong performance! You cleared the majority of problems on schedule. Review the underlying patterns and tricky edge cases for any questions that lagged or went unsolved.'
+                : 'Time pressure impacted recall. Strengthen these patterns using Spaced Revision (1, 3, 7, 28 days), then re-attempt this format with confidence!'}
           </p>
+
+          {/* Quick Attempt Summary Box */}
+          <div className="mt-3 pt-3 border-t border-black/10 flex items-center gap-4 text-xs font-mono flex-wrap">
+            <span className="flex items-center gap-1.5 text-emerald-800 font-bold">
+              <span>✓ Attempted & Solved:</span>
+              <span className="bg-emerald-100 px-2 py-0.5 rounded-full">
+                {solvedQuestions.length}
+              </span>
+            </span>
+            <span className="flex items-center gap-1.5 text-rose-800 font-bold">
+              <span>✕ Left / Skipped:</span>
+              <span className="bg-rose-100 px-2 py-0.5 rounded-full">
+                {leftQuestions.length}
+              </span>
+            </span>
+          </div>
         </div>
 
-        {/* Question-by-Question Deep Dive */}
+        {/* Diagnostic Insights: Attempted vs Left Breakdown */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Solved Insights */}
+          <div className="p-4 rounded-xl border border-emerald-300 bg-emerald-50/40 space-y-2">
+            <div className="flex items-center justify-between font-mono text-xs font-bold text-emerald-900 border-b border-emerald-200 pb-1.5">
+              <span>🎯 Attempted & Cleared ({solvedQuestions.length})</span>
+              <span className="text-[10px] bg-emerald-200 text-emerald-900 px-1.5 py-0.2 rounded font-bold">
+                Cleared
+              </span>
+            </div>
+            {solvedQuestions.length > 0 ? (
+              <ul className="space-y-1 text-xs text-emerald-950">
+                {solvedQuestions.map((q, idx) => (
+                  <li key={idx} className="flex items-center justify-between gap-2">
+                    <span className="truncate">
+                      ✓ <strong>{q.name}</strong> ({q.patternTitle})
+                    </span>
+                    <span className="font-mono text-[10px] px-1 rounded bg-emerald-200 font-semibold flex-shrink-0">
+                      {q.difficulty}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-xs text-emerald-800/80 italic">
+                No problems were fully solved this round. Target Easy questions first in the next round to build momentum!
+              </p>
+            )}
+          </div>
+
+          {/* Left / Skipped Insights */}
+          <div className="p-4 rounded-xl border border-rose-300 bg-rose-50/40 space-y-2">
+            <div className="flex items-center justify-between font-mono text-xs font-bold text-rose-900 border-b border-rose-200 pb-1.5">
+              <span>⚠️ Left in Round / Skipped ({leftQuestions.length})</span>
+              <span className="text-[10px] bg-rose-200 text-rose-900 px-1.5 py-0.2 rounded font-bold">
+                Action Items
+              </span>
+            </div>
+            {leftQuestions.length > 0 ? (
+              <ul className="space-y-1.5 text-xs text-rose-950">
+                {leftQuestions.map((q, idx) => (
+                  <li key={idx} className="flex items-center justify-between gap-2">
+                    <span className="truncate">
+                      ✕ <strong>{q.name}</strong> ({q.patternTitle})
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => handleOpenProblemChecklist(q)}
+                      className="font-mono text-[10px] text-core underline hover:text-orange-700 cursor-pointer flex-shrink-0"
+                    >
+                      Solve Now ➔
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-xs text-emerald-800 font-medium">
+                🎉 Flawless! Not a single problem was left behind—all questions cleared within the time limit!
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Question-by-Question Deep Dive with Filter Tabs */}
         <div className="bg-paper-surface border border-paper-border rounded-2xl p-5 sm:p-6 shadow-sm">
-          <h3 className="font-serif text-lg font-semibold text-paper-text mb-4">
-            Question-by-Question Breakdown
-          </h3>
+          <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
+            <h3 className="font-serif text-lg font-semibold text-paper-text">
+              Question-by-Question Detailed Analysis
+            </h3>
+
+            {/* Filter Tabs */}
+            <div className="flex items-center gap-1.5 bg-paper-surface-2 p-1 rounded-xl border border-paper-border text-xs font-mono">
+              <button
+                type="button"
+                onClick={() => setDetailQuestionTab('all')}
+                className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
+                  detailQuestionTab === 'all'
+                    ? 'bg-paper-surface text-paper-text font-bold shadow-2xs'
+                    : 'text-paper-dim hover:text-paper-text'
+                }`}
+              >
+                All ({problems.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setDetailQuestionTab('solved')}
+                className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
+                  detailQuestionTab === 'solved'
+                    ? 'bg-emerald-100 text-emerald-900 font-bold shadow-2xs'
+                    : 'text-paper-dim hover:text-paper-text'
+                }`}
+              >
+                ✓ Solved ({solvedQuestions.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setDetailQuestionTab('left')}
+                className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
+                  detailQuestionTab === 'left'
+                    ? 'bg-rose-100 text-rose-900 font-bold shadow-2xs'
+                    : 'text-paper-dim hover:text-paper-text'
+                }`}
+              >
+                ✕ Left ({leftQuestions.length})
+              </button>
+            </div>
+          </div>
 
           <div className="space-y-3">
-            {problems.map((prob, idx) => {
+            {displayedQuestions.map((prob, idx) => {
               const isSolved = prob.solved
+              const rev = revision[prob.id]
+              const hasSavedCode = !!rev?.codeSnippet
+              const isCodeExpanded = expandedCodeProblemId === prob.id
+
               return (
                 <div
                   key={prob.id || idx}
-                  className={`p-4 rounded-xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                  className={`p-4 rounded-xl border transition-all flex flex-col gap-3 ${
                     isSolved
-                      ? 'bg-emerald-50/30 border-emerald-200'
-                      : 'bg-rose-50/30 border-rose-200'
+                      ? 'bg-emerald-50/30 border-emerald-300'
+                      : 'bg-rose-50/30 border-rose-300'
                   }`}
                 >
-                  <div className="flex items-start gap-3 min-w-0">
-                    <span
-                      className={`w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs font-bold flex-shrink-0 mt-0.5 ${
-                        isSolved ? 'bg-emerald-600 text-white' : 'bg-rose-600 text-white'
-                      }`}
-                    >
-                      {isSolved ? '✓' : '✕'}
-                    </span>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="flex items-start gap-3 min-w-0">
+                      <span
+                        className={`w-7 h-7 rounded-full flex items-center justify-center font-mono text-xs font-bold flex-shrink-0 mt-0.5 ${
+                          isSolved ? 'bg-emerald-600 text-white' : 'bg-rose-600 text-white'
+                        }`}
+                      >
+                        {isSolved ? '✓' : '✕'}
+                      </span>
 
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap mb-0.5">
-                        <span className="font-mono text-[10px] uppercase text-paper-faint">
-                          Q{idx + 1} &middot; {prob.patternTitle}
-                        </span>
-                        <span
-                          className={`font-mono text-[10px] font-bold px-1.5 py-0.2 rounded ${
-                            prob.difficulty === 'E'
-                              ? 'text-sage bg-sage-bg'
-                              : prob.difficulty === 'H'
-                                ? 'text-core bg-core-bg'
-                                : 'text-gold bg-gold-bg'
-                          }`}
-                        >
-                          {prob.difficulty}
-                        </span>
-                        <span
-                          className={`font-mono text-[10px] font-bold px-2 py-0.2 rounded-full ${
-                            isSolved
-                              ? 'bg-emerald-100 text-emerald-800'
-                              : 'bg-rose-100 text-rose-800'
-                          }`}
-                        >
-                          {isSolved ? 'Solved Under Timer' : 'Unsolved / Timed Out'}
-                        </span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                          <span className="font-mono text-[10px] uppercase text-paper-faint">
+                            Q{idx + 1} &middot; {prob.patternTitle}
+                          </span>
+                          <span
+                            className={`font-mono text-[10px] font-bold px-1.5 py-0.2 rounded ${
+                              prob.difficulty === 'E'
+                                ? 'text-sage bg-sage-bg'
+                                : prob.difficulty === 'H'
+                                  ? 'text-core bg-core-bg'
+                                  : 'text-gold bg-gold-bg'
+                            }`}
+                          >
+                            {prob.difficulty}
+                          </span>
+                          <span
+                            className={`font-mono text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                              isSolved
+                                ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                                : 'bg-rose-100 text-rose-800 border border-rose-300'
+                            }`}
+                          >
+                            {isSolved ? '✓ Attempted & Solved' : '⚠️ Left in Round / Timed Out'}
+                          </span>
+
+                          {rev?.aiReview?.score && (
+                            <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 text-purple-900 border border-purple-200">
+                              ⭐ AI Review: {rev.aiReview.score}/10
+                            </span>
+                          )}
+                        </div>
+
+                        <h4 className="font-serif text-sm sm:text-base font-bold text-paper-text">
+                          {prob.name}
+                        </h4>
                       </div>
+                    </div>
 
-                      <h4 className="font-serif text-sm sm:text-base font-medium text-paper-text">
-                        {prob.name}
-                      </h4>
+                    {/* Actions for this problem */}
+                    <div className="flex items-center gap-2 self-end sm:self-auto flex-wrap">
+                      {prob.lc && (
+                        <a
+                          href={prob.url || `https://leetcode.com/problems/${prob.slug || ''}/`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-mono text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-orange-50 text-orange-700 border border-orange-200 hover:bg-orange-600 hover:text-white transition-all inline-flex items-center gap-1"
+                        >
+                          <span>{prob.lc}</span>
+                          <span className="text-[10px]">↗</span>
+                        </a>
+                      )}
+
+                      <button
+                        type="button"
+                        onClick={() => handleOpenProblemChecklist(prob)}
+                        className="font-mono text-xs font-semibold px-3 py-1.5 rounded-lg bg-paper-surface hover:bg-paper-surface-2 text-paper-text border border-paper-border transition-all cursor-pointer flex items-center gap-1 shadow-2xs"
+                      >
+                        <span>📝 {isSolved ? 'Review Checklist' : 'Solve & Revise'}</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleOpenProblemChecklist(prob)}
+                        className="font-mono text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 transition-all cursor-pointer flex items-center gap-1 shadow-2xs"
+                      >
+                        <span>🤖 AI Review</span>
+                      </button>
                     </div>
                   </div>
 
-                  {/* Actions for this problem */}
-                  <div className="flex items-center gap-2 self-end sm:self-auto flex-wrap">
-                    {prob.lc && (
-                      <a
-                        href={prob.url || `https://leetcode.com/problems/${prob.slug || ''}/`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-mono text-xs font-semibold px-2.5 py-1 rounded-lg bg-orange-50 text-orange-700 border border-orange-200 hover:bg-orange-600 hover:text-white transition-all inline-flex items-center gap-1"
-                      >
-                        <span>{prob.lc}</span>
-                        <span className="text-[10px]">↗</span>
-                      </a>
-                    )}
+                  {/* Saved Solution & AI Feedback Drawer (if exists) */}
+                  {hasSavedCode && (
+                    <div className="pt-2 border-t border-paper-border/60">
+                      <div className="flex items-center justify-between">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setExpandedCodeProblemId(isCodeExpanded ? null : prob.id)
+                          }
+                          className="font-mono text-[11px] text-core hover:underline cursor-pointer flex items-center gap-1"
+                        >
+                          <span>{isCodeExpanded ? '▲ Hide Saved Solution' : '▼ View Saved Solution'}</span>
+                        </button>
 
-                    <button
-                      type="button"
-                      onClick={() => handleOpenProblemChecklist(prob)}
-                      className="font-mono text-xs font-semibold px-3 py-1 rounded-lg bg-paper-surface-2 hover:bg-paper-border/60 text-paper-text border border-paper-border transition-all cursor-pointer"
-                    >
-                      📝 Revise Checklist
-                    </button>
-                  </div>
+                        {rev?.aiReview?.optimalityTag && (
+                          <span className="font-mono text-[10px] text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded font-semibold">
+                            {rev.aiReview.optimalityTag}
+                          </span>
+                        )}
+                      </div>
+
+                      {isCodeExpanded && (
+                        <div className="mt-2 space-y-2">
+                          <pre className="p-3 rounded-lg bg-paper-surface border border-paper-border font-mono text-[11px] text-paper-text overflow-x-auto max-h-48 custom-scrollbar">
+                            <code>{rev.codeSnippet}</code>
+                          </pre>
+                          {rev?.notes && (
+                            <div className="text-[11px] text-paper-dim italic bg-paper-surface-2 p-2 rounded border border-paper-border">
+                              💡 <strong>Key Takeaway:</strong> {rev.notes}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               )
             })}
@@ -335,7 +560,7 @@ export default function InterviewAnalysisSection() {
             </h2>
             <p className="text-paper-dim text-xs sm:text-sm mt-1 max-w-2xl leading-relaxed">
               Track your speed and accuracy under real interview pressure. Har diye gaye interview
-              par click karke uski deep breakdown, time metrics, aur scratchpad notes dekhein.
+              ke andar kiye gaye questions, chhoote hue questions, aur unka complete analysis dekhein.
             </p>
           </div>
 
@@ -382,38 +607,91 @@ export default function InterviewAnalysisSection() {
         </div>
       </div>
 
-      {/* Interviews History List */}
+      {/* Interviews History List Card */}
       <div className="bg-paper-surface border border-paper-border rounded-2xl p-5 sm:p-6 shadow-sm">
         <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
           <div className="font-serif text-lg font-semibold text-paper-text flex items-center gap-2">
             <span>📋 All Given Interviews ({history.length})</span>
           </div>
 
-          {history.length > 0 && (
-            <button
-              type="button"
-              onClick={() => {
-                if (window.confirm('Clear all interview history records?')) {
-                  dispatch(clearInterviewHistory())
-                  dispatch(showToastNotification('Interview history cleared'))
-                }
-              }}
-              className="font-mono text-xs text-paper-faint hover:text-rose-600 underline cursor-pointer"
-            >
-              Clear All Records
-            </button>
-          )}
+          <div className="flex items-center gap-2 flex-wrap">
+            {/* Filter Chips */}
+            {history.length > 0 && (
+              <div className="flex items-center gap-1 bg-paper-surface-2 p-1 rounded-xl border border-paper-border text-xs font-mono">
+                <button
+                  type="button"
+                  onClick={() => setListFilter('all')}
+                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                    listFilter === 'all'
+                      ? 'bg-paper-surface text-paper-text font-bold shadow-2xs'
+                      : 'text-paper-dim hover:text-paper-text'
+                  }`}
+                >
+                  All ({history.length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setListFilter('perfect')}
+                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                    listFilter === 'perfect'
+                      ? 'bg-emerald-100 text-emerald-900 font-bold shadow-2xs'
+                      : 'text-paper-dim hover:text-paper-text'
+                  }`}
+                >
+                  🌟 100% Cleared
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setListFilter('partial')}
+                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                    listFilter === 'partial'
+                      ? 'bg-blue-100 text-blue-900 font-bold shadow-2xs'
+                      : 'text-paper-dim hover:text-paper-text'
+                  }`}
+                >
+                  ⚡ Partial
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setListFilter('needs_work')}
+                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                    listFilter === 'needs_work'
+                      ? 'bg-rose-100 text-rose-900 font-bold shadow-2xs'
+                      : 'text-paper-dim hover:text-paper-text'
+                  }`}
+                >
+                  ⚠️ Incomplete
+                </button>
+              </div>
+            )}
+
+            {history.length > 0 && (
+              <button
+                type="button"
+                onClick={() => {
+                  if (window.confirm('Clear all interview history records?')) {
+                    dispatch(clearInterviewHistory())
+                    dispatch(showToastNotification('Interview history cleared'))
+                  }
+                }}
+                className="font-mono text-xs text-paper-faint hover:text-rose-600 underline cursor-pointer"
+              >
+                Clear All
+              </button>
+            )}
+          </div>
         </div>
 
         {history.length === 0 ? (
           <div className="text-center py-12 px-4 bg-paper-surface-2 rounded-xl border border-paper-border/60">
             <span className="text-4xl block mb-2">⏱️</span>
             <h4 className="font-serif text-base font-semibold text-paper-text">
-              Abhi tak koi mock interview nahi diya hai!
+              No mock interviews completed yet!
             </h4>
             <p className="text-xs text-paper-dim mt-1 max-w-md mx-auto mb-4">
-              Upper diye gaye &ldquo;Start New Interview&rdquo; button par click karke pehla timed
-              practice round shuru karein. Har round ki analytics yahan automatically save hogi.
+              Click the &ldquo;Start New Interview&rdquo; button above to launch your first timed
+              screening round. Attempted problems, solutions, and skipped questions will
+              automatically be saved and analyzed here.
             </p>
             <button
               type="button"
@@ -424,81 +702,199 @@ export default function InterviewAnalysisSection() {
             </button>
           </div>
         ) : (
-          <div className="space-y-3">
-            {history.map((item) => {
+          <div className="space-y-4">
+            {filteredHistory.map((item) => {
               const isAllSolved =
                 item.solvedProblems === item.totalProblems && item.totalProblems > 0
               const isHalfOrMore = item.scorePercent >= 50
+              const solvedList = (item.problems || []).filter((p) => p.solved)
+              const leftList = (item.problems || []).filter((p) => !p.solved)
+              const isExpanded = expandedCardId === item.id
 
               return (
                 <div
                   key={item.id}
-                  onClick={() => dispatch(setSelectedInterviewDetailId(item.id))}
-                  className="bg-paper-surface hover:bg-paper-surface-2/60 border border-paper-border hover:border-paper-border/90 rounded-xl p-4 transition-all shadow-xs cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
+                  className="bg-paper-surface hover:bg-paper-surface-2/40 border border-paper-border hover:border-paper-border/90 rounded-2xl p-4 sm:p-5 transition-all shadow-xs flex flex-col gap-3 group"
                 >
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <span className="font-serif font-bold text-sm sm:text-base text-paper-text group-hover:text-core transition-colors">
-                        {item.title}
-                      </span>
-                      <span className="font-mono text-[10.5px] text-paper-faint">
-                        &middot; {formatDate(item.completedAt || item.startedAt)}
-                      </span>
-                    </div>
+                  {/* Top Bar: Title, Date, Score Pill, Actions */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap mb-1">
+                        <span className="font-serif font-bold text-base sm:text-lg text-paper-text group-hover:text-core transition-colors">
+                          {item.title}
+                        </span>
+                        <span className="font-mono text-[10.5px] text-paper-faint">
+                          &middot; {formatDate(item.completedAt || item.startedAt)}
+                        </span>
+                      </div>
 
-                    <div className="flex items-center gap-3 text-xs text-paper-dim flex-wrap">
-                      <span className="font-mono text-[11px]">
-                        ⏱️ Time: <strong>{formatSeconds(item.timeTakenSeconds)}</strong> /{' '}
-                        {item.durationMinutes}m
-                      </span>
-
-                      {/* Difficulty Pills Preview */}
-                      <div className="flex items-center gap-1">
-                        {(item.problems || []).map((p, i) => (
-                          <span
-                            key={i}
-                            className={`font-mono text-[9.5px] font-bold px-1.5 py-0.2 rounded ${
-                              p.difficulty === 'E'
-                                ? 'text-sage bg-sage-bg'
-                                : p.difficulty === 'H'
-                                  ? 'text-core bg-core-bg'
-                                  : 'text-gold bg-gold-bg'
-                            }`}
-                          >
-                            {p.difficulty}
-                          </span>
-                        ))}
+                      <div className="flex items-center gap-3 text-xs text-paper-dim flex-wrap font-mono">
+                        <span>
+                          ⏱️ Time Taken: <strong>{formatSeconds(item.timeTakenSeconds)}</strong> /{' '}
+                          {item.durationMinutes}m
+                        </span>
+                        <span>&middot;</span>
+                        <span>
+                          Avg Pace:{' '}
+                          <strong>
+                            {item.totalProblems > 0
+                              ? Math.round(item.timeTakenSeconds / 60 / item.totalProblems)
+                              : 0}{' '}
+                            m/prob
+                          </strong>
+                        </span>
                       </div>
                     </div>
+
+                    {/* Score Pill & View Action */}
+                    <div className="flex items-center gap-2.5 self-end sm:self-auto flex-wrap">
+                      <span
+                        className={`font-mono text-xs font-bold px-3 py-1 rounded-full border ${
+                          isAllSolved
+                            ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                            : isHalfOrMore
+                              ? 'bg-blue-100 text-blue-800 border-blue-300'
+                              : 'bg-rose-100 text-rose-800 border-rose-300'
+                        }`}
+                      >
+                        {item.solvedProblems} / {item.totalProblems} Solved ({item.scorePercent}%)
+                      </span>
+
+                      <button
+                        type="button"
+                        onClick={(e) => handleDelete(e, item.id)}
+                        title="Delete this record"
+                        className="w-7 h-7 rounded-lg flex items-center justify-center text-paper-faint hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                      >
+                        🗑️
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => dispatch(setSelectedInterviewDetailId(item.id))}
+                        className="font-mono text-xs font-bold px-3 py-1.5 rounded-xl bg-core text-white hover:bg-[#ea580c] transition-colors cursor-pointer shadow-2xs inline-flex items-center gap-1"
+                      >
+                        <span>Deep Analysis</span>
+                        <span>➔</span>
+                      </button>
+                    </div>
                   </div>
 
-                  {/* Score Pill & Action */}
-                  <div className="flex items-center gap-3 self-end sm:self-auto">
-                    <span
-                      className={`font-mono text-xs font-bold px-3 py-1 rounded-full border ${
-                        isAllSolved
-                          ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
-                          : isHalfOrMore
-                            ? 'bg-blue-100 text-blue-800 border-blue-300'
-                            : 'bg-amber-100 text-amber-800 border-amber-300'
-                      }`}
-                    >
-                      {item.solvedProblems} / {item.totalProblems} Solved ({item.scorePercent}%)
-                    </span>
+                  {/* Question Chips Preview: Attempted vs Left */}
+                  <div className="pt-2 border-t border-paper-border/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {/* Attempted Questions Chips */}
+                      {solvedList.length > 0 && (
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="font-mono text-[10.5px] font-bold text-emerald-800 bg-emerald-100/90 px-2 py-0.5 rounded-full border border-emerald-200">
+                            ✓ Done ({solvedList.length}):
+                          </span>
+                          {solvedList.map((p, i) => (
+                            <span
+                              key={i}
+                              className="font-mono text-[10.5px] px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-900 border border-emerald-200 font-medium"
+                            >
+                              {p.name}
+                            </span>
+                          ))}
+                        </div>
+                      )}
 
+                      {/* Left Questions Chips */}
+                      {leftList.length > 0 && (
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="font-mono text-[10.5px] font-bold text-rose-800 bg-rose-100/90 px-2 py-0.5 rounded-full border border-rose-200">
+                            ✕ Left ({leftList.length}):
+                          </span>
+                          {leftList.map((p, i) => (
+                            <span
+                              key={i}
+                              className="font-mono text-[10.5px] px-2 py-0.5 rounded-md bg-rose-50 text-rose-900 border border-rose-200 font-medium"
+                            >
+                              {p.name}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Quick Expand Toggle Button */}
                     <button
                       type="button"
-                      onClick={(e) => handleDelete(e, item.id)}
-                      title="Delete this record"
-                      className="w-7 h-7 rounded-lg flex items-center justify-center text-paper-faint hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                      onClick={() => setExpandedCardId(isExpanded ? null : item.id)}
+                      className="font-mono text-[11px] text-core hover:underline cursor-pointer flex-shrink-0 self-end sm:self-auto"
                     >
-                      🗑️
+                      {isExpanded ? '▲ Hide Questions' : '▼ Quick Summary'}
                     </button>
-
-                    <span className="font-mono text-xs font-semibold text-core group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">
-                      View Analysis ➔
-                    </span>
                   </div>
+
+                  {/* Inline Expanded Question Summary Drawer */}
+                  {isExpanded && (
+                    <div className="mt-2 p-3 rounded-xl bg-paper-surface-2 border border-paper-border space-y-2 animate-fadeIn">
+                      <div className="font-mono text-[11px] font-bold uppercase tracking-wider text-paper-dim flex items-center justify-between">
+                        <span>All Questions in this Round ({item.problems?.length || 0}):</span>
+                        <span className="text-[10px] lowercase font-normal">
+                          Click any question to open checklist
+                        </span>
+                      </div>
+
+                      <div className="space-y-1.5">
+                        {(item.problems || []).map((prob, pIdx) => {
+                          const isSolvedProb = prob.solved
+                          return (
+                            <div
+                              key={pIdx}
+                              className={`p-2 rounded-lg border flex items-center justify-between gap-2 text-xs ${
+                                isSolvedProb
+                                  ? 'bg-emerald-50/70 border-emerald-200'
+                                  : 'bg-rose-50/70 border-rose-200'
+                              }`}
+                            >
+                              <div className="flex items-center gap-2 min-w-0">
+                                <span
+                                  className={`font-mono text-[10px] font-bold px-1.5 py-0.2 rounded-full ${
+                                    isSolvedProb
+                                      ? 'bg-emerald-200 text-emerald-900'
+                                      : 'bg-rose-200 text-rose-900'
+                                  }`}
+                                >
+                                  {isSolvedProb ? '✓ Solved' : '✕ Left'}
+                                </span>
+                                <span className="font-medium text-paper-text truncate">
+                                  {prob.name}
+                                </span>
+                                <span className="font-mono text-[10px] text-paper-dim hidden sm:inline">
+                                  ({prob.patternTitle})
+                                </span>
+                              </div>
+
+                              <div className="flex items-center gap-2 flex-shrink-0">
+                                <span
+                                  className={`font-mono text-[10px] font-bold px-1.5 py-0.2 rounded ${
+                                    prob.difficulty === 'E'
+                                      ? 'text-sage bg-sage-bg'
+                                      : prob.difficulty === 'H'
+                                        ? 'text-core bg-core-bg'
+                                        : 'text-gold bg-gold-bg'
+                                  }`}
+                                >
+                                  {prob.difficulty}
+                                </span>
+
+                                <button
+                                  type="button"
+                                  onClick={() => handleOpenProblemChecklist(prob)}
+                                  className="font-mono text-[10.5px] px-2 py-0.5 rounded border border-paper-border bg-paper-surface hover:bg-paper-surface-2 text-core cursor-pointer font-semibold"
+                                >
+                                  {isSolvedProb ? 'Checklist' : 'Solve'}
+                                </button>
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )
             })}

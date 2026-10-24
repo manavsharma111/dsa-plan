@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import Header from './components/Header'
 import CloudSync from './components/CloudSync'
 import ProgressBar from './components/ProgressBar'
@@ -13,12 +13,19 @@ import WeakPatternAnalytics from './components/WeakPatternAnalytics'
 import InterviewAnalysisSection from './components/InterviewAnalysisSection'
 import InterviewModeModal from './components/InterviewModeModal'
 import RevisionChecklistModal from './components/RevisionChecklistModal'
+import ExtensionGuideModal from './components/ExtensionGuideModal'
 import Toast from './components/Toast'
 import { patternsData } from './data/patternsData'
-import { selectActiveTab } from './store/progressSlice'
+import {
+  selectActiveTab,
+  selectExtensionModalOpen,
+  setExtensionModalOpen,
+} from './store/progressSlice'
 
 export default function App() {
+  const dispatch = useDispatch()
   const activeTab = useSelector(selectActiveTab)
+  const isExtensionOpen = useSelector(selectExtensionModalOpen)
 
   return (
     <div className="min-h-screen bg-paper-bg text-paper-text font-sans antialiased bg-grid-pattern">
@@ -71,6 +78,12 @@ export default function App() {
 
       {/* 5-Point Spaced Revision & Adaptive Outcome Modal */}
       <RevisionChecklistModal />
+
+      {/* Chrome Extension Setup Guide Modal */}
+      <ExtensionGuideModal
+        isOpen={isExtensionOpen}
+        onClose={() => dispatch(setExtensionModalOpen(false))}
+      />
 
       {/* Global Toast */}
       <Toast />

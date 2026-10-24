@@ -28,6 +28,15 @@ class SyncController {
       next(error)
     }
   }
+
+  async extensionSubmission(req, res, next) {
+    try {
+      const result = await syncService.handleExtensionSubmission(req.body)
+      return res.status(APP_CONSTANTS.HTTP_STATUS.OK).json(result)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 export default new SyncController()

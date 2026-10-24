@@ -9,4 +9,7 @@ router.post('/pull', syncController.pull)
 // POST /api/sync/push - Push solved, mastery, and revision progress
 router.post('/push', syncController.push)
 
+// POST /api/sync/extension-submission - Auto capture from Chrome extension
+router.post('/extension-submission', syncController.extensionSubmission)
+
 export default router

@@ -1,9 +1,6 @@
 import { ENV } from '../config/env.js'
 import { APP_CONSTANTS } from '../config/constants.js'
 
-/**
- * Global Centralized Error Handling Middleware
- */
 export function errorHandler(err, req, res, next) {
   const statusCode =
     err.statusCode || APP_CONSTANTS.HTTP_STATUS.INTERNAL_SERVER_ERROR

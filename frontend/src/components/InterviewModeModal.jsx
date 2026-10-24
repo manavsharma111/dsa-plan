@@ -37,6 +37,23 @@ export default function InterviewModeModal() {
     return () => clearInterval(interval)
   }, [session?.status, dispatch])
 
+  // Lock body scroll and prevent background scrolling when modal is open
+  useEffect(() => {
+    if (!isOpen) return
+    const prevOverflow = document.body.style.overflow
+    const prevPaddingRight = document.body.style.paddingRight
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`
+    }
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.body.style.overflow = prevOverflow
+      document.body.style.paddingRight = prevPaddingRight
+    }
+  }, [isOpen])
+
   if (!isOpen) return null
 
   // Generate random problems for interview
@@ -192,10 +209,10 @@ export default function InterviewModeModal() {
   const solvedCount = session?.solved ? Object.values(session.solved).filter(Boolean).length : 0
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-[#fffdfb] border border-paper-border rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col justify-between">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-sm animate-fadeIn overflow-hidden overscroll-contain">
+      <div className="bg-[#fffdfb] border border-paper-border rounded-2xl w-full max-w-2xl max-h-[90vh] shadow-2xl flex flex-col justify-between overflow-hidden">
         {/* Modal Header */}
-        <div className="px-5 py-4 border-b border-paper-border flex justify-between items-center bg-paper-surface">
+        <div className="px-5 py-4 border-b border-paper-border flex justify-between items-center bg-paper-surface flex-shrink-0">
           <div className="flex items-center gap-2">
             <span className="text-xl">⏱️</span>
             <h3 className="font-serif font-bold text-lg sm:text-xl text-paper-text">
@@ -212,7 +229,7 @@ export default function InterviewModeModal() {
         </div>
 
         {/* Modal Body */}
-        <div className="p-5 sm:p-6 space-y-5">
+        <div className="p-5 sm:p-6 space-y-5 flex-1 overflow-y-auto custom-scrollbar overscroll-contain">
           {!session ? (
             /* Setup Screen */
             <div className="space-y-5">

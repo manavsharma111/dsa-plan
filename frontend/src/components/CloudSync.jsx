@@ -8,6 +8,7 @@ import {
   manualSync,
   disconnectSync,
   showToastNotification,
+  setExtensionModalOpen,
 } from '../store/progressSlice'
 import { sanitizeKey } from '../utils/codec'
 
@@ -181,13 +182,24 @@ export default function CloudSync() {
         )}
       </form>
 
-      <div className="flex flex-col sm:flex-row justify-between text-xs text-paper-dim mt-2.5 gap-1.5">
-        <span>
-          💡 Syncs solved questions, mastery, spaced revisions, mock interviews & pattern analytics
-          to MongoDB Atlas.
-        </span>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center text-xs text-paper-dim mt-2.5 gap-1.5 border-t border-paper-border/60 pt-2">
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <span>
+            💡 Syncs solved questions, mastery, spaced revisions & mock interviews to MongoDB Atlas.
+          </span>
+          <button
+            type="button"
+            onClick={() => dispatch(setExtensionModalOpen(true))}
+            className="text-emerald-700 font-bold hover:underline inline-flex items-center gap-0.5 cursor-pointer"
+          >
+            <span>⚡ LeetCode Auto-Sync Extension Setup</span>
+            <span className="text-[10px]">↗</span>
+          </button>
+        </div>
         {lastSyncTime && (
-          <span className="font-mono text-paper-faint">Synced at {lastSyncTime}</span>
+          <span className="font-mono text-paper-faint whitespace-nowrap">
+            Synced at {lastSyncTime}
+          </span>
         )}
       </div>
     </div>

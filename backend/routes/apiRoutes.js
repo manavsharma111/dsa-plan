@@ -2,6 +2,7 @@ import express from 'express'
 import syncRoutes from './syncRoutes.js'
 import interviewRoutes from './interviewRoutes.js'
 import analyticsRoutes from './analyticsRoutes.js'
+import aiRoutes from './aiRoutes.js'
 import { isDbConnected } from '../config/db.js'
 
 const router = express.Router()
@@ -20,5 +21,6 @@ router.get('/health', (req, res) => {
 router.use('/sync', syncRoutes)
 router.use('/interviews', interviewRoutes)
 router.use('/analytics', analyticsRoutes)
+router.use('/ai', aiRoutes)
 
 export default router
