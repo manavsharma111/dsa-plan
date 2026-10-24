@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectTotalSolved } from '../store/progressSlice';
+import { totalQuestions } from '../data/patternsData';
 
 export default function StickyHeader() {
   const [isVisible, setIsVisible] = useState(false);
   const solvedCount = useSelector(selectTotalSolved);
-  const totalCount = 258;
+  const totalCount = totalQuestions;
   const pct = totalCount > 0 ? Math.round((solvedCount / totalCount) * 100) : 0;
   const exactPct = totalCount > 0 ? ((solvedCount / totalCount) * 100).toFixed(1) : '0.0';
 

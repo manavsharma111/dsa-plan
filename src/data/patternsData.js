@@ -2742,6 +2742,30 @@ export const patternsData = [
         "tags": [],
         "slug": "range-sum-query-mutable",
         "url": "https://leetcode.com/problems/range-sum-query-mutable/"
+      },
+      {
+        "id": "c259",
+        "name": "Minimizing Path Costs in a Weighted Tree",
+        "lc": "LC 2646",
+        "difficulty": "H",
+        "tags": [
+          "LCA",
+          "Greedy"
+        ],
+        "slug": "minimize-the-total-price-of-the-trips",
+        "url": "https://leetcode.com/problems/minimize-the-total-price-of-the-trips/"
+      },
+      {
+        "id": "c260",
+        "name": "Shortest Path in a Weighted Tree",
+        "lc": "LC 2846",
+        "difficulty": "H",
+        "tags": [
+          "Euler Tour",
+          "SegTree"
+        ],
+        "slug": "minimum-edge-weight-equilibrium-queries-in-a-tree",
+        "url": "https://leetcode.com/problems/minimum-edge-weight-equilibrium-queries-in-a-tree/"
       }
     ]
   },
@@ -2807,3 +2831,5 @@ export const patternsData = [
     ]
   }
 ];
+
+export const totalQuestions = patternsData.reduce((acc, p) => acc + p.problems.length, 0);

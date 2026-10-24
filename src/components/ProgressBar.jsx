@@ -1,10 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { selectTotalSolved } from '../store/progressSlice';
+import { totalQuestions } from '../data/patternsData';
 
 export default function ProgressBar() {
   const solvedCount = useSelector(selectTotalSolved);
-  const totalCount = 258;
+  const totalCount = totalQuestions;
   const pct = totalCount > 0 ? Math.round((solvedCount / totalCount) * 100) : 0;
   const exactPct = totalCount > 0 ? ((solvedCount / totalCount) * 100).toFixed(1) : '0.0';
   const remaining = totalCount - solvedCount;
@@ -16,7 +17,7 @@ export default function ProgressBar() {
     if (pct < 50) return 'Solid momentum! Keep pushing 💪';
     if (pct < 75) return 'Halfway mark crossed! Revision is locking in 🚀';
     if (pct < 100) return 'Almost at the finish line! Final stretch 🌟';
-    return '🏆 All 258 questions revised! Master level achieved!';
+    return `🏆 All ${totalCount} questions revised! Master level achieved!`;
   };
 
   return (
@@ -62,7 +63,7 @@ export default function ProgressBar() {
       <div className="flex justify-between items-center flex-wrap gap-1.5 mt-2.5 text-xs text-paper-dim">
         <span className="italic">{getMotivation()}</span>
         <span className="font-mono text-xs text-core font-semibold">
-          {remaining > 0 ? `${remaining} to go` : '🎉 All 258 completed!'}
+          {remaining > 0 ? `${remaining} to go` : `🎉 All ${totalCount} completed!`}
         </span>
       </div>
     </div>

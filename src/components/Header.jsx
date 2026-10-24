@@ -1,10 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { selectTotalSolved } from '../store/progressSlice';
+import { totalQuestions } from '../data/patternsData';
 
 export default function Header() {
   const solvedCount = useSelector(selectTotalSolved);
-  const todoCount = 258 - solvedCount;
+  const todoCount = totalQuestions - solvedCount;
 
   return (
     <header className="pt-10 pb-6 md:pt-13 md:pb-7 border-b-2 border-paper-border mb-2">
@@ -31,7 +32,7 @@ export default function Header() {
           <div className="font-mono text-[10px] tracking-wider uppercase text-paper-faint">Patterns</div>
         </div>
         <div>
-          <div className="font-mono text-xl sm:text-2xl font-semibold">258</div>
+          <div className="font-mono text-xl sm:text-2xl font-semibold">{totalQuestions}</div>
           <div className="font-mono text-[10px] tracking-wider uppercase text-paper-faint">Must-practice Qs</div>
         </div>
         <div>

@@ -1,7 +1,8 @@
-// Packs 258 question states into exactly 33 bytes (44 chars URL-safe base64)
-export function encodeState(state) {
-  const b = new Uint8Array(33);
-  for (let i = 1; i <= 258; i++) {
+// Packs up to 260 question states into 33 bytes (44 chars URL-safe base64)
+export function encodeState(state, total = 260) {
+  const bytes = Math.ceil(total / 8);
+  const b = new Uint8Array(bytes);
+  for (let i = 1; i <= total; i++) {
     if (state['c' + i]) {
       b[Math.floor((i - 1) / 8)] |= (1 << ((i - 1) % 8));
     }
@@ -11,7 +12,7 @@ export function encodeState(state) {
   return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
-export function decodeState(str) {
+export function decodeState(str, total = 260) {
   if (!str || typeof str !== 'string') return {};
   try {
     let clean = str.replace(/-/g, '+').replace(/_/g, '/');
@@ -20,7 +21,7 @@ export function decodeState(str) {
     const b = new Uint8Array(bin.length);
     for (let i = 0; i < bin.length; i++) b[i] = bin.charCodeAt(i);
     const res = {};
-    for (let k = 1; k <= 258; k++) {
+    for (let k = 1; k <= total; k++) {
       const bi = Math.floor((k - 1) / 8);
       const bit = (k - 1) % 8;
       if (bi < b.length && (b[bi] & (1 << bit)) !== 0) {
