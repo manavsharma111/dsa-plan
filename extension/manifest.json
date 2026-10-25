@@ -3,7 +3,7 @@
   "name": "DSA Tracker Auto-Sync",
   "version": "1.0.0",
   "description": "Auto-captures LeetCode & GeeksForGeeks submissions and syncs with your DSA Tracker cloud",
-  "permissions": ["storage", "scripting", "activeTab"],
+  "permissions": ["storage", "scripting", "activeTab", "tabs"],
   "host_permissions": [
     "https://leetcode.com/*",
     "https://*.geeksforgeeks.org/*",

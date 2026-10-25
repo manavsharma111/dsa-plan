@@ -192,12 +192,27 @@ function extractLeetCodeCode() {
   return ''
 }
 
+function isCompleteCode(code) {
+  if (!code || typeof code !== 'string') return false
+  const trimmed = code.trim()
+  if (trimmed.length < 35) return false
+  const hasStart =
+    /class\s+Solution|struct\s+|#include|def\s+|function\s+|int\s+main|var\s+|public\s+class/i.test(
+      trimmed
+    )
+  const hasEnd = /};\s*$|return\s+.*}\s*$|}\s*$/m.test(trimmed)
+  return hasStart && hasEnd
+}
+
 async function handleLeetCodeSubmissionAccepted(slug, title, runtime, memory) {
-  // Retry extraction up to 5 times (1.5s total) to give injected.js & network bridge time to settle
+  // Retry extraction up to 6 times (1.8s total) to give injected.js & network bridge time to settle
   let code = ''
-  for (let attempt = 0; attempt < 5; attempt++) {
-    code = extractLeetCodeCode()
-    if (code && code.trim().length > 15) break
+  for (let attempt = 0; attempt < 6; attempt++) {
+    const candidate = extractLeetCodeCode()
+    if (candidate && candidate.length > code.length) {
+      code = candidate
+    }
+    if (isCompleteCode(code)) break
     window.postMessage({ type: '__DSA_TRACKER_REQUEST_CODE__' }, '*')
     window.dispatchEvent(new CustomEvent('DSA_TRACKER_REQUEST_CODE'))
     await new Promise((res) => setTimeout(res, 300))

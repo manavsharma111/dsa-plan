@@ -2,6 +2,27 @@
 
 const DEFAULT_BACKEND = 'https://dsa-plan-backend.onrender.com'
 
+// Automatically inject main-world script via chrome.scripting on tab navigation (bypasses CSP)
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (
+    changeInfo.status === 'loading' &&
+    tab &&
+    tab.url &&
+    (tab.url.includes('leetcode.com/problems/') ||
+      tab.url.includes('geeksforgeeks.org/problems/'))
+  ) {
+    if (chrome.scripting) {
+      chrome.scripting
+        .executeScript({
+          target: { tabId },
+          world: 'MAIN',
+          files: ['injected.js'],
+        })
+        .catch(() => {})
+    }
+  }
+})
+
 // Handle messages from content script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'CODE_SUBMITTED') {
@@ -30,7 +51,7 @@ async function handleSubmission(payload, sender) {
     throw new Error('Sync Key not configured. Please open extension and enter Sync Key.')
   }
 
-  // Use Chrome native chrome.scripting API to extract 100% full unvirtualized Monaco code from MAIN world
+  // Use Chrome native chrome.scripting API to extract 100% full unvirtualized Monaco / React Fiber code from MAIN world
   if (sender && sender.tab && sender.tab.id && chrome.scripting) {
     try {
       const results = await chrome.scripting.executeScript({
@@ -47,7 +68,7 @@ async function handleSubmission(payload, sender) {
                   const val = m.getValue() || ''
                   if (val.length > best.length) best = val
                 }
-                if (best.trim().length > 15) return best.trim()
+                if (best.trim().length > 25) return best.trim()
               }
             }
           } catch (_) {}
@@ -56,30 +77,75 @@ async function handleSubmission(payload, sender) {
           try {
             if (
               window.__DSA_TRACKER_LATEST_CODE__ &&
-              window.__DSA_TRACKER_LATEST_CODE__.trim().length > 15
+              window.__DSA_TRACKER_LATEST_CODE__.trim().length > 25
             ) {
               return window.__DSA_TRACKER_LATEST_CODE__.trim()
             }
           } catch (_) {}
 
-          // 3. Ace Editor (GeeksForGeeks)
+          // 3. React Fiber tree traversal from .monaco-editor or editor container
+          try {
+            const editorEl = document.querySelector('.monaco-editor')
+            if (editorEl) {
+              let curr = editorEl
+              while (curr && curr !== document.body) {
+                const fiberKey = Object.keys(curr).find(
+                  (k) =>
+                    k.startsWith('__reactFiber$') ||
+                    k.startsWith('__reactInternalInstance$')
+                )
+                if (fiberKey && curr[fiberKey]) {
+                  let fiber = curr[fiberKey]
+                  let depth = 0
+                  while (fiber && depth < 30) {
+                    const p = fiber.memoizedProps
+                    if (p) {
+                      if (p.editor && typeof p.editor.getValue === 'function') {
+                        const val = p.editor.getValue()
+                        if (val && val.length > 25) return val.trim()
+                      }
+                      if (p.model && typeof p.model.getValue === 'function') {
+                        const val = p.model.getValue()
+                        if (val && val.length > 25) return val.trim()
+                      }
+                      if (typeof p.value === 'string' && p.value.length > 30) {
+                        return p.value.trim()
+                      }
+                    }
+                    if (fiber.stateNode) {
+                      const sn = fiber.stateNode
+                      if (sn.editor && typeof sn.editor.getValue === 'function') {
+                        const val = sn.editor.getValue()
+                        if (val && val.length > 25) return val.trim()
+                      }
+                    }
+                    fiber = fiber.return || fiber.child
+                    depth++
+                  }
+                }
+                curr = curr.parentElement
+              }
+            }
+          } catch (_) {}
+
+          // 4. Ace Editor (GeeksForGeeks)
           try {
             const aceElem = document.querySelector('.ace_editor')
             if (aceElem && window.ace) {
               const editor = window.ace.edit(aceElem)
               if (editor) {
                 const val = editor.getValue()
-                if (val && val.trim().length > 10) return val.trim()
+                if (val && val.trim().length > 15) return val.trim()
               }
             }
           } catch (_) {}
 
-          // 4. CodeMirror
+          // 5. CodeMirror
           try {
             const cmElem = document.querySelector('.CodeMirror')
             if (cmElem && cmElem.CodeMirror) {
               const val = cmElem.CodeMirror.getValue()
-              if (val && val.trim().length > 10) return val.trim()
+              if (val && val.trim().length > 15) return val.trim()
             }
           } catch (_) {}
 
@@ -101,7 +167,9 @@ async function handleSubmission(payload, sender) {
 
   const backendUrl = (config.backendUrl || DEFAULT_BACKEND).replace(/\/$/, '')
 
-  console.log(`[DSA Tracker] Sending ${payload.problemTitle} to ${backendUrl}... (Code length: ${payload.code?.length || 0})`)
+  console.log(
+    `[DSA Tracker] Sending ${payload.problemTitle} to ${backendUrl}... (Code length: ${payload.code?.length || 0})`
+  )
 
   const response = await fetch(`${backendUrl}/api/sync/extension-submission`, {
     method: 'POST',
