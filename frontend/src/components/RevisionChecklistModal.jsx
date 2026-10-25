@@ -96,7 +96,19 @@ export default function RevisionChecklistModal() {
         Object.entries(revision).find(([k, r]) => k === problem.slug || r?.slug === problem.slug || k.includes(problem.slug))?.[1]) ||
       null
     setNoteText(rev?.notes || '')
-    setCodeSnippet(rev?.codeSnippet || '')
+    // Only pre-populate codeSnippet if user saved it (lastOutcome !== 'extension_auto') or if it's a complete class/function
+    const existingCode = rev?.codeSnippet || ''
+    if (existingCode && rev?.lastOutcome !== 'extension_auto') {
+      setCodeSnippet(existingCode)
+    } else if (
+      existingCode &&
+      /class\s+Solution|struct\s+|#include|def\s+|function\s+/i.test(existingCode) &&
+      /};\s*$|}\s*$/m.test(existingCode)
+    ) {
+      setCodeSnippet(existingCode)
+    } else {
+      setCodeSnippet('')
+    }
     setAiReviewData(rev?.aiReview || null)
   }, [problem?.id, problem?.slug])
 
@@ -790,7 +802,8 @@ export default function RevisionChecklistModal() {
                           </div>
                         )}
 
-                        {entry.codeSnippet ? (
+                        {entry.codeSnippet &&
+                        entry.outcome !== 'extension_auto_capture' ? (
                           <div className="pt-1 border-t border-paper-border/60">
                             <div className="flex items-center justify-between">
                               <button
@@ -820,11 +833,7 @@ export default function RevisionChecklistModal() {
                               </pre>
                             )}
                           </div>
-                        ) : (
-                          <div className="text-[10px] text-paper-faint italic">
-                            (No code snippet submitted in this attempt)
-                          </div>
-                        )}
+                        ) : null}
                       </div>
                     )
                   })}

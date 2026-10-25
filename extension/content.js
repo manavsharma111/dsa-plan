@@ -222,7 +222,7 @@ async function handleLeetCodeSubmissionAccepted(slug, title, runtime, memory) {
     platform: 'LeetCode',
     problemSlug: slug,
     problemTitle: title,
-    code: code || '',
+    code: isCompleteCode(code) ? code : '',
     runtime,
     memory,
     beatsPercentile: runtime,

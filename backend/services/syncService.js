@@ -175,12 +175,9 @@ class SyncService {
     const nextStage = isDuplicateRecent ? (currentRev.stage || 1) : Math.min((currentRev.stage || 0) + 1, 5)
     const daysToAdd = [1, 3, 7, 14, 28][nextStage - 1] || 7
 
-    // Keep existing code snippet if incoming code is blank or shorter fragment
-    const existingSnippet = currentRev.codeSnippet || ''
-    const resolvedCodeSnippet =
-      cleanCode && cleanCode.length >= existingSnippet.length
-        ? cleanCode.slice(0, 10000)
-        : (existingSnippet || cleanCode.slice(0, 10000))
+    // Only keep user-saved code snippet. Extension submissions auto-tick and record performance metrics,
+    // but code snippets are only attached when explicitly pasted and saved by the user!
+    const resolvedCodeSnippet = currentRev.codeSnippet || ''
 
     const historyEntry = {
       date: now,
