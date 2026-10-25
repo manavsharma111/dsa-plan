@@ -7,6 +7,7 @@
     "test": "node --test tests/readinessEngine.test.js",
     "build": "echo Backend build ready",
     "dev": "node --watch server.js",
+    "bench": "node benchmarks/autocannon-benchmark.js",
     "bench:autocannon": "npx autocannon -c 20 -d 10 http://localhost:5000/api/health",
     "bench:artillery": "npx artillery run benchmarks/artillery-config.yml",
     "bench:clinic:doctor": "cmd /c \"set PORT=5050&& npx clinic doctor --autocannon [ -c 20 -d 10 /api/health ] -- node server.js\"",
