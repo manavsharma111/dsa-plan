@@ -133,11 +133,19 @@ export const connectAndSync = createAsyncThunk(
 
     // 1. Try MongoDB Backend API first
     try {
-      const res = await fetch('/api/sync/pull', {
+      let res = await fetch('/api/sync/pull', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ syncKey: cleanKey }),
       })
+      if (!res.ok) {
+        // Direct Render fallback when developing on localhost without local backend running
+        res = await fetch('https://dsa-plan-backend.onrender.com/api/sync/pull', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ syncKey: cleanKey }),
+        })
+      }
       if (res.ok) {
         const json = await res.json()
         if (json.success && json.data) {
@@ -149,7 +157,25 @@ export const connectAndSync = createAsyncThunk(
         }
       }
     } catch (e) {
-      console.warn('MongoDB API pull failed, falling back to KV:', e)
+      try {
+        const fallbackRes = await fetch('https://dsa-plan-backend.onrender.com/api/sync/pull', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ syncKey: cleanKey }),
+        })
+        if (fallbackRes.ok) {
+          const json = await fallbackRes.json()
+          if (json.success && json.data) {
+            mongoSuccess = true
+            cloudSolved = json.data.solved || {}
+            cloudMastery = json.data.mastery || {}
+            cloudRevision = json.data.revision || {}
+            cloudInterviews = json.data.interviews || []
+          }
+        }
+      } catch (err2) {
+        console.warn('MongoDB API pull failed, falling back to local:', err2)
+      }
     }
 
     // 2. If MongoDB was not reached, rely on localStorage state (soft offline fallback)
@@ -309,7 +335,7 @@ export const autoSaveToCloud = createAsyncThunk(
       clearTimeout(autoSaveTimer)
       autoSaveTimer = setTimeout(async () => {
         try {
-          const res = await fetch('/api/sync/push', {
+          let res = await fetch('/api/sync/push', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -319,6 +345,18 @@ export const autoSaveToCloud = createAsyncThunk(
               revision,
             }),
           })
+          if (!res.ok) {
+            res = await fetch('https://dsa-plan-backend.onrender.com/api/sync/push', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                syncKey,
+                solved,
+                mastery,
+                revision,
+              }),
+            })
+          }
           if (!res.ok) throw new Error('Auto-save to MongoDB returned non-ok')
           const time = new Date().toLocaleTimeString([], {
             hour: '2-digit',

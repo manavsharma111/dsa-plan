@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectSolved, selectMastery, selectSyncKey, setActiveTab } from '../store/progressSlice'
 import { patternsData } from '../data/patternsData'

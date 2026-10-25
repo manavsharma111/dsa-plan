@@ -27,10 +27,10 @@ export default function SpacedRevisionSection() {
   const solved = useSelector(selectSolved)
   const revision = useSelector(selectRevision)
   const mastery = useSelector(selectMastery)
+  const now = Date.now()
 
   // Compute revision categories with memoization
   const { dueProblems, upcomingProblems, graduatedProblems } = useMemo(() => {
-    const now = Date.now()
     const due = []
     const upcoming = []
     const graduated = []
