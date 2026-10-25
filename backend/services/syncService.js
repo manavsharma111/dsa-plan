@@ -99,6 +99,7 @@ class SyncService {
       beatsPercentile = '',
       platform = 'LeetCode',
       problemId = null,
+      submissionId = '',
     } = payload
 
     if (!syncKey || typeof syncKey !== 'string') {
@@ -168,9 +169,11 @@ class SyncService {
 
     const previousHistory = Array.isArray(currentRev.history) ? currentRev.history : []
 
-    // Deduplication strategy: if same problem was submitted within the last 60 seconds, treat as duplicate attempt
+    // Deduplication strategy:
+    // Only treat as duplicate if identical submissionId was passed, or if repeated within 5 seconds (rapid network echo)
     const lastEntry = previousHistory[previousHistory.length - 1]
-    const isDuplicateRecent = lastEntry && (now - (lastEntry.date || 0) < 60000)
+    const isSameSubmissionId = payload.submissionId && lastEntry && lastEntry.submissionId === payload.submissionId
+    const isDuplicateRecent = isSameSubmissionId || (lastEntry && (now - (lastEntry.date || 0) < 5000))
 
     const nextStage = isDuplicateRecent ? (currentRev.stage || 1) : Math.min((currentRev.stage || 0) + 1, 5)
     const daysToAdd = [1, 3, 7, 14, 28][nextStage - 1] || 7
@@ -187,6 +190,7 @@ class SyncService {
       notes: `Auto-captured from ${platform} (External Judge Accepted). Runtime: ${runtime || 'N/A'}${beatsPercentile ? ` (${beatsPercentile})` : ''}. Memory: ${memory || 'N/A'}.`,
       codeSnippet: resolvedCodeSnippet,
       platform,
+      submissionId: payload.submissionId || undefined,
     }
 
     const updatedHistory = isDuplicateRecent

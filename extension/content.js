@@ -204,7 +204,57 @@ function isCompleteCode(code) {
   return hasStart && hasEnd
 }
 
-async function handleLeetCodeSubmissionAccepted(slug, title, runtime, memory) {
+const processedSubmissionIds = new Set()
+let lastProcessedSignature = ''
+let isSubmitting = false
+
+// Track user-initiated submission triggers
+document.addEventListener(
+  'click',
+  (e) => {
+    try {
+      const btn = e.target.closest('button, [role="button"]')
+      if (btn) {
+        const text = (btn.textContent || '').trim().toLowerCase()
+        const locator = (btn.getAttribute('data-e2e-locator') || '').toLowerCase()
+        if (text.includes('submit') || locator.includes('submit')) {
+          isSubmitting = true
+        }
+      }
+    } catch (_) {}
+  },
+  true
+)
+
+document.addEventListener(
+  'keydown',
+  (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      isSubmitting = true
+    }
+  },
+  true
+)
+
+// Direct real-time event from injected.js network response interceptor
+window.addEventListener('DSA_TRACKER_SUBMISSION_ACCEPTED', (event) => {
+  const detail = event.detail || {}
+  const submissionId = detail.submissionId ? String(detail.submissionId) : ''
+  if (submissionId && processedSubmissionIds.has(submissionId)) return
+  if (submissionId) processedSubmissionIds.add(submissionId)
+
+  const slug = window.location.pathname.split('/')[2] || ''
+  const title =
+    document.querySelector('[data-cy="question-title"]')?.textContent ||
+    document.title.replace(' - LeetCode', '').trim()
+
+  const runtime = detail.runtime || 'Accepted'
+  const memory = detail.memory || ''
+
+  handleLeetCodeSubmissionAccepted(slug, title, runtime, memory, submissionId)
+})
+
+async function handleLeetCodeSubmissionAccepted(slug, title, runtime, memory, submissionId = '') {
   // Retry extraction up to 6 times (1.8s total) to give injected.js & network bridge time to settle
   let code = ''
   for (let attempt = 0; attempt < 6; attempt++) {
@@ -226,6 +276,7 @@ async function handleLeetCodeSubmissionAccepted(slug, title, runtime, memory) {
     runtime,
     memory,
     beatsPercentile: runtime,
+    submissionId: submissionId || undefined,
   }
 
   console.log('[DSA Tracker] Sending LeetCode Accepted payload:', payload)
@@ -238,10 +289,10 @@ async function handleLeetCodeSubmissionAccepted(slug, title, runtime, memory) {
     }
   })
 
-  // Reset lock after 8 seconds
+  // Reset lock after 4 seconds
   setTimeout(() => {
     hasProcessedSubmission = false
-  }, 8000)
+  }, 4000)
 }
 
 function checkLeetCodeSubmission() {
@@ -255,10 +306,6 @@ function checkLeetCodeSubmission() {
     document.querySelector('span[data-state="success"]')
 
   if (resultElem && resultElem.textContent.includes('Accepted')) {
-    if (hasProcessedSubmission) return
-    hasProcessedSubmission = true
-
-    // Extract details
     const slug = window.location.pathname.split('/')[2] || ''
     const title =
       document.querySelector('[data-cy="question-title"]')?.textContent ||
@@ -270,6 +317,18 @@ function checkLeetCodeSubmission() {
 
     const runtime = runtimeElem ? runtimeElem.textContent.trim() : 'Accepted'
     const memory = memoryElem ? memoryElem.textContent.trim() : ''
+
+    const signature = `${slug}|${runtime}|${memory}|${resultElem.textContent.trim()}`
+
+    // Only process if user initiated a submission or signature is different from last processed
+    if (!isSubmitting && signature === lastProcessedSignature) {
+      return
+    }
+
+    if (hasProcessedSubmission) return
+    hasProcessedSubmission = true
+    lastProcessedSignature = signature
+    isSubmitting = false
 
     handleLeetCodeSubmissionAccepted(slug, title, runtime, memory)
   }

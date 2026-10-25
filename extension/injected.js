@@ -120,18 +120,86 @@
           } catch (e) {}
         }
       } catch (e) {}
-      return originalFetch.apply(this, args)
+
+      const response = await originalFetch.apply(this, args)
+
+      try {
+        const url = typeof args[0] === 'string' ? args[0] : (args[0]?.url || '')
+        if (
+          url.includes('/check/') ||
+          url.includes('/submit') ||
+          url.includes('/submissions/') ||
+          url.includes('graphql')
+        ) {
+          response
+            .clone()
+            .json()
+            .then((data) => {
+              if (
+                data &&
+                (data.status_msg === 'Accepted' ||
+                  (data.state === 'SUCCESS' && data.status_msg === 'Accepted'))
+              ) {
+                const submissionId = String(data.submission_id || data.id || Date.now())
+                const runtime = data.status_runtime || 'Accepted'
+                const memory = data.status_memory || ''
+                window.dispatchEvent(
+                  new CustomEvent('DSA_TRACKER_SUBMISSION_ACCEPTED', {
+                    detail: { submissionId, runtime, memory },
+                  })
+                )
+              }
+            })
+            .catch(() => {})
+        }
+      } catch (_) {}
+
+      return response
     }
   } catch (e) {}
 
-  // 2. Intercept XMLHttpRequest.prototype.send for AJAX submissions
+  // 2. Intercept XMLHttpRequest for AJAX submissions & check polling
   try {
+    const originalOpen = window.XMLHttpRequest.prototype.open
+    window.XMLHttpRequest.prototype.open = function (method, url) {
+      this._dsa_url = url
+      return originalOpen.apply(this, arguments)
+    }
+
     const originalSend = window.XMLHttpRequest.prototype.send
     window.XMLHttpRequest.prototype.send = function (body) {
       try {
         const code = extractCodeFromRaw(body)
         if (code) saveCodeToBridge(code)
       } catch (e) {}
+
+      this.addEventListener('load', function () {
+        try {
+          const url = this._dsa_url || ''
+          if (
+            url.includes('/check/') ||
+            url.includes('/submit') ||
+            url.includes('/submissions/')
+          ) {
+            const data = JSON.parse(this.responseText)
+            if (
+              data &&
+              (data.status_msg === 'Accepted' ||
+                (data.state === 'SUCCESS' && data.status_msg === 'Accepted'))
+            ) {
+              const submissionId = String(data.submission_id || data.id || Date.now())
+              const runtime = data.status_runtime || 'Accepted'
+              const memory = data.status_memory || ''
+              window.dispatchEvent(
+                new CustomEvent('DSA_TRACKER_SUBMISSION_ACCEPTED', {
+                  detail: { submissionId, runtime, memory },
+                })
+              )
+            }
+          }
+        } catch (_) {}
+      })
+
       return originalSend.apply(this, arguments)
     }
   } catch (e) {}
