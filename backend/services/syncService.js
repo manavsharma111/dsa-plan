@@ -2,7 +2,7 @@ const Progress = require('../models/Progress')
 const Interview = require('../models/Interview')
 const PatternAnalytics = require('../models/PatternAnalytics')
 const { APP_CONSTANTS } = require('../config/constants')
-const { resolveProblem } = require('../config/problemCatalog')
+const { resolveProblem, resolveAllProblems } = require('../config/problemCatalog')
 
 class SyncService {
   async pullUserProgress(syncKey) {
@@ -124,24 +124,48 @@ class SyncService {
     const mastery = { ...(progress.mastery || {}) }
     const revision = { ...(progress.revision || {}) }
 
-    // Resolve canonical problem ID if matched with 260 curated problems
-    const matched = resolveProblem(problemSlug) || resolveProblem(problemTitle)
-    const canonicalId = matched ? matched.id : null
-    const targetKey = problemId ? String(problemId) : (canonicalId || problemSlug || String(now))
+    // Resolve canonical problem IDs if matched with 260 curated problems across all patterns
+    const matches = resolveAllProblems(problemSlug)
+    const titleMatches = matches.length > 0 ? [] : resolveAllProblems(problemTitle)
+    const allMatches = matches.length > 0 ? matches : titleMatches
 
-    solved[targetKey] = true
-    if (canonicalId) solved[canonicalId] = true
-    if (problemSlug) solved[problemSlug] = true
-
-    // Solve independence is marked as 'unverified' unless user explicitly recorded it
-    if (!mastery[targetKey]) {
-      mastery[targetKey] = 'unverified'
+    const canonicalIds = allMatches.map((m) => m.id)
+    if (problemId && !canonicalIds.includes(String(problemId))) {
+      canonicalIds.push(String(problemId))
     }
-    if (canonicalId && !mastery[canonicalId]) {
-      mastery[canonicalId] = 'unverified'
+    if (canonicalIds.length === 0 && problemSlug) {
+      canonicalIds.push(problemSlug)
     }
 
-    const currentRev = (canonicalId && revision[canonicalId]) || revision[targetKey] || { stage: 0, count: 0 }
+    const cleanCode = code && typeof code === 'string' ? code.trim() : ''
+
+    // Update solved and mastery for all canonical IDs and slug
+    canonicalIds.forEach((id) => {
+      solved[id] = true
+      if (!mastery[id]) {
+        mastery[id] = 'unverified'
+      }
+    })
+    if (problemSlug) {
+      solved[problemSlug] = true
+      if (!mastery[problemSlug]) mastery[problemSlug] = 'unverified'
+    }
+
+    // Find previous revision across any of the matching IDs or slug
+    let currentRev = null
+    for (const id of canonicalIds) {
+      if (revision[id] && (revision[id].stage || revision[id].codeSnippet)) {
+        currentRev = revision[id]
+        break
+      }
+    }
+    if (!currentRev && problemSlug && revision[problemSlug]) {
+      currentRev = revision[problemSlug]
+    }
+    if (!currentRev) {
+      currentRev = { stage: 0, count: 0 }
+    }
+
     const previousHistory = Array.isArray(currentRev.history) ? currentRev.history : []
 
     // Deduplication strategy: if same problem was submitted within the last 60 seconds, treat as duplicate attempt
@@ -151,13 +175,16 @@ class SyncService {
     const nextStage = isDuplicateRecent ? (currentRev.stage || 1) : Math.min((currentRev.stage || 0) + 1, 5)
     const daysToAdd = [1, 3, 7, 14, 28][nextStage - 1] || 7
 
+    // Keep existing code snippet if incoming code is blank/empty
+    const resolvedCodeSnippet = cleanCode ? cleanCode.slice(0, 10000) : (currentRev.codeSnippet || '')
+
     const historyEntry = {
       date: now,
       stage: nextStage,
       outcome: 'extension_auto_capture',
       timeSpent: runtime || 'Accepted',
       notes: `Auto-captured from ${platform} (External Judge Accepted). Runtime: ${runtime || 'N/A'}${beatsPercentile ? ` (${beatsPercentile})` : ''}. Memory: ${memory || 'N/A'}.`,
-      codeSnippet: code ? code.slice(0, 10000) : '',
+      codeSnippet: resolvedCodeSnippet,
       platform,
     }
 
@@ -171,13 +198,18 @@ class SyncService {
       lastRevised: now,
       nextDue: now + daysToAdd * 86400000,
       lastOutcome: 'extension_auto',
-      codeSnippet: code ? code.slice(0, 10000) : currentRev.codeSnippet || '',
+      codeSnippet: resolvedCodeSnippet,
       notes: historyEntry.notes,
       history: updatedHistory,
     }
 
-    revision[targetKey] = revPayload
-    if (canonicalId) revision[canonicalId] = revPayload
+    // Store revision under all matching IDs and problemSlug
+    canonicalIds.forEach((id) => {
+      revision[id] = revPayload
+    })
+    if (problemSlug) {
+      revision[problemSlug] = revPayload
+    }
 
     await Progress.findOneAndUpdate(
       { syncKey: cleanKey },

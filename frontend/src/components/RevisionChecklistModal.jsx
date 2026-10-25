@@ -87,11 +87,18 @@ export default function RevisionChecklistModal() {
     setAiReviewLoading(false)
 
     // Pre-populate note, code, and saved AI review from previous attempt
-    const rev = revision[problem.id]
+    // Check by ID, by slug, or by any matching problem with the same slug/name
+    const rev =
+      revision[problem.id] ||
+      (problem.slug && revision[problem.slug]) ||
+      (problem.name && revision[problem.name]) ||
+      (problem.slug &&
+        Object.entries(revision).find(([k, r]) => k === problem.slug || r?.slug === problem.slug || k.includes(problem.slug))?.[1]) ||
+      null
     setNoteText(rev?.notes || '')
     setCodeSnippet(rev?.codeSnippet || '')
     setAiReviewData(rev?.aiReview || null)
-  }, [problem?.id])
+  }, [problem?.id, problem?.slug])
 
   // Lock body scroll and prevent background scrolling when modal is open
   useEffect(() => {
@@ -188,8 +195,18 @@ export default function RevisionChecklistModal() {
     dispatch(showToastNotification('💾 Solution & AI Review successfully saved!'))
   }
 
-  const revData = (problem && revision[problem.id]) || { stage: 1, count: 0 }
-  const currentMastery = (problem && mastery[problem.id]) || 'independent'
+  const revData =
+    (problem &&
+      (revision[problem.id] ||
+        (problem.slug && revision[problem.slug]) ||
+        (problem.name && revision[problem.name]))) ||
+    { stage: 1, count: 0 }
+  const currentMastery =
+    (problem &&
+      (mastery[problem.id] ||
+        (problem.slug && mastery[problem.slug]) ||
+        (problem.name && mastery[problem.name]))) ||
+    'independent'
   const currentStageInfo =
     REVISION_STAGES_INFO.find((s) => s.stage === revData.stage) || REVISION_STAGES_INFO[0]
 
@@ -298,6 +315,10 @@ export default function RevisionChecklistModal() {
               {currentMastery === 'mastered' ? (
                 <span className="font-mono text-[10.5px] px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold whitespace-nowrap shadow-2xs">
                   ⚡ Mastered
+                </span>
+              ) : currentMastery === 'unverified' ? (
+                <span className="font-mono text-[10.5px] px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 border border-purple-300 font-bold whitespace-nowrap shadow-2xs" title="Auto-captured from external judge. Solved solo verification occurs during active spaced recall.">
+                  🚀 Extension Capture (Unverified)
                 </span>
               ) : currentMastery === 'hint' ? (
                 <span className="font-mono text-[10.5px] px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 font-bold whitespace-nowrap shadow-2xs">
