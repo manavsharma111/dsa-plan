@@ -19,8 +19,26 @@
         "https://leetcode.com/problems/*",
         "https://*.geeksforgeeks.org/problems/*"
       ],
+      "js": ["injected.js"],
+      "world": "MAIN",
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "https://leetcode.com/problems/*",
+        "https://*.geeksforgeeks.org/problems/*"
+      ],
       "js": ["content.js"],
       "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["injected.js"],
+      "matches": [
+        "https://leetcode.com/*",
+        "https://*.geeksforgeeks.org/*"
+      ]
     }
   ],
   "action": {

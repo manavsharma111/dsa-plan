@@ -49,7 +49,22 @@ function showInPageNotification(title, message, isSuccess = true) {
 // 1. LEETCODE CAPTURE ENGINE
 // -------------------------------------------------------------
 function extractLeetCodeCode() {
-  // Method 1: Try reading from DOM Monaco editor view lines
+  // Method 1: Read full untruncated model from shared bridge (populated by injected.js from window.monaco.editor.getModels())
+  const bridge = document.getElementById('__dsa_tracker_code_bridge__')
+  if (bridge && bridge.value && bridge.value.trim().length > 10) {
+    return bridge.value.trim()
+  }
+
+  // Method 2: Trigger custom event to request immediate sync from injected.js
+  try {
+    window.dispatchEvent(new CustomEvent('DSA_TRACKER_REQUEST_CODE'))
+    const refreshedBridge = document.getElementById('__dsa_tracker_code_bridge__')
+    if (refreshedBridge && refreshedBridge.value && refreshedBridge.value.trim().length > 10) {
+      return refreshedBridge.value.trim()
+    }
+  } catch (e) {}
+
+  // Method 3: Try reading from DOM Monaco editor view lines (fallback, subject to Monaco scroll virtualization)
   const lines = document.querySelectorAll('.view-lines .view-line')
   if (lines && lines.length > 0) {
     return Array.from(lines)
@@ -57,7 +72,7 @@ function extractLeetCodeCode() {
       .join('\n')
   }
 
-  // Method 2: Try textarea fallback
+  // Method 4: Try textarea fallback
   const textarea = document.querySelector('textarea.monaco-mouse-cursor-text')
   if (textarea && textarea.value) return textarea.value
 
@@ -140,11 +155,15 @@ function checkGFGSubmission() {
     const slug = window.location.pathname.split('/')[2] || ''
     const title = document.querySelector('.problem-tab__name')?.textContent || slug
 
-    // Extract code
-    const aceLines = document.querySelectorAll('.ace_line')
-    const code = aceLines.length
-      ? Array.from(aceLines).map((l) => l.textContent).join('\n')
-      : ''
+    // Extract full untruncated code
+    let code = ''
+    const bridge = document.getElementById('__dsa_tracker_code_bridge__')
+    if (bridge && bridge.value && bridge.value.trim().length > 10) {
+      code = bridge.value.trim()
+    } else {
+      const aceLines = document.querySelectorAll('.ace_line')
+      code = aceLines.length ? Array.from(aceLines).map((l) => l.textContent).join('\n') : ''
+    }
 
     const payload = {
       platform: 'GeeksForGeeks',
