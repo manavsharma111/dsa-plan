@@ -68,7 +68,7 @@ function PatternSection({ pattern }) {
             </svg>
             <span>Clear checks</span>
             {done > 0 && (
-              <span className="text-[10px] bg-paper-border/80 text-paper-text font-bold px-1.5 py-0.2 rounded-full font-mono">
+              <span className="text-[10.5px] font-mono font-bold leading-none px-1.5 py-0.5 min-w-[18px] text-center rounded-full bg-rose-100 text-rose-700 border border-rose-200/80 group-hover:bg-rose-200 group-hover:text-rose-800 transition-colors">
                 {done}
               </span>
             )}
