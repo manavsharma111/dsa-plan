@@ -519,6 +519,42 @@ export default function RevisionChecklistModal() {
 
             {showCodeBox && (
               <div className="p-3 border-t border-paper-border bg-paper-surface space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[11px] text-paper-dim font-mono">
+                    {codeSnippet ? `${codeSnippet.split('\n').length} lines pasted` : 'Paste code or click button:'}
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        try {
+                          const text = await navigator.clipboard.readText()
+                          if (text && text.trim()) {
+                            setCodeSnippet(text.trim())
+                            dispatch(showToastNotification('📋 Solution pasted from clipboard!'))
+                          } else {
+                            dispatch(showToastNotification('⚠️ Clipboard is empty!'))
+                          }
+                        } catch (_) {
+                          dispatch(showToastNotification('⚠️ Please allow clipboard permission or press Ctrl+V'))
+                        }
+                      }}
+                      className="font-mono text-[11px] font-bold px-2.5 py-1 rounded-md bg-core/10 text-core border border-core/30 hover:bg-core/20 flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                    >
+                      <span>📋 Paste from Clipboard</span>
+                    </button>
+                    {codeSnippet && (
+                      <button
+                        type="button"
+                        onClick={() => setCodeSnippet('')}
+                        className="font-mono text-[10px] text-paper-dim hover:text-rose-600 underline cursor-pointer"
+                      >
+                        Clear
+                      </button>
+                    )}
+                  </div>
+                </div>
+
                 <textarea
                   value={codeSnippet}
                   onChange={(e) => setCodeSnippet(e.target.value)}
