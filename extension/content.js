@@ -2,6 +2,16 @@
 
 console.log('[DSA Tracker Extension] Content script loaded on', window.location.hostname)
 
+// Inject main-world script directly into document as a guaranteed execution channel
+try {
+  const injectedScript = document.createElement('script')
+  injectedScript.src = chrome.runtime.getURL('injected.js')
+  injectedScript.onload = () => injectedScript.remove()
+  ;(document.head || document.documentElement).appendChild(injectedScript)
+} catch (e) {
+  console.warn('[DSA Tracker] Script injection note:', e)
+}
+
 let hasProcessedSubmission = false
 
 // Helper: Show floating toast on webpage
@@ -49,22 +59,47 @@ function showInPageNotification(title, message, isSuccess = true) {
 // 1. LEETCODE CAPTURE ENGINE
 // -------------------------------------------------------------
 function extractLeetCodeCode() {
-  // Method 1: Read full untruncated model from shared bridge (populated by injected.js from window.monaco.editor.getModels())
+  // Method 1: Read full untruncated code from shared bridge (populated by /submit network interception or Monaco)
   const bridge = document.getElementById('__dsa_tracker_code_bridge__')
-  if (bridge && bridge.value && bridge.value.trim().length > 10) {
+  if (bridge && bridge.value && bridge.value.trim().length > 15) {
     return bridge.value.trim()
   }
 
-  // Method 2: Trigger custom event to request immediate sync from injected.js
+  // Method 2: Scan page localStorage for LeetCode editor auto-saved code buffer
+  try {
+    let best = ''
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i)
+      if (k && (k.includes('code') || k.includes('solution') || k.includes('_') || /^\d+/.test(k))) {
+        const val = localStorage.getItem(k)
+        if (
+          val &&
+          typeof val === 'string' &&
+          val.length > best.length &&
+          (val.includes('class Solution') ||
+            val.includes('vector<') ||
+            val.includes('def ') ||
+            val.includes('public:'))
+        ) {
+          best = val
+        }
+      }
+    }
+    if (best && best.trim().length > 15) {
+      return best.trim()
+    }
+  } catch (e) {}
+
+  // Method 3: Trigger custom event to request immediate sync from injected.js
   try {
     window.dispatchEvent(new CustomEvent('DSA_TRACKER_REQUEST_CODE'))
     const refreshedBridge = document.getElementById('__dsa_tracker_code_bridge__')
-    if (refreshedBridge && refreshedBridge.value && refreshedBridge.value.trim().length > 10) {
+    if (refreshedBridge && refreshedBridge.value && refreshedBridge.value.trim().length > 15) {
       return refreshedBridge.value.trim()
     }
   } catch (e) {}
 
-  // Method 3: Try reading from DOM Monaco editor view lines (fallback, subject to Monaco scroll virtualization)
+  // Method 4: Try reading from DOM Monaco editor view lines (fallback)
   const lines = document.querySelectorAll('.view-lines .view-line')
   if (lines && lines.length > 0) {
     return Array.from(lines)
@@ -72,7 +107,7 @@ function extractLeetCodeCode() {
       .join('\n')
   }
 
-  // Method 4: Try textarea fallback
+  // Method 5: Try textarea fallback
   const textarea = document.querySelector('textarea.monaco-mouse-cursor-text')
   if (textarea && textarea.value) return textarea.value
 
