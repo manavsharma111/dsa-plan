@@ -228,13 +228,16 @@ class SyncService {
       { upsert: true, returnDocument: 'after' }
     )
 
+    const primaryKey = canonicalIds[0] || problemSlug || String(now)
+
     return {
       success: true,
       syncKey: cleanKey,
       problemTitle: problemTitle || problemSlug,
-      targetKey,
+      targetKey: primaryKey,
+      canonicalIds,
       stage: nextStage,
-      nextDue: revision[targetKey].nextDue,
+      nextDue: revPayload.nextDue,
     }
   }
 }
