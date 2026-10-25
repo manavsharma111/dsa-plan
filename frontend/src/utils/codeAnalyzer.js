@@ -163,31 +163,39 @@ export function analyzeSubmittedCode(code = '', patternContext = '') {
     estimatedSpace = 'O(N) Extra Memory'
   }
 
-  // Contextual adjustments based on the active pattern
+  // Contextual pattern detection across 28 algorithmic domains
   const isMatrixProblem = patternLower.includes('matrix') || patternLower.includes('grid')
   const isGraphProblem =
     patternLower.includes('graph') ||
     patternLower.includes('bfs') ||
     patternLower.includes('dfs') ||
-    patternLower.includes('tree')
-  const isDPProblem = patternLower.includes('dynamic programming') || patternLower.includes('dp')
+    patternLower.includes('tree') ||
+    patternLower.includes('topological')
+  const isDPProblem =
+    patternLower.includes('dynamic programming') ||
+    patternLower.includes('dp') ||
+    patternLower.includes('knapsack') ||
+    patternLower.includes('subsets')
   const isBinarySearchProblem = patternLower.includes('binary search')
-  const isTwoPointerProblem = patternLower.includes('two pointer') || patternLower.includes('sliding window')
+  const isTwoPointerProblem =
+    patternLower.includes('two pointer') ||
+    patternLower.includes('fast & slow') ||
+    patternLower.includes('sliding window')
+  const isStackProblem = patternLower.includes('stack') || patternLower.includes('monotonic')
+  const isBitProblem = patternLower.includes('bit')
 
   let complexityVerdict = 'Standard'
   let optimalityTag = ''
 
   if (isMatrixProblem) {
-    // Matrices generally need O(N*M) since visiting each cell is the expected baseline
     if (estimatedTime === 'O(N²)' || maxNesting === 2) {
       estimatedTime = 'O(N × M) Optimal'
       optimalityTag = '⭐ Optimal Bound (Every cell visited)'
     }
     if (estimatedSpace.includes('O(1)')) {
-      optimalityTag += ' • ⚡ 100% In-Place Swap'
+      optimalityTag += ' • ⚡ 100% In-Place'
     }
   } else if (isGraphProblem) {
-    // Graph traversals standardly take O(V+E) with an O(V) visited set or queue
     if (estimatedTime.includes('Recursion') || estimatedTime === 'O(N)') {
       estimatedTime = 'O(V + E) Optimal'
       optimalityTag = '⭐ Optimal Graph Traversal'
@@ -200,6 +208,8 @@ export function analyzeSubmittedCode(code = '', patternContext = '') {
     if (estimatedTime === 'O(N²)' || maxNesting === 2) {
       estimatedTime = 'O(N × M) DP Optimal'
       optimalityTag = '⭐ Optimal 2D State Table'
+    } else if (estimatedTime === 'O(N)') {
+      optimalityTag = '⭐ Optimal 1D State Array'
     }
   } else if (isBinarySearchProblem) {
     if (estimatedTime === 'O(log N)') {
@@ -208,61 +218,145 @@ export function analyzeSubmittedCode(code = '', patternContext = '') {
   } else if (isTwoPointerProblem) {
     if (estimatedTime === 'O(N)' && estimatedSpace.includes('O(1)')) {
       optimalityTag = '⭐ Optimal O(N) In-Place Two Pointers'
+    } else if (estimatedTime === 'O(N)') {
+      optimalityTag = '⭐ Optimal O(N) Linear Scan'
     }
+  } else if (isStackProblem) {
+    if (estimatedTime === 'O(N)') {
+      optimalityTag = '⭐ Optimal O(N) Monotonic Stack'
+    }
+  } else if (isBitProblem) {
+    if (estimatedTime === 'O(1)') {
+      optimalityTag = '⭐ Optimal O(1) Bitwise Arithmetic'
+    }
+  } else if (estimatedTime === 'O(N)' && estimatedSpace.includes('O(1)')) {
+    optimalityTag = '⭐ Optimal O(N) In-Place'
+  } else if (estimatedTime === 'O(1)' || estimatedTime === 'O(log N)') {
+    optimalityTag = '⭐ Optimal Log / Constant Bound'
   }
 
-  // Scan for common edge-case safety checks
+  // Scan for common edge-case safety checks (C++, Java, Python, JS)
   const edgeCaseKeywords = []
-  if (/\b(null|nullptr|None|nil)\b/i.test(raw)) {
-    edgeCaseKeywords.push('Null / Empty Pointer')
+  if (
+    /\b(null|nullptr|None|nil|NULL)\b/.test(raw) ||
+    /!\s*(head|root|node|curr|p|q)\b/i.test(raw) ||
+    /\b(head|root|node)\s*==\s*(null|nullptr|NULL|0)\b/i.test(raw)
+  ) {
+    edgeCaseKeywords.push('Null / Pointer Guard')
   }
-  if (/\.(length|size\(\)|len\()\s*(==|<=|===)\s*0\b/i.test(raw) || /empty\(\)/i.test(raw)) {
-    edgeCaseKeywords.push('Empty Input (length 0)')
+
+  if (
+    /\b(length|size|len)\b\s*(\(\s*\))?\s*(==|<=|===|<)\s*(0|1)\b/i.test(raw) ||
+    /\bempty\s*\(\s*\)/i.test(raw) ||
+    /\b(n|m|sz|len)\s*(==|<=|<)\s*(0|1)\b/i.test(raw)
+  ) {
+    edgeCaseKeywords.push('Empty / Single Element Guard')
   }
-  if (/\b(length|size\(\)|len\()\s*(==|===)\s*1\b/i.test(raw)) {
-    edgeCaseKeywords.push('Single Element')
-  }
-  if (/\b(Integer\.MAX_VALUE|INT_MAX|float\('inf'\)|Number\.MAX_SAFE_INTEGER)\b/i.test(raw)) {
+
+  if (
+    /\b(Integer\.MAX_VALUE|INT_MAX|INT_MIN|LONG_MAX|LLONG_MAX|float\('inf'\)|Number\.MAX_SAFE_INTEGER|Infinity)\b/i.test(
+      raw
+    ) ||
+    /\b(1e9|1e18)\b/i.test(raw)
+  ) {
     edgeCaseKeywords.push('Infinity / Overflow Guard')
+  }
+
+  if (
+    /\b(l|left)\s*<\s*(r|right)\b/i.test(raw) ||
+    /\b(low|start)\s*<=\s*(high|end)\b/i.test(raw) ||
+    /\b(start|left|i)\s*<=\s*(end|right|n)\b/i.test(raw)
+  ) {
+    edgeCaseKeywords.push('Index Bounds / Pointer Termination')
   }
 
   // Tag recognizable DSA techniques used in the solution
   const detectedTags = []
   if (
-    /\b(left|right|slow|fast|i|j)\b/i.test(raw) &&
-    (raw.includes('++') || raw.includes('+=') || raw.includes('-='))
+    /\b(left|right|slow|fast|low|high|start|end|ptr|curr)\b/i.test(raw) &&
+    (raw.includes('++') || raw.includes('--') || raw.includes('+=') || raw.includes('-='))
   ) {
     detectedTags.push('Pointers Manipulation')
   }
-  if (/\b(dp|memo|cache)\b/i.test(raw)) {
+  if (/\b(dp|memo|cache|table)\b/i.test(raw) || /vector<\s*vector/i.test(raw)) {
     detectedTags.push('Dynamic Programming / Memoization')
   }
-  if (/\b(stack|deque|queue)\b/i.test(raw) || /push|pop|shift/i.test(raw)) {
+  if (
+    /\b(stack|deque|queue|priority_queue)\b/i.test(raw) ||
+    /\b(push|pop|top|peek|poll|enqueue|dequeue)\b/i.test(raw)
+  ) {
     detectedTags.push('Stack / Queue Operation')
   }
-  if (/\b(swap|reverse)\b/i.test(raw)) {
+  if (/\b(swap|reverse)\b/i.test(raw) || /std::swap/i.test(raw)) {
     detectedTags.push('In-Place Swap')
   }
   if (hasBinarySearchPattern || hasLogarithmicStep) {
-    detectedTags.push('Logarithmic / Halving Step')
+    detectedTags.push('Logarithmic Search Invariant')
+  }
+  if (/\b(unordered_map|unordered_set|HashMap|HashSet|map|set|dict)\b/i.test(raw)) {
+    detectedTags.push('Hash Map / Fast Lookup')
   }
 
-  // High-level solution score (1-10) factoring in optimality and defensive checks
-  let qualityScore = 7
-  if (isMatrixProblem && (estimatedTime.includes('Optimal') || estimatedSpace.includes('O(1)'))) {
-    qualityScore = 9
-  } else if (isGraphProblem && estimatedTime.includes('Optimal')) {
-    qualityScore = 9
-  } else if (isDPProblem && estimatedTime.includes('Optimal')) {
-    qualityScore = 9
-  } else if (isBinarySearchProblem && estimatedTime === 'O(log N)') {
-    qualityScore = 9
-  } else if (isTwoPointerProblem && estimatedTime === 'O(N)') {
-    qualityScore = 9
+  // Multi-factor dynamic code quality score (1 to 10)
+  let scoreAccumulator = 6.0 // Baseline for syntactically correct code
+
+  // 1. Time Complexity Impact (up to +2.5 / -2.5)
+  if (estimatedTime === 'O(1)' || estimatedTime === 'O(log N)') {
+    scoreAccumulator += 2.0
+  } else if (
+    estimatedTime === 'O(N)' ||
+    estimatedTime.includes('Optimal') ||
+    estimatedTime === 'O(V + E)'
+  ) {
+    scoreAccumulator += 1.5
+  } else if (estimatedTime === 'O(N log N)') {
+    scoreAccumulator += 1.0
+  } else if (estimatedTime === 'O(N²)' || estimatedTime.includes('O(N × M)')) {
+    if (isMatrixProblem || isDPProblem || isGraphProblem) {
+      scoreAccumulator += 0.5
+    } else {
+      scoreAccumulator -= 1.5 // Suboptimal nested loop in linear problem
+    }
+  } else if (estimatedTime.includes('O(N³)') || estimatedTime.includes('O(2ⁿ)')) {
+    scoreAccumulator -= 2.5 // Severe brute force / cubic / exponential
   }
 
-  if (edgeCaseKeywords.length >= 2) qualityScore = Math.min(10, qualityScore + 1)
-  if (codeLines > 100) qualityScore = Math.max(qualityScore - 1, 6)
+  // 2. Space Efficiency Impact (up to +1.5 / -1.0)
+  if (estimatedSpace.includes('O(1)')) {
+    scoreAccumulator += 1.5 // Optimal in-place memory
+  } else if (estimatedSpace.includes('O(N)') || estimatedSpace.includes('O(V)')) {
+    scoreAccumulator += 0.5
+  } else if (estimatedSpace.includes('Grid') && !isMatrixProblem && !isDPProblem) {
+    scoreAccumulator -= 1.0 // Unnecessary 2D allocation for 1D problem
+  }
+
+  // 3. Pattern Alignment & DSA Idioms Impact (up to +1.0)
+  if (detectedTags.length >= 2) {
+    scoreAccumulator += 1.0
+  } else if (detectedTags.length === 1) {
+    scoreAccumulator += 0.5
+  }
+
+  // 4. Defensive Guarding Impact (up to +1.0)
+  if (edgeCaseKeywords.length >= 2) {
+    scoreAccumulator += 1.0
+  } else if (edgeCaseKeywords.length === 1) {
+    scoreAccumulator += 0.5
+  }
+
+  // 5. Code Structure & Cleanliness (up to +0.5 / -1.0)
+  if (codeLines >= 5 && codeLines <= 45) {
+    scoreAccumulator += 0.5 // Concise & clean
+  } else if (codeLines > 90) {
+    scoreAccumulator -= 1.0 // Verbose / bloated
+  }
+
+  if (maxNesting >= 3) {
+    scoreAccumulator -= 1.0 // Excessive nesting depth
+  }
+
+  // Final rounded score clamped between 1 and 10
+  const qualityScore = Math.min(10, Math.max(1, Math.round(scoreAccumulator)))
 
   return {
     language,

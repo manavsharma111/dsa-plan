@@ -31,6 +31,44 @@ export default function CloudSync() {
     }
   }, [])
 
+  // Auto-revalidate on window focus / tab switch (e.g. returning from LeetCode or GFG)
+  useEffect(() => {
+    if (!syncKey) return
+
+    let lastPullTime = Date.now()
+
+    const handleRevalidate = () => {
+      const now = Date.now()
+      // Throttle revalidation to avoid spamming the backend (min 4 seconds gap)
+      if (now - lastPullTime > 4000) {
+        lastPullTime = now
+        dispatch(connectAndSync({ key: syncKey, isSilent: true }))
+      }
+    }
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        handleRevalidate()
+      }
+    }
+
+    window.addEventListener('focus', handleRevalidate)
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    // Gentle polling every 25 seconds while tab is active to catch background extension syncs
+    const pollInterval = setInterval(() => {
+      if (document.visibilityState === 'visible') {
+        handleRevalidate()
+      }
+    }, 25000)
+
+    return () => {
+      window.removeEventListener('focus', handleRevalidate)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      clearInterval(pollInterval)
+    }
+  }, [dispatch, syncKey])
+
   const handleConnect = (e) => {
     e.preventDefault()
     const clean = sanitizeKey(inputVal)
