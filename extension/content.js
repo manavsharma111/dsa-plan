@@ -2,6 +2,29 @@
 
 console.log('[DSA Tracker Extension] Content script loaded on', window.location.hostname)
 
+let latestCrossWorldCode = ''
+
+// Listen for cross-world postMessage from injected.js (MAIN world network interception)
+window.addEventListener('message', (event) => {
+  if (event.data && event.data.type === '__DSA_TRACKER_CODE_SYNC__' && event.data.code) {
+    latestCrossWorldCode = event.data.code.trim()
+    console.log('[DSA Tracker] Received complete code from MAIN world bridge (Length:', latestCrossWorldCode.length, ')')
+  }
+})
+
+// Listen for CustomEvent from injected.js
+window.addEventListener('DSA_TRACKER_CODE_CAPTURED', (event) => {
+  if (event.detail && event.detail.code) {
+    latestCrossWorldCode = event.detail.code.trim()
+  }
+})
+
+window.addEventListener('DSA_TRACKER_RESPONSE_CODE', (event) => {
+  if (event.detail && event.detail.code) {
+    latestCrossWorldCode = event.detail.code.trim()
+  }
+})
+
 // Inject main-world script directly into document as a guaranteed execution channel
 try {
   const injectedScript = document.createElement('script')
@@ -59,55 +82,70 @@ function showInPageNotification(title, message, isSuccess = true) {
 // 1. LEETCODE CAPTURE ENGINE
 // -------------------------------------------------------------
 function extractLeetCodeCode() {
-  // Method 1: Read full untruncated code from shared bridge (populated by network interception or Monaco models)
-  const bridge = document.getElementById('__dsa_tracker_code_bridge__')
-  if (bridge && bridge.value && bridge.value.trim().length > 15) {
-    return bridge.value.trim()
+  // Method 1: Cross-world message from injected.js network interceptor (100% full unvirtualized code)
+  if (latestCrossWorldCode && latestCrossWorldCode.length > 15) {
+    return latestCrossWorldCode
   }
 
-  // Method 2: Trigger custom event to request immediate sync from injected.js
+  // Method 2: DOM bridge data-code attribute or textContent (shared DOM tree)
+  const bridge = document.getElementById('__dsa_tracker_code_bridge__')
+  if (bridge) {
+    const attrCode = bridge.getAttribute('data-code')
+    if (attrCode && attrCode.trim().length > 15) return attrCode.trim()
+    if (bridge.textContent && bridge.textContent.trim().length > 15) return bridge.textContent.trim()
+    if (bridge.value && bridge.value.trim().length > 15) return bridge.value.trim()
+  }
+
+  // Method 3: Trigger on-demand postMessage and custom event to injected.js
   try {
+    window.postMessage({ type: '__DSA_TRACKER_REQUEST_CODE__' }, '*')
     window.dispatchEvent(new CustomEvent('DSA_TRACKER_REQUEST_CODE'))
-    const refreshedBridge = document.getElementById('__dsa_tracker_code_bridge__')
-    if (refreshedBridge && refreshedBridge.value && refreshedBridge.value.trim().length > 15) {
-      return refreshedBridge.value.trim()
-    }
   } catch (e) {}
 
-  // Method 3: Scan page localStorage for LeetCode editor auto-saved code buffer
+  // Method 4: Scan page localStorage and sessionStorage
   try {
     let best = ''
-    for (let i = 0; i < localStorage.length; i++) {
-      const k = localStorage.key(i)
-      if (k && (k.includes('code') || k.includes('solution') || k.includes('_') || /^\d+/.test(k))) {
-        let val = localStorage.getItem(k)
-        if (val && typeof val === 'string') {
-          // If JSON wrapped
-          if (val.trim().startsWith('{')) {
-            try {
-              const parsed = JSON.parse(val)
-              const candidate =
-                parsed.typed_code ||
-                parsed.code ||
-                parsed.typedCode ||
-                parsed.variables?.typedCode ||
-                parsed.variables?.code ||
-                ''
-              if (candidate && candidate.length > best.length) {
-                best = candidate
-              }
-            } catch (_) {}
-          }
-          if (
-            val.length > best.length &&
-            (val.includes('class Solution') ||
-              val.includes('vector<') ||
-              val.includes('def ') ||
-              val.includes('public:') ||
-              val.includes('function') ||
-              val.includes('sortColors'))
-          ) {
-            best = val
+    const storages = [localStorage, sessionStorage]
+    for (const stor of storages) {
+      if (!stor) continue
+      for (let i = 0; i < stor.length; i++) {
+        const k = stor.key(i)
+        if (
+          k &&
+          (k.includes('code') ||
+            k.includes('solution') ||
+            k.includes('_') ||
+            /^\d+/.test(k) ||
+            k.includes('editor'))
+        ) {
+          let val = stor.getItem(k)
+          if (val && typeof val === 'string') {
+            if (val.trim().startsWith('{')) {
+              try {
+                const parsed = JSON.parse(val)
+                const candidate =
+                  parsed.typed_code ||
+                  parsed.code ||
+                  parsed.typedCode ||
+                  parsed.variables?.typedCode ||
+                  parsed.variables?.code ||
+                  ''
+                if (candidate && candidate.length > best.length) {
+                  best = candidate
+                }
+              } catch (_) {}
+            }
+            if (
+              val.length > best.length &&
+              (val.includes('class Solution') ||
+                val.includes('vector<') ||
+                val.includes('def ') ||
+                val.includes('public:') ||
+                val.includes('canJump') ||
+                val.includes('function'))
+            ) {
+              best = val
+            }
           }
         }
       }
@@ -117,31 +155,37 @@ function extractLeetCodeCode() {
     }
   } catch (e) {}
 
-  // Method 4: Submission Result Code Viewer (<pre> / <code>)
+  // Method 5: Submission Result Code Viewer (<pre> / <code>)
   const preCode = document.querySelector('pre code, .submission-detail pre, [class*="submission-code"]')
   if (preCode && preCode.textContent && preCode.textContent.trim().length > 15) {
     return preCode.textContent.trim()
   }
 
-  // Method 5: Monaco editor DOM lines
+  // Method 6: Monaco editor DOM lines - CRITICAL: SORT BY style.top so lines are in visual order (1, 2, 3...) and NEVER reversed!
   const lines = document.querySelectorAll('.monaco-editor .view-line, .view-lines .view-line')
   if (lines && lines.length > 0) {
-    const text = Array.from(lines)
-      .map((l) => l.textContent)
-      .join('\n')
+    const sorted = Array.from(lines).sort((a, b) => {
+      const topA = parseFloat(a.style.top) || a.offsetTop || 0
+      const topB = parseFloat(b.style.top) || b.offsetTop || 0
+      return topA - topB
+    })
+    const text = sorted.map((l) => l.textContent).join('\n')
     if (text.trim().length > 15) return text.trim()
   }
 
-  // Method 6: CodeMirror DOM lines
+  // Method 7: CodeMirror DOM lines
   const cmLines = document.querySelectorAll('.cm-content .cm-line, .CodeMirror-line')
   if (cmLines && cmLines.length > 0) {
-    const text = Array.from(cmLines)
-      .map((l) => l.textContent)
-      .join('\n')
+    const sorted = Array.from(cmLines).sort((a, b) => {
+      const topA = parseFloat(a.style.top) || a.offsetTop || 0
+      const topB = parseFloat(b.style.top) || b.offsetTop || 0
+      return topA - topB
+    })
+    const text = sorted.map((l) => l.textContent).join('\n')
     if (text.trim().length > 15) return text.trim()
   }
 
-  // Method 7: Textarea fallback
+  // Method 8: Textarea fallback
   const textarea = document.querySelector('textarea.monaco-mouse-cursor-text, .cm-editor textarea')
   if (textarea && textarea.value && textarea.value.trim().length > 15) return textarea.value.trim()
 
@@ -154,6 +198,7 @@ async function handleLeetCodeSubmissionAccepted(slug, title, runtime, memory) {
   for (let attempt = 0; attempt < 5; attempt++) {
     code = extractLeetCodeCode()
     if (code && code.trim().length > 15) break
+    window.postMessage({ type: '__DSA_TRACKER_REQUEST_CODE__' }, '*')
     window.dispatchEvent(new CustomEvent('DSA_TRACKER_REQUEST_CODE'))
     await new Promise((res) => setTimeout(res, 300))
   }
@@ -221,16 +266,24 @@ function checkLeetCodeSubmission() {
 async function handleGFGSubmissionAccepted(slug, title) {
   let code = ''
   for (let attempt = 0; attempt < 5; attempt++) {
-    const bridge = document.getElementById('__dsa_tracker_code_bridge__')
-    if (bridge && bridge.value && bridge.value.trim().length > 10) {
-      code = bridge.value.trim()
+    if (latestCrossWorldCode && latestCrossWorldCode.length > 10) {
+      code = latestCrossWorldCode
       break
+    }
+    const bridge = document.getElementById('__dsa_tracker_code_bridge__')
+    if (bridge) {
+      const attrCode = bridge.getAttribute('data-code')
+      if (attrCode && attrCode.trim().length > 10) {
+        code = attrCode.trim()
+        break
+      }
     }
     const aceLines = document.querySelectorAll('.ace_line')
     if (aceLines.length > 0) {
       code = Array.from(aceLines).map((l) => l.textContent).join('\n')
       if (code.trim().length > 10) break
     }
+    window.postMessage({ type: '__DSA_TRACKER_REQUEST_CODE__' }, '*')
     window.dispatchEvent(new CustomEvent('DSA_TRACKER_REQUEST_CODE'))
     await new Promise((res) => setTimeout(res, 300))
   }

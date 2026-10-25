@@ -2,7 +2,7 @@
 // Intercepts LeetCode & GFG submissions & extracts full untruncated code directly from network & editor models
 
 (function () {
-  console.log('[DSA Tracker MAIN World] Interceptors initialized.')
+  console.log('[DSA Tracker MAIN World] Interceptors active & listening.')
 
   function saveCodeToBridge(code) {
     if (!code || typeof code !== 'string') return
@@ -11,18 +11,40 @@
 
     window.__DSA_TRACKER_LATEST_CODE__ = trimmed
 
-    let bridge = document.getElementById('__dsa_tracker_code_bridge__')
-    if (!bridge) {
-      bridge = document.createElement('textarea')
-      bridge.id = '__dsa_tracker_code_bridge__'
-      bridge.style.display = 'none'
-      bridge.setAttribute('data-dsa-bridge', 'true')
-      ;(document.body || document.documentElement).appendChild(bridge)
-    }
-    bridge.value = trimmed
-    window.dispatchEvent(
-      new CustomEvent('DSA_TRACKER_CODE_CAPTURED', { detail: { code: trimmed } })
-    )
+    // 1. Post message to ISOLATED world (Chrome cross-world channel)
+    try {
+      window.postMessage(
+        {
+          type: '__DSA_TRACKER_CODE_SYNC__',
+          code: trimmed,
+          timestamp: Date.now(),
+        },
+        '*'
+      )
+    } catch (_) {}
+
+    // 2. Write to DOM attribute & textContent (DOM tree is shared across worlds)
+    try {
+      let bridge = document.getElementById('__dsa_tracker_code_bridge__')
+      if (!bridge) {
+        bridge = document.createElement('textarea')
+        bridge.id = '__dsa_tracker_code_bridge__'
+        bridge.style.display = 'none'
+        bridge.setAttribute('data-dsa-bridge', 'true')
+        ;(document.body || document.documentElement).appendChild(bridge)
+      }
+      bridge.value = trimmed
+      bridge.textContent = trimmed
+      bridge.setAttribute('data-code', trimmed)
+      bridge.setAttribute('data-updated', String(Date.now()))
+    } catch (_) {}
+
+    // 3. Dispatch custom event
+    try {
+      window.dispatchEvent(
+        new CustomEvent('DSA_TRACKER_CODE_CAPTURED', { detail: { code: trimmed } })
+      )
+    } catch (_) {}
   }
 
   function extractCodeFromRaw(body) {
@@ -44,7 +66,7 @@
           return code.trim()
         }
       } catch (e) {
-        // Handle URL-encoded or non-JSON strings
+        // Handle URL-encoded or raw JSON strings
         const match =
           body.match(/"typed_code"\s*:\s*"((?:\\.|[^"\\])*)"/) ||
           body.match(/"typedCode"\s*:\s*"((?:\\.|[^"\\])*)"/) ||
@@ -176,7 +198,7 @@
     return false
   }
 
-  // 6. Extract from CodeMirror (LeetCode mobile / alternate layout)
+  // 6. Extract from CodeMirror
   function extractFromCodeMirror() {
     try {
       const cmElem = document.querySelector('.CodeMirror')
@@ -197,11 +219,22 @@
     extractFromCodeMirror()
   }
 
+  // Handle postMessage requests from content.js
+  window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === '__DSA_TRACKER_REQUEST_CODE__') {
+      syncAll()
+      const code = window.__DSA_TRACKER_LATEST_CODE__ || ''
+      if (code) {
+        saveCodeToBridge(code)
+      }
+    }
+  })
+
   // Answer on-demand request from content.js
   window.addEventListener('DSA_TRACKER_REQUEST_CODE', () => {
     syncAll()
     const bridge = document.getElementById('__dsa_tracker_code_bridge__')
-    const code = bridge ? bridge.value : window.__DSA_TRACKER_LATEST_CODE__ || ''
+    const code = bridge ? bridge.getAttribute('data-code') || bridge.value : window.__DSA_TRACKER_LATEST_CODE__ || ''
     window.dispatchEvent(
       new CustomEvent('DSA_TRACKER_RESPONSE_CODE', { detail: { code } })
     )
@@ -241,7 +274,6 @@
     true
   )
 
-  // Periodic heartbeat sync
   setInterval(syncAll, 1000)
   setTimeout(syncAll, 500)
 })()
