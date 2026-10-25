@@ -48,12 +48,61 @@
     }
     input[type="text"]:focus { border-color: #10b981; }
 
-    .radio-group {
+    .cloud-status-card {
       background: #27272a;
       border: 1px solid #3f3f46;
       border-radius: 8px;
+      padding: 9px 12px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+    }
+    .cloud-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: #e4e4e7;
+    }
+    .dot-live {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 6px #10b981;
+    }
+    .cloud-tag {
+      font-size: 10px;
+      font-weight: 600;
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .dev-toggle {
+      font-size: 10.5px;
+      color: #71717a;
+      cursor: pointer;
+      margin-bottom: 12px;
+      user-select: none;
+    }
+    .dev-toggle summary {
+      outline: none;
+      transition: color 0.2s;
+    }
+    .dev-toggle summary:hover {
+      color: #a1a1aa;
+    }
+    .dev-toggle[open] .radio-group {
+      margin-top: 8px;
+    }
+
+    .radio-group {
+      background: #202023;
+      border: 1px solid #3f3f46;
+      border-radius: 8px;
       padding: 8px 10px;
-      margin-bottom: 14px;
       font-size: 11px;
     }
     .radio-item {
@@ -121,17 +170,27 @@
     <label for="syncKeyInput">Your Sync Key</label>
     <input type="text" id="syncKeyInput" placeholder="e.g. manav_prep" required />
 
-    <label>Target Backend API</label>
-    <div class="radio-group">
-      <label class="radio-item">
-        <input type="radio" name="backendType" value="https://dsa-plan-backend.onrender.com" checked />
-        <span>Live Cloud (Render)</span>
-      </label>
-      <label class="radio-item">
-        <input type="radio" name="backendType" value="http://localhost:5000" />
-        <span>Localhost (port 5000)</span>
-      </label>
+    <div class="cloud-status-card">
+      <div class="cloud-row">
+        <span class="dot-live"></span>
+        <span>Target: <strong>Live Production Cloud</strong></span>
+      </div>
+      <span class="cloud-tag">Online</span>
     </div>
+
+    <details class="dev-toggle">
+      <summary>⚙️ Advanced / Local Testing</summary>
+      <div class="radio-group">
+        <label class="radio-item">
+          <input type="radio" name="backendType" value="https://dsa-plan-backend.onrender.com" checked />
+          <span>Live Cloud (Default)</span>
+        </label>
+        <label class="radio-item">
+          <input type="radio" name="backendType" value="http://localhost:5000" />
+          <span>Localhost (port 5000)</span>
+        </label>
+      </div>
+    </details>
 
     <button type="submit" class="btn" id="saveBtn">Save Settings</button>
   </form>
