@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { selectTotalSolved } from '../store/progressSlice'
 import { totalQuestions } from '../data/patternsData'
@@ -44,7 +45,10 @@ export default function StickyHeader() {
       <div className="max-w-[1000px] mx-auto px-4 sm:px-6 flex items-center justify-between gap-3">
         {/* Meta Info */}
         <div className="flex items-center gap-2 sm:gap-2.5 whitespace-nowrap text-xs sm:text-sm">
-          <span className="font-serif font-semibold text-paper-text flex items-center gap-1.5">
+          <Link
+            to="/"
+            className="font-serif font-semibold text-paper-text flex items-center gap-1.5 no-underline hover:text-core transition-colors"
+          >
             <img
               src="/dsa-small.webp"
               alt="DSA"
@@ -55,7 +59,7 @@ export default function StickyHeader() {
               className="w-4 h-4 rounded-full object-cover border border-core/30 flex-shrink-0"
             />
             <span>DSA Progress</span>
-          </span>
+          </Link>
           <span className="font-mono text-xs text-paper-dim">
             <b className="text-paper-text font-bold">{solvedCount}</b> / {totalCount}
           </span>

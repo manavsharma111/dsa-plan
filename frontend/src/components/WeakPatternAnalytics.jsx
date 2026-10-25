@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { selectSolved, selectMastery, selectSyncKey, setActiveTab } from '../store/progressSlice'
 import { patternsData } from '../data/patternsData'
 
 export default function WeakPatternAnalytics() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const solved = useSelector(selectSolved)
   const mastery = useSelector(selectMastery)
   const syncKey = useSelector(selectSyncKey)
@@ -121,6 +123,7 @@ export default function WeakPatternAnalytics() {
 
   const handleJumpToPattern = (id) => {
     dispatch(setActiveTab('all'))
+    navigate(`/pattern/${id}`)
     setTimeout(() => {
       const el = document.getElementById(`pattern-${id}`)
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })

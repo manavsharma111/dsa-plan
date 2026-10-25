@@ -19,6 +19,7 @@ backend/.env.*
 frontend/dist
 .clinic
 *.clinic*
+scratch/
 
 
 # Editor directories and files

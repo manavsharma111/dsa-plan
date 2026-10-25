@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { Link, useLocation } from 'react-router-dom'
 import {
-  selectActiveTab,
   setActiveTab,
   setInterviewModalOpen,
   setExtensionModalOpen,
@@ -10,12 +10,27 @@ import {
   selectMastery,
   selectInterviewHistory,
 } from '../store/progressSlice'
-import { patternsData } from '../data/patternsData'
 import { calculateClientReadinessReport } from '../utils/readinessEngine'
 
 export default function FeatureBar() {
   const dispatch = useDispatch()
-  const activeTab = useSelector(selectActiveTab)
+  const location = useLocation()
+  const currentPath = location.pathname
+
+  // Derive active tab from current route URL
+  const activeTab = React.useMemo(() => {
+    if (currentPath === '/readiness') return 'readiness'
+    if (currentPath === '/revision') return 'revision'
+    if (currentPath === '/analytics' || currentPath === '/weak-patterns') return 'analytics'
+    if (currentPath === '/interviews') return 'interviews'
+    return 'all'
+  }, [currentPath])
+
+  // Sync Redux activeTab for backward compatibility
+  React.useEffect(() => {
+    dispatch(setActiveTab(activeTab))
+  }, [activeTab, dispatch])
+
   const solved = useSelector(selectSolved)
   const revision = useSelector(selectRevision)
   const mastery = useSelector(selectMastery)
@@ -105,11 +120,13 @@ export default function FeatureBar() {
   const tabs = [
     {
       id: 'all',
+      path: '/',
       label: 'All 28 Patterns',
       icon: '📑',
     },
     {
       id: 'readiness',
+      path: '/readiness',
       label: 'Interview Readiness',
       icon: '🎓',
       badge: (
@@ -128,6 +145,7 @@ export default function FeatureBar() {
     },
     {
       id: 'revision',
+      path: '/revision',
       label: 'Spaced Revision',
       icon: '🔁',
       badge:
@@ -149,6 +167,7 @@ export default function FeatureBar() {
     },
     {
       id: 'analytics',
+      path: '/analytics',
       label: 'Weak Patterns',
       icon: '📊',
       badge:
@@ -166,6 +185,7 @@ export default function FeatureBar() {
     },
     {
       id: 'interviews',
+      path: '/interviews',
       label: 'Interview Analysis',
       icon: '🎯',
       badge:
@@ -208,14 +228,13 @@ export default function FeatureBar() {
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id
           return (
-            <button
+            <Link
               key={tab.id}
+              to={tab.path}
               ref={(el) => {
                 if (el) tabRefs.current[tab.id] = el
               }}
-              type="button"
-              onClick={() => dispatch(setActiveTab(tab.id))}
-              className={`relative z-10 font-mono text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-xl cursor-pointer flex items-center gap-2 select-none transition-colors duration-250 ${
+              className={`relative z-10 font-mono text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-xl cursor-pointer flex items-center gap-2 select-none transition-colors duration-250 no-underline ${
                 isActive
                   ? 'text-paper-bg'
                   : 'text-paper-dim hover:text-paper-text hover:bg-paper-surface-2/60'
@@ -227,7 +246,7 @@ export default function FeatureBar() {
                 </span>
                 {tab.badge}
               </span>
-            </button>
+            </Link>
           )
         })}
       </div>

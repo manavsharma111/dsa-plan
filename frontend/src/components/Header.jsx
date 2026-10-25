@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { selectTotalSolved } from '../store/progressSlice'
 import { totalQuestions } from '../data/patternsData'
@@ -10,7 +11,10 @@ export default function Header() {
   return (
     <header className="pt-10 pb-6 md:pt-13 md:pb-7 border-b-2 border-paper-border mb-2">
       {/* Kicker */}
-      <div className="font-mono text-xs tracking-widest uppercase text-core mb-4 flex items-center gap-2">
+      <Link
+        to="/"
+        className="font-mono text-xs tracking-widest uppercase text-core mb-4 inline-flex items-center gap-2 no-underline hover:opacity-85 transition-opacity"
+      >
         <img
           src="/dsa-small.webp"
           alt="DSA"
@@ -22,7 +26,7 @@ export default function Header() {
         />
         <span className="inline-block w-4 h-[2px] bg-core"></span>
         <span>DSA &middot; Must-Practice Master List</span>
-      </div>
+      </Link>
 
       {/* Main Heading */}
       <h1 className="font-serif font-semibold text-3xl sm:text-4xl md:text-5xl leading-tight mb-4 tracking-tight">

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import {
   selectInterviewModalOpen,
   selectInterviewSession,
@@ -19,6 +20,7 @@ import { patternsData } from '../data/patternsData'
 
 export default function InterviewModeModal() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const isOpen = useSelector(selectInterviewModalOpen)
   const session = useSelector(selectInterviewSession)
 
@@ -191,6 +193,7 @@ export default function InterviewModeModal() {
     if (openDetails) {
       dispatch(setSelectedInterviewDetailId(session.id))
       dispatch(setActiveTab('interviews'))
+      navigate('/interviews')
       dispatch(setInterviewModalOpen(false))
     } else {
       dispatch(setInterviewModalOpen(false))

@@ -120,11 +120,10 @@ function ProblemItem({ problem }) {
 
   return (
     <li
-      className={`flex items-center gap-2.5 sm:gap-3 bg-paper-surface border rounded-xl p-2.5 sm:p-3 text-xs sm:text-sm transition-all ${
-        isSolved
+      className={`flex items-center gap-2.5 sm:gap-3 bg-paper-surface border rounded-xl p-2.5 sm:p-3 text-xs sm:text-sm transition-all ${isSolved
           ? 'border-sage/40 bg-sage-bg/10'
           : 'border-paper-border hover:border-paper-border/80'
-      }`}
+        }`}
     >
       {/* Checkbox */}
       <input
@@ -139,9 +138,8 @@ function ProblemItem({ problem }) {
       <div className="flex-1 min-w-0 flex items-center flex-wrap gap-x-2 gap-y-1">
         <label
           htmlFor={problem.id}
-          className={`cursor-pointer select-none leading-snug break-words ${
-            isSolved ? 'line-through text-paper-dim' : 'text-paper-text font-medium'
-          }`}
+          className={`cursor-pointer select-none leading-snug break-words ${isSolved ? 'line-through text-paper-dim' : 'text-paper-text font-medium'
+            }`}
         >
           {problem.name}
         </label>
@@ -158,13 +156,12 @@ function ProblemItem({ problem }) {
                 : `Open ${problem.lc}: ${problem.name} on LeetCode`
             }
             onClick={(e) => e.stopPropagation()}
-            className={`font-mono text-[11px] font-semibold px-2 py-0.5 rounded transition-all inline-flex items-center gap-1 shadow-xs ${
-              isSolved
+            className={`font-mono text-[11px] font-semibold px-2 py-0.5 rounded transition-all inline-flex items-center gap-1 shadow-xs ${isSolved
                 ? 'text-paper-faint bg-paper-surface-2 border border-paper-border/60 hover:text-paper-dim hover:bg-paper-border/40'
                 : problem.platform === 'GFG'
                   ? 'text-emerald-700 bg-emerald-50 border border-emerald-200 hover:bg-emerald-600 hover:text-white hover:border-emerald-600'
                   : 'text-orange-700 bg-orange-50 border border-orange-200 hover:bg-orange-600 hover:text-white hover:border-orange-600'
-            }`}
+              }`}
           >
             <span>{problem.platform === 'GFG' ? `${problem.lc} · GFG` : problem.lc}</span>
             <span className="text-[9px] opacity-80">↗</span>
@@ -174,24 +171,22 @@ function ProblemItem({ problem }) {
         {/* Mastery Status Badge (Status is set accurately via Revision Checklist) */}
         {isSolved && (
           <span
-            title={`Status: ${
-              masteryLevel === 'hint'
+            title={`Status: ${masteryLevel === 'hint'
                 ? '💡 Needed Hints'
                 : masteryLevel === 'mastered'
                   ? '⚡ Mastered'
                   : masteryLevel === 'unverified'
                     ? '⚖️ External Judge Accepted (Solve Independence Unverified — open checklist to record solo solve)'
                     : '🧠 Solved Solo'
-            } (Update outcome via Revision Checklist to adjust revision schedule)`}
-            className={`font-mono text-[10.5px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1 shadow-2xs border select-none cursor-default ${
-              masteryLevel === 'hint'
+              } (Update outcome via Revision Checklist to adjust revision schedule)`}
+            className={`font-mono text-[10.5px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1 shadow-2xs border select-none cursor-default ${masteryLevel === 'hint'
                 ? 'text-amber-800 bg-amber-50 border-amber-300'
                 : masteryLevel === 'mastered'
                   ? 'text-emerald-800 bg-emerald-50 border-emerald-300'
                   : masteryLevel === 'unverified'
                     ? 'text-indigo-800 bg-indigo-50 border-indigo-300'
                     : 'text-blue-800 bg-blue-50 border-blue-300'
-            }`}
+              }`}
           >
             <span>
               {masteryLevel === 'hint'
@@ -222,9 +217,8 @@ function ProblemItem({ problem }) {
             <button
               type="button"
               onClick={handleOpenChecklist}
-              title={`Next scheduled revision: ${getNextRevDateString()} (Stage ${
-                revData?.stage || 1
-              }/5). Click to review checklist or log revision.`}
+              title={`Next scheduled revision: ${getNextRevDateString()} (Stage ${revData?.stage || 1
+                }/5). Click to review checklist or log revision.`}
               className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-paper-surface-2 hover:bg-paper-border/50 text-paper-dim border border-paper-border transition-colors cursor-pointer inline-flex items-center gap-1"
             >
               <span>📅 {getNextRevDateString()}</span>
@@ -241,11 +235,10 @@ function ProblemItem({ problem }) {
               ? `Saved AI Review Score: ${revData.aiReview.score}/10 (${revData.aiReview.provider || 'AI'}). Click to open.`
               : 'Open AI Code Reviewer & Checklist'
           }
-          className={`font-mono text-[10px] font-semibold px-2 py-0.5 rounded-full border transition-all cursor-pointer inline-flex items-center gap-1 shadow-2xs ${
-            revData?.aiReview?.score
+          className={`font-mono text-[10px] font-semibold px-2 py-0.5 rounded-full border transition-all cursor-pointer inline-flex items-center gap-1 shadow-2xs ${revData?.aiReview?.score
               ? 'border-purple-300 text-purple-800 bg-purple-50/80 hover:bg-purple-100'
               : 'border-paper-border/80 text-paper-dim hover:text-purple-700 hover:border-purple-300 hover:bg-purple-50'
-          }`}
+            }`}
         >
           <span>🤖 AI Review</span>
           {revData?.aiReview?.score && (

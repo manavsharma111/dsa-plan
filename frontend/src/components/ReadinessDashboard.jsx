@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import {
   selectSolved,
   selectMastery,
@@ -24,6 +25,7 @@ import { ArchitectureModal, ComponentDetailModal } from './readiness/ReadinessMo
 
 export default function ReadinessDashboard() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const solved = useSelector(selectSolved)
   const mastery = useSelector(selectMastery)
   const revision = useSelector(selectRevision)
@@ -58,10 +60,12 @@ export default function ReadinessDashboard() {
   const handleRecommendationAction = (rec) => {
     if (rec.id === 'rec_delayed_recall_decay') {
       dispatch(setActiveTab('revision'))
+      navigate('/revision')
     } else if (rec.id === 'rec_time_pressure_gap' || rec.id === 'rec_establish_benchmark') {
       dispatch(setInterviewModalOpen(true))
     } else if (rec.patterns && rec.patterns.length > 0) {
       dispatch(setActiveTab('all'))
+      navigate('/')
       setTimeout(() => {
         const title = rec.patterns[0]
         const el = Array.from(document.querySelectorAll('h2, h3')).find((h) =>

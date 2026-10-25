@@ -1,33 +1,29 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, lazy } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Header from './components/Header'
 import CloudSync from './components/CloudSync'
 import ProgressBar from './components/ProgressBar'
 import FeatureBar from './components/FeatureBar'
-import PatternBreakdown from './components/PatternBreakdown'
-import KeyConcepts from './components/KeyConcepts'
 import StickyHeader from './components/StickyHeader'
-import PatternSection from './components/PatternSection'
+import PatternsMasterView from './components/PatternsMasterView'
 import Toast from './components/Toast'
-import { patternsData } from './data/patternsData'
 import {
-  selectActiveTab,
   selectExtensionModalOpen,
   setExtensionModalOpen,
 } from './store/progressSlice'
 
 // Dynamic lazy imports for non-critical views and modals to slash initial JS bundle
-const SpacedRevisionSection = React.lazy(() => import('./components/SpacedRevisionSection'))
-const WeakPatternAnalytics = React.lazy(() => import('./components/WeakPatternAnalytics'))
-const InterviewAnalysisSection = React.lazy(() => import('./components/InterviewAnalysisSection'))
-const ReadinessDashboard = React.lazy(() => import('./components/ReadinessDashboard'))
-const InterviewModeModal = React.lazy(() => import('./components/InterviewModeModal'))
-const RevisionChecklistModal = React.lazy(() => import('./components/RevisionChecklistModal'))
-const ExtensionGuideModal = React.lazy(() => import('./components/ExtensionGuideModal'))
+const SpacedRevisionSection = lazy(() => import('./components/SpacedRevisionSection'))
+const WeakPatternAnalytics = lazy(() => import('./components/WeakPatternAnalytics'))
+const InterviewAnalysisSection = lazy(() => import('./components/InterviewAnalysisSection'))
+const ReadinessDashboard = lazy(() => import('./components/ReadinessDashboard'))
+const InterviewModeModal = lazy(() => import('./components/InterviewModeModal'))
+const RevisionChecklistModal = lazy(() => import('./components/RevisionChecklistModal'))
+const ExtensionGuideModal = lazy(() => import('./components/ExtensionGuideModal'))
 
 export default function App() {
   const dispatch = useDispatch()
-  const activeTab = useSelector(selectActiveTab)
   const isExtensionOpen = useSelector(selectExtensionModalOpen)
 
   return (
@@ -42,28 +38,32 @@ export default function App() {
         <ProgressBar />
         <FeatureBar />
 
-        {/* Feature Views */}
-        <Suspense fallback={<div className="py-8 text-center font-mono text-xs text-paper-dim">Loading section...</div>}>
-          {activeTab === 'readiness' && <ReadinessDashboard />}
-          {activeTab === 'revision' && <SpacedRevisionSection />}
-          {activeTab === 'analytics' && <WeakPatternAnalytics />}
-          {activeTab === 'interviews' && <InterviewAnalysisSection />}
-        </Suspense>
-
-        {/* View 4: All 28 Patterns Master View */}
-        {activeTab === 'all' && (
-          <>
-            <PatternBreakdown />
-            <KeyConcepts />
-
-            {/* All 28 Patterns */}
-            <div className="space-y-4">
-              {patternsData.map((pattern) => (
-                <PatternSection key={pattern.id} pattern={pattern} />
-              ))}
+        {/* Feature Views via React Router */}
+        <Suspense
+          fallback={
+            <div className="py-12 text-center font-mono text-xs text-paper-dim flex flex-col items-center justify-center gap-2">
+              <span className="inline-block w-4 h-4 border-2 border-core border-t-transparent rounded-full animate-spin" />
+              <span>Loading section...</span>
             </div>
-          </>
-        )}
+          }
+        >
+          <Routes>
+            {/* Master Patterns View */}
+            <Route path="/" element={<PatternsMasterView />} />
+            <Route path="/patterns" element={<PatternsMasterView />} />
+            <Route path="/pattern/:patternId" element={<PatternsMasterView />} />
+
+            {/* Standalone Route Views */}
+            <Route path="/readiness" element={<ReadinessDashboard />} />
+            <Route path="/revision" element={<SpacedRevisionSection />} />
+            <Route path="/analytics" element={<WeakPatternAnalytics />} />
+            <Route path="/weak-patterns" element={<Navigate to="/analytics" replace />} />
+            <Route path="/interviews" element={<InterviewAnalysisSection />} />
+
+            {/* Catch-all Fallback */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
 
         {/* Footer */}
         <footer className="mt-14 pt-6 border-t-2 border-paper-border font-mono text-xs text-paper-faint flex flex-col sm:flex-row justify-between items-center gap-2.5">
