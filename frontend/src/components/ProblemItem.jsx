@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   selectIsSolved,
@@ -7,18 +7,16 @@ import {
   recordRevision,
   setRevisionModalProblem,
   selectProblemMastery,
-  selectRevision,
+  selectProblemRevision,
   showToastNotification,
   autoSaveToCloud,
 } from '../store/progressSlice'
 
-export default function ProblemItem({ problem }) {
+function ProblemItem({ problem }) {
   const dispatch = useDispatch()
   const isSolved = useSelector(selectIsSolved(problem.id, problem.slug))
   const masteryLevel = useSelector(selectProblemMastery(problem.id, problem.slug))
-  const revision = useSelector(selectRevision)
-
-  const revData = revision[problem.id] || (problem.slug && revision[problem.slug])
+  const revData = useSelector(selectProblemRevision(problem.id, problem.slug))
   const isDueForRevision = isSolved && revData && revData.nextDue && revData.nextDue <= Date.now()
 
   const handleChange = () => {
@@ -181,14 +179,18 @@ export default function ProblemItem({ problem }) {
                 ? '💡 Needed Hints'
                 : masteryLevel === 'mastered'
                   ? '⚡ Mastered'
-                  : '🧠 Solved Solo'
+                  : masteryLevel === 'unverified'
+                    ? '⚖️ External Judge Accepted (Solve Independence Unverified — open checklist to record solo solve)'
+                    : '🧠 Solved Solo'
             } (Update outcome via Revision Checklist to adjust revision schedule)`}
             className={`font-mono text-[10.5px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1 shadow-2xs border select-none cursor-default ${
               masteryLevel === 'hint'
                 ? 'text-amber-800 bg-amber-50 border-amber-300'
                 : masteryLevel === 'mastered'
                   ? 'text-emerald-800 bg-emerald-50 border-emerald-300'
-                  : 'text-blue-800 bg-blue-50 border-blue-300'
+                  : masteryLevel === 'unverified'
+                    ? 'text-indigo-800 bg-indigo-50 border-indigo-300'
+                    : 'text-blue-800 bg-blue-50 border-blue-300'
             }`}
           >
             <span>
@@ -196,7 +198,9 @@ export default function ProblemItem({ problem }) {
                 ? '💡 Hint'
                 : masteryLevel === 'mastered'
                   ? '⚡ Mastered'
-                  : '🧠 Solo'}
+                  : masteryLevel === 'unverified'
+                    ? '⚖️ Accepted'
+                    : '🧠 Solo'}
             </span>
           </span>
         )}
@@ -260,3 +264,5 @@ export default function ProblemItem({ problem }) {
     </li>
   )
 }
+
+export default memo(ProblemItem)

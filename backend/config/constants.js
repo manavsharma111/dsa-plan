@@ -1,4 +1,4 @@
-export const APP_CONSTANTS = {
+const APP_CONSTANTS = {
   DEFAULT_PORT: 5000,
   MAX_JSON_LIMIT: '10mb',
   MAX_HISTORY_LIMIT: 100,
@@ -13,3 +13,5 @@ export const APP_CONSTANTS = {
     SERVICE_UNAVAILABLE: 503,
   },
 }
+
+module.exports = { APP_CONSTANTS }

@@ -1,6 +1,5 @@
-import mongoose from 'mongoose'
-import dns from 'dns'
-import { ENV } from './env.js'
+const mongoose = require('mongoose')
+const dns = require('dns')
 
 // Safe DNS fallback for Windows / ISP SRV lookup
 try {
@@ -11,40 +10,36 @@ try {
 
 let isConnecting = false
 
-export async function connectDB() {
+const connectDB = async () => {
   if (mongoose.connection.readyState === 1) {
     return mongoose.connection
   }
 
   if (isConnecting) {
-    // Wait for in-flight connection
     await new Promise((resolve) => setTimeout(resolve, 300))
     if (mongoose.connection.readyState === 1) return mongoose.connection
   }
 
-  const uri = ENV.MONGODB_URI
+  const uri = process.env.MONGODB_URI
   if (!uri) {
-    throw new Error('MONGODB_URI is not defined in environment variables')
+    console.warn('[Config Warning] MONGODB_URI is not set.')
   }
 
   try {
     isConnecting = true
-    const conn = await mongoose.connect(uri, {
+    const conn = await mongoose.connect(uri || '', {
       serverSelectionTimeoutMS: 5000,
       maxPoolSize: 10,
     })
     isConnecting = false
-    console.log(
-      `[MongoDB] Connected successfully to database: ${conn.connection.name}`
-    )
+    console.log('MongoDB connected successfully')
 
-    // Connection event listeners
     mongoose.connection.on('error', (err) => {
       console.error('[MongoDB Error]', err.message)
     })
 
     mongoose.connection.on('disconnected', () => {
-      console.warn('[MongoDB] Disconnected from database. Reconnecting...')
+      console.warn('[MongoDB] Disconnected from database.')
     })
 
     mongoose.connection.on('reconnected', () => {
@@ -54,18 +49,30 @@ export async function connectDB() {
     return conn
   } catch (error) {
     isConnecting = false
-    console.error('[MongoDB Connection Failed]', error.message)
+    console.error('MongoDB connection error:', error.message)
+    if (process.env.NODE_ENV === 'production') {
+      process.exit(1)
+    }
     throw error
   }
 }
 
-export async function disconnectDB() {
+const disconnectDB = async () => {
   if (mongoose.connection.readyState !== 0) {
     await mongoose.disconnect()
     console.log('[MongoDB] Disconnected gracefully.')
   }
 }
 
-export function isDbConnected() {
+const isDbConnected = () => {
   return mongoose.connection.readyState === 1
 }
+
+connectDB.connectDB = connectDB
+connectDB.disconnectDB = disconnectDB
+connectDB.isDbConnected = isDbConnected
+
+module.exports = connectDB
+module.exports.connectDB = connectDB
+module.exports.disconnectDB = disconnectDB
+module.exports.isDbConnected = isDbConnected

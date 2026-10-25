@@ -1,5 +1,5 @@
-import { ENV } from '../config/env.js'
-import { APP_CONSTANTS } from '../config/constants.js'
+const { ENV } = require('../config/env')
+const { APP_CONSTANTS } = require('../config/constants')
 
 class AiService {
 
@@ -314,4 +314,4 @@ You MUST respond strictly in valid JSON format matching this schema:
   }
 }
 
-export default new AiService()
+module.exports = new AiService()

@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+const mongoose = require('mongoose')
 
 const PatternMetricSchema = new mongoose.Schema(
   {
@@ -51,5 +51,6 @@ const PatternAnalyticsSchema = new mongoose.Schema(
   }
 )
 
-export default mongoose.models.PatternAnalytics ||
+module.exports =
+  mongoose.models.PatternAnalytics ||
   mongoose.model('PatternAnalytics', PatternAnalyticsSchema)

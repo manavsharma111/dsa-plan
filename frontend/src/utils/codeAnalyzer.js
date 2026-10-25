@@ -1,13 +1,5 @@
-/**
- * Pattern-Aware DSA Code Analyzer
- * Analyzes code pasted from LeetCode, GFG, or auto-captured via Chrome Extension.
- *
- * Evaluates complexity RELATIVE to the specific Pattern / Problem Category:
- * - Matrix / Grid: O(N²) or O(N×M) is optimal; O(1) in-place is praised.
- * - Graph / BFS / DFS / Tree: O(V+E) or O(N) is optimal; O(V) space for visited/queue is optimal.
- * - 2D Dynamic Programming: O(N×M) is optimal; O(M) or O(N×M) space is expected.
- * - Two Pointers / Sliding Window: O(N) time and O(1) space is optimal.
- */
+// Lightweight static analyzer for pasted code (LeetCode/GFG/Extension).
+// Estimates time/space complexity and checks edge-case handling on the fly.
 
 export function analyzeSubmittedCode(code = '', patternContext = '') {
   if (!code || typeof code !== 'string' || !code.trim()) {
@@ -23,39 +15,45 @@ export function analyzeSubmittedCode(code = '', patternContext = '') {
 
   const patternLower = (patternContext || '').toLowerCase()
 
-  // 1. Language Detection
+  // Quick check to guess the language
   let language = 'Unknown'
   if (
     raw.includes('#include') ||
     raw.includes('std::') ||
     raw.includes('vector<') ||
-    raw.includes('cout')
+    raw.includes('cout') ||
+    /\b(cin|nullptr|size_t|auto)\b/.test(raw)
   ) {
     language = 'C++'
   } else if (
     raw.includes('public class') ||
     raw.includes('System.out') ||
     raw.includes('int[]') ||
-    raw.includes('HashMap<')
+    raw.includes('HashMap<') ||
+    raw.includes('ArrayList<')
   ) {
     language = 'Java'
   } else if (
     raw.includes('def ') ||
     raw.includes('elif ') ||
     raw.includes('self.') ||
-    (raw.includes(':') && raw.includes('in range'))
+    (raw.includes(':') && raw.includes('in range')) ||
+    /\b(None|True|False)\b/.test(raw)
   ) {
     language = 'Python'
   } else if (
     raw.includes('function') ||
     raw.includes('const ') ||
     raw.includes('let ') ||
-    raw.includes('=>')
+    raw.includes('=>') ||
+    raw.includes('console.log')
   ) {
     language = 'JavaScript'
+  } else if (/\b(int|long|float|double|char|bool|void)\b/.test(raw) && (raw.includes('{') || raw.includes(';'))) {
+    language = 'C / C++'
   }
 
-  // 2. Loop & Nesting Detection
+  // Figure out loop counts and how deep they nest
   const loopMatches = raw.match(/\b(for|while)\b/g) || []
   const loopCount = loopMatches.length
 
@@ -98,32 +96,55 @@ export function analyzeSubmittedCode(code = '', patternContext = '') {
     }
   }
 
-  // Binary search indicator
-  const hasBinarySearch =
-    /\b(low|left)\s*<=\s*(high|right)\b/i.test(raw) ||
-    /\bmid\s*=\s*\(?(low|left)\s*\+\s*(high|right)\)?\s*(\/|\>\>)\s*2/i.test(raw) ||
-    /\bbisect\b/i.test(raw)
+  // Binary search pointers and helper functions
+  const hasBinarySearchPattern =
+    /\b(bisect|binary_search|lower_bound|upper_bound|binarySearch)\b/i.test(raw) ||
+    (/\b(low|left|l|lo|start)\s*(<=|<)\s*(high|right|r|hi|end)\b/i.test(raw) &&
+      (/\bmid\b/i.test(raw) || /\b(>>|>>>|\/)\s*2\b/.test(raw))) ||
+    /\bmid\s*=\s*\(?(low|left|l|lo|start)\s*\+\s*(high|right|r|hi|end)\)?\s*(\/|\>\>|\/\/)\s*2/i.test(raw) ||
+    /\bmid\s*=\s*\(?(low|left|l|lo|start)\s*\+\s*\(?(high|right|r|hi|end)\s*-\s*(low|left|l|lo|start)\)?\s*(\/|\>\>|\/\/)\s*2/i.test(raw) ||
+    /Math\.(floor|trunc)\s*\(\s*\(?(low|left|l|lo|start)\s*\+\s*(high|right|r|hi|end)\)?\s*\/\s*2\s*\)/i.test(raw)
 
-  // Recursion indicator
+  // Catches halving or doubling steps like n /= 2, n >>= 1, or i *= 2
+  const hasLogarithmicStep =
+    /\b[a-zA-Z0-9_]+\s*(\/=|\*=|>>=|<<=|>>>=|\/\/=)\s*\d+/i.test(raw) ||
+    /\b([a-zA-Z0-9_]+)\s*=\s*\1\s*(\/|\/\/|\*|>>|<<|>>>)\s*\d+/i.test(raw) ||
+    /\b([a-zA-Z0-9_]+)\s*=\s*Math\.(floor|trunc|round)\s*\(\s*\1\s*\/\s*\d+\s*\)/i.test(raw) ||
+    /\b([a-zA-Z0-9_]+)\s*=\s*int\s*\(\s*\1\s*(\/|\/\/)\s*\d+\s*\)/i.test(raw) ||
+    /for\s*\([^;]*;[^;]*;\s*([a-zA-Z0-9_]+)\s*(\*=|\/=|<<=|>>=|>>>=)/i.test(raw) ||
+    /for\s*\([^;]*;[^;]*;\s*([a-zA-Z0-9_]+)\s*=\s*\1\s*(\*|\/|<<|>>)/i.test(raw)
+
+  const hasLogarithmicLoop = hasBinarySearchPattern || hasLogarithmicStep
+
+  // Native sort calls take O(N log N)
+  const hasSorting = /\b(sort|sorted|Arrays\.sort|Collections\.sort|std::sort)\b/i.test(raw)
+
+  // Simple recursion check with base conditions
   const hasRecursion = /\breturn\s+[a-zA-Z0-9_]+\s*\(/.test(raw) && /\bif\b/.test(raw)
 
-  // Estimate Raw Time Complexity
+  // Estimate time complexity from nesting and step behavior
   let estimatedTime = 'O(1)'
-  if (hasBinarySearch && maxNesting === 0) {
-    estimatedTime = 'O(log N)'
-  } else if (maxNesting >= 3) {
-    estimatedTime = 'O(N³)'
+  if (maxNesting >= 3) {
+    estimatedTime = hasLogarithmicLoop ? 'O(N² log N)' : 'O(N³)'
   } else if (maxNesting === 2) {
-    estimatedTime = 'O(N²)'
-  } else if (loopCount >= 1 && hasBinarySearch) {
+    estimatedTime = hasLogarithmicLoop ? 'O(N log N)' : 'O(N²)'
+  } else if (loopCount >= 1 && hasLogarithmicLoop) {
+    estimatedTime = loopCount === 1 ? 'O(log N)' : 'O(N log N)'
+  } else if (hasLogarithmicLoop && loopCount === 0) {
+    estimatedTime = 'O(log N)'
+  } else if (hasSorting && maxNesting <= 1) {
     estimatedTime = 'O(N log N)'
   } else if (loopCount >= 1) {
     estimatedTime = 'O(N)'
   } else if (hasRecursion) {
-    estimatedTime = 'O(V+E) / O(2ⁿ) Recursion'
+    if (hasLogarithmicStep || hasBinarySearchPattern) {
+      estimatedTime = 'O(log N)'
+    } else {
+      estimatedTime = 'O(V+E) / O(2ⁿ) Recursion'
+    }
   }
 
-  // 3. Space Complexity Detection
+  // Spot auxiliary memory like 2D grids, maps, sets, or heaps
   const has2DArray =
     /\[\s*\w+\s*\]\s*\[\s*\w+\s*\]/.test(raw) ||
     /vector<\s*vector</.test(raw) ||
@@ -142,7 +163,7 @@ export function analyzeSubmittedCode(code = '', patternContext = '') {
     estimatedSpace = 'O(N) Extra Memory'
   }
 
-  // 4. Pattern-Aware Evaluation & Theoretical Optimality
+  // Contextual adjustments based on the active pattern
   const isMatrixProblem = patternLower.includes('matrix') || patternLower.includes('grid')
   const isGraphProblem =
     patternLower.includes('graph') ||
@@ -150,12 +171,14 @@ export function analyzeSubmittedCode(code = '', patternContext = '') {
     patternLower.includes('dfs') ||
     patternLower.includes('tree')
   const isDPProblem = patternLower.includes('dynamic programming') || patternLower.includes('dp')
+  const isBinarySearchProblem = patternLower.includes('binary search')
+  const isTwoPointerProblem = patternLower.includes('two pointer') || patternLower.includes('sliding window')
 
   let complexityVerdict = 'Standard'
   let optimalityTag = ''
 
   if (isMatrixProblem) {
-    // In Matrix, O(N²) or O(N*M) is the mandatory lower bound because every cell must be visited!
+    // Matrices generally need O(N*M) since visiting each cell is the expected baseline
     if (estimatedTime === 'O(N²)' || maxNesting === 2) {
       estimatedTime = 'O(N × M) Optimal'
       optimalityTag = '⭐ Optimal Bound (Every cell visited)'
@@ -164,7 +187,7 @@ export function analyzeSubmittedCode(code = '', patternContext = '') {
       optimalityTag += ' • ⚡ 100% In-Place Swap'
     }
   } else if (isGraphProblem) {
-    // In Graphs, O(V+E) time and O(V) space for visited array / queue is optimal!
+    // Graph traversals standardly take O(V+E) with an O(V) visited set or queue
     if (estimatedTime.includes('Recursion') || estimatedTime === 'O(N)') {
       estimatedTime = 'O(V + E) Optimal'
       optimalityTag = '⭐ Optimal Graph Traversal'
@@ -178,9 +201,17 @@ export function analyzeSubmittedCode(code = '', patternContext = '') {
       estimatedTime = 'O(N × M) DP Optimal'
       optimalityTag = '⭐ Optimal 2D State Table'
     }
+  } else if (isBinarySearchProblem) {
+    if (estimatedTime === 'O(log N)') {
+      optimalityTag = '⭐ Optimal Logarithmic Search'
+    }
+  } else if (isTwoPointerProblem) {
+    if (estimatedTime === 'O(N)' && estimatedSpace.includes('O(1)')) {
+      optimalityTag = '⭐ Optimal O(N) In-Place Two Pointers'
+    }
   }
 
-  // 5. Edge Cases Handled Check
+  // Scan for common edge-case safety checks
   const edgeCaseKeywords = []
   if (/\b(null|nullptr|None|nil)\b/i.test(raw)) {
     edgeCaseKeywords.push('Null / Empty Pointer')
@@ -195,7 +226,7 @@ export function analyzeSubmittedCode(code = '', patternContext = '') {
     edgeCaseKeywords.push('Infinity / Overflow Guard')
   }
 
-  // 6. Pattern Keywords
+  // Tag recognizable DSA techniques used in the solution
   const detectedTags = []
   if (
     /\b(left|right|slow|fast|i|j)\b/i.test(raw) &&
@@ -212,15 +243,21 @@ export function analyzeSubmittedCode(code = '', patternContext = '') {
   if (/\b(swap|reverse)\b/i.test(raw)) {
     detectedTags.push('In-Place Swap')
   }
+  if (hasBinarySearchPattern || hasLogarithmicStep) {
+    detectedTags.push('Logarithmic / Halving Step')
+  }
 
-  // 7. Overall Quality Score (1 to 10)
-  // Give high scores when optimal relative to pattern!
+  // High-level solution score (1-10) factoring in optimality and defensive checks
   let qualityScore = 7
   if (isMatrixProblem && (estimatedTime.includes('Optimal') || estimatedSpace.includes('O(1)'))) {
     qualityScore = 9
   } else if (isGraphProblem && estimatedTime.includes('Optimal')) {
     qualityScore = 9
   } else if (isDPProblem && estimatedTime.includes('Optimal')) {
+    qualityScore = 9
+  } else if (isBinarySearchProblem && estimatedTime === 'O(log N)') {
+    qualityScore = 9
+  } else if (isTwoPointerProblem && estimatedTime === 'O(N)') {
     qualityScore = 9
   }
 

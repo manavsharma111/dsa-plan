@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+const mongoose = require('mongoose')
 
 const InterviewProblemSchema = new mongoose.Schema(
   {
@@ -75,5 +75,5 @@ const InterviewSchema = new mongoose.Schema(
   }
 )
 
-export default mongoose.models.Interview ||
-  mongoose.model('Interview', InterviewSchema)
+module.exports =
+  mongoose.models.Interview || mongoose.model('Interview', InterviewSchema)

@@ -20,6 +20,7 @@ import {
 const SpacedRevisionSection = React.lazy(() => import('./components/SpacedRevisionSection'))
 const WeakPatternAnalytics = React.lazy(() => import('./components/WeakPatternAnalytics'))
 const InterviewAnalysisSection = React.lazy(() => import('./components/InterviewAnalysisSection'))
+const ReadinessDashboard = React.lazy(() => import('./components/ReadinessDashboard'))
 const InterviewModeModal = React.lazy(() => import('./components/InterviewModeModal'))
 const RevisionChecklistModal = React.lazy(() => import('./components/RevisionChecklistModal'))
 const ExtensionGuideModal = React.lazy(() => import('./components/ExtensionGuideModal'))
@@ -41,8 +42,9 @@ export default function App() {
         <ProgressBar />
         <FeatureBar />
 
-        {/* View 1: Spaced Revision View */}
+        {/* Feature Views */}
         <Suspense fallback={<div className="py-8 text-center font-mono text-xs text-paper-dim">Loading section...</div>}>
+          {activeTab === 'readiness' && <ReadinessDashboard />}
           {activeTab === 'revision' && <SpacedRevisionSection />}
           {activeTab === 'analytics' && <WeakPatternAnalytics />}
           {activeTab === 'interviews' && <InterviewAnalysisSection />}

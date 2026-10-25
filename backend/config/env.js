@@ -1,9 +1,5 @@
-import dotenv from 'dotenv'
-import path from 'path'
-import { fileURLToPath } from 'url'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const dotenv = require('dotenv')
+const path = require('path')
 
 // Load .env from backend directory first, fallback to root if needed
 dotenv.config({ path: path.resolve(__dirname, '../.env') })
@@ -16,7 +12,7 @@ const parsedOrigins = rawOrigins.includes(',')
   ? rawOrigins.split(',').map((o) => o.trim())
   : rawOrigins
 
-export const ENV = {
+const ENV = {
   PORT: process.env.PORT || 5000,
   NODE_ENV: process.env.NODE_ENV || 'development',
   IS_PROD: process.env.NODE_ENV === 'production',
@@ -42,3 +38,5 @@ if (!ENV.MONGODB_URI) {
     '[Config Warning] MONGODB_URI is not set. Database connections will fail until configured in .env'
   )
 }
+
+module.exports = { ENV }

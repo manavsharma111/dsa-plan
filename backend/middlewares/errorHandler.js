@@ -1,7 +1,7 @@
-import { ENV } from '../config/env.js'
-import { APP_CONSTANTS } from '../config/constants.js'
+const { ENV } = require('../config/env')
+const { APP_CONSTANTS } = require('../config/constants')
 
-export function errorHandler(err, req, res, next) {
+function errorHandler(err, req, res, next) {
   const statusCode =
     err.statusCode || APP_CONSTANTS.HTTP_STATUS.INTERNAL_SERVER_ERROR
   let message = err.message || 'Internal Server Error'
@@ -44,3 +44,5 @@ export function errorHandler(err, req, res, next) {
     ...(!ENV.IS_PROD && { stack: err.stack }),
   })
 }
+
+module.exports = { errorHandler }

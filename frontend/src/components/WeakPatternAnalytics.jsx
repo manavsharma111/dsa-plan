@@ -10,64 +10,71 @@ export default function WeakPatternAnalytics() {
   const syncKey = useSelector(selectSyncKey)
   const [filterMode, setFilterMode] = useState('weakest') // 'weakest' | 'hints' | 'alphabetical'
 
-  // Analyze each pattern
-  const analyticsData = patternsData.map((pat) => {
-    const total = pat.problems.length
-    let solvedCount = 0
-    let hintCount = 0
-    let soloCount = 0
-    let masterCount = 0
+  // Analyze each pattern with memoization
+  const analyticsData = useMemo(() => {
+    return patternsData.map((pat) => {
+      const total = pat.problems.length
+      let solvedCount = 0
+      let hintCount = 0
+      let soloCount = 0
+      let masterCount = 0
 
-    pat.problems.forEach((p) => {
-      if (solved[p.id]) {
-        solvedCount++
-        const m = mastery[p.id] || 'independent'
-        if (m === 'hint') hintCount++
-        else if (m === 'mastered') masterCount++
-        else soloCount++
+      pat.problems.forEach((p) => {
+        const isProblemSolved = solved[p.id] || (p.slug && solved[p.slug])
+        if (isProblemSolved) {
+          solvedCount++
+          const m = mastery[p.id] || (p.slug && mastery[p.slug]) || 'independent'
+          if (m === 'hint') hintCount++
+          else if (m === 'mastered') masterCount++
+          else soloCount++
+        }
+      })
+
+      const completionPct = total > 0 ? Math.round((solvedCount / total) * 100) : 0
+      // Confidence: independent and mastered give full weight, hints give partial weight
+      const rawConfidence =
+        total > 0 ? ((soloCount * 0.7 + masterCount * 1.0 + hintCount * 0.25) / total) * 100 : 0
+      const confidencePct = Math.round(rawConfidence)
+
+      // Weakness score: high hint count + low completion increases score
+      const weaknessScore = hintCount * 2.5 + (total - solvedCount) * 1.0
+
+      return {
+        id: pat.id,
+        title: pat.title,
+        idea: pat.idea,
+        total,
+        solvedCount,
+        hintCount,
+        soloCount,
+        masterCount,
+        completionPct,
+        confidencePct,
+        weaknessScore,
       }
     })
-
-    const completionPct = total > 0 ? Math.round((solvedCount / total) * 100) : 0
-    // Confidence: independent and mastered give full weight, hints give partial weight
-    const rawConfidence =
-      total > 0 ? ((soloCount * 0.7 + masterCount * 1.0 + hintCount * 0.25) / total) * 100 : 0
-    const confidencePct = Math.round(rawConfidence)
-
-    // Weakness score: high hint count + low completion increases score
-    const weaknessScore = hintCount * 2.5 + (total - solvedCount) * 1.0
-
-    return {
-      id: pat.id,
-      title: pat.title,
-      idea: pat.idea,
-      total,
-      solvedCount,
-      hintCount,
-      soloCount,
-      masterCount,
-      completionPct,
-      confidencePct,
-      weaknessScore,
-    }
-  })
+  }, [solved, mastery])
 
   // Sort according to filter
-  const sorted = [...analyticsData].sort((a, b) => {
-    if (filterMode === 'weakest') {
-      return b.weaknessScore - a.weaknessScore
-    }
-    if (filterMode === 'hints') {
-      return b.hintCount - a.hintCount
-    }
-    return a.id - b.id
-  })
+  const sorted = useMemo(() => {
+    return [...analyticsData].sort((a, b) => {
+      if (filterMode === 'weakest') {
+        return b.weaknessScore - a.weaknessScore
+      }
+      if (filterMode === 'hints') {
+        return b.hintCount - a.hintCount
+      }
+      return a.id - b.id
+    })
+  }, [analyticsData, filterMode])
 
   // Top 3 attention-needed patterns
-  const topAttention = [...analyticsData]
-    .filter((p) => p.hintCount > 0 || p.confidencePct < 60)
-    .sort((a, b) => b.weaknessScore - a.weaknessScore)
-    .slice(0, 3)
+  const topAttention = useMemo(() => {
+    return [...analyticsData]
+      .filter((p) => p.hintCount > 0 || p.confidencePct < 60)
+      .sort((a, b) => b.weaknessScore - a.weaknessScore)
+      .slice(0, 3)
+  }, [analyticsData])
 
   // Auto-sync pattern analytics to MongoDB backend when connected
   useEffect(() => {

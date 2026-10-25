@@ -1,9 +1,10 @@
-import express from 'express'
-import syncRoutes from './syncRoutes.js'
-import interviewRoutes from './interviewRoutes.js'
-import analyticsRoutes from './analyticsRoutes.js'
-import aiRoutes from './aiRoutes.js'
-import { isDbConnected } from '../config/db.js'
+const express = require('express')
+const syncRoutes = require('./syncRoutes')
+const interviewRoutes = require('./interviewRoutes')
+const analyticsRoutes = require('./analyticsRoutes')
+const aiRoutes = require('./aiRoutes')
+const readinessRoutes = require('./readinessRoutes')
+const { isDbConnected } = require('../config/db')
 
 const router = express.Router()
 
@@ -22,5 +23,6 @@ router.use('/sync', syncRoutes)
 router.use('/interviews', interviewRoutes)
 router.use('/analytics', analyticsRoutes)
 router.use('/ai', aiRoutes)
+router.use('/readiness', readinessRoutes)
 
-export default router
+module.exports = router

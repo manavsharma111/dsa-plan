@@ -1,4 +1,4 @@
-import autocannon from 'autocannon'
+const autocannon = require('autocannon')
 
 const BASE_URL = process.env.TARGET_URL || 'http://localhost:5000'
 

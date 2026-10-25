@@ -1,5 +1,5 @@
-import PatternAnalytics from '../models/PatternAnalytics.js'
-import { APP_CONSTANTS } from '../config/constants.js'
+const PatternAnalytics = require('../models/PatternAnalytics')
+const { APP_CONSTANTS } = require('../config/constants')
 
 class AnalyticsService {
   /**
@@ -62,4 +62,4 @@ class AnalyticsService {
   }
 }
 
-export default new AnalyticsService()
+module.exports = new AnalyticsService()

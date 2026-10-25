@@ -21,6 +21,7 @@ const KEY_MASTERY = 'dsa_mastery_v1'
 const KEY_REVISION = 'dsa_revision_v1'
 const KEY_INTERVIEW = 'dsa_interview_v1'
 const KEY_INTERVIEW_HISTORY = 'dsa_interview_history_v1'
+const KEY_READINESS_SNAPSHOTS = 'dsa_readiness_snapshots_v1'
 const SYNC_KEY_STORAGE = 'dsa_sync_key'
 const APP_ID = 'igz1gl8v'
 
@@ -80,6 +81,15 @@ function getInitialInterviewHistory() {
   }
 }
 
+function getInitialReadinessSnapshots() {
+  try {
+    const raw = localStorage.getItem(KEY_READINESS_SNAPSHOTS)
+    return raw ? JSON.parse(raw) : []
+  } catch (e) {
+    return []
+  }
+}
+
 function getInitialSyncKey() {
   if (typeof window === 'undefined') return ''
   const hashMatch = window.location.hash.match(/[#&]sync=([^&]+)/)
@@ -96,6 +106,7 @@ function persistState(state) {
     localStorage.setItem(KEY_MASTERY, JSON.stringify(state.mastery))
     localStorage.setItem(KEY_REVISION, JSON.stringify(state.revision))
     localStorage.setItem(KEY_INTERVIEW_HISTORY, JSON.stringify(state.interviewHistory || []))
+    localStorage.setItem(KEY_READINESS_SNAPSHOTS, JSON.stringify(state.readinessSnapshots || []))
     if (state.interviewSession) {
       localStorage.setItem(KEY_INTERVIEW, JSON.stringify(state.interviewSession))
     } else {
@@ -343,6 +354,71 @@ export const saveInterviewToBackend = createAsyncThunk(
   }
 )
 
+// Async Thunks for Interview Readiness
+export const fetchBackendReadiness = createAsyncThunk(
+  'progress/fetchBackendReadiness',
+  async (_, { getState }) => {
+    const { syncKey } = getState().progress
+    if (!syncKey) return null
+    try {
+      const res = await fetch(`/api/readiness?syncKey=${encodeURIComponent(syncKey)}`)
+      if (res.ok) {
+        const json = await res.json()
+        if (json.success && json.report) {
+          return json.report
+        }
+      }
+    } catch (e) {
+      console.warn('Backend readiness fetch failed:', e)
+    }
+    return null
+  }
+)
+
+export const fetchHistoricalSnapshots = createAsyncThunk(
+  'progress/fetchHistoricalSnapshots',
+  async (_, { getState }) => {
+    const { syncKey } = getState().progress
+    if (!syncKey) return []
+    try {
+      const res = await fetch(`/api/readiness/history?syncKey=${encodeURIComponent(syncKey)}&limit=20`)
+      if (res.ok) {
+        const json = await res.json()
+        if (json.success && Array.isArray(json.snapshots)) {
+          return json.snapshots
+        }
+      }
+    } catch (e) {
+      console.warn('Backend history fetch failed:', e)
+    }
+    return []
+  }
+)
+
+export const persistReadinessSnapshot = createAsyncThunk(
+  'progress/persistReadinessSnapshot',
+  async (report, { getState }) => {
+    const { syncKey } = getState().progress
+    if (!syncKey || !report) return null
+    try {
+      const res = await fetch('/api/readiness/snapshot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ syncKey, report }),
+      })
+      if (res.ok) {
+        const json = await res.json()
+        if (json.success && json.snapshot) {
+          return json.snapshot
+        }
+      }
+    } catch (e) {
+      console.warn('Save readiness snapshot to backend failed:', e)
+    }
+    return null
+  }
+)
+
 export const progressSlice = createSlice({
   name: 'progress',
   initialState: {
@@ -352,7 +428,7 @@ export const progressSlice = createSlice({
     interviewSession: getInitialInterview(),
     interviewHistory: getInitialInterviewHistory(),
     selectedInterviewDetailId: null,
-    activeTab: 'all', // 'all' | 'revision' | 'analytics' | 'interviews'
+    activeTab: 'all', // 'all' | 'revision' | 'analytics' | 'interviews' | 'readiness'
     interviewModalOpen: false,
     extensionModalOpen: false,
     revisionModalProblem: null, // Problem object currently opened in 5-Point Revision Checklist
@@ -360,6 +436,10 @@ export const progressSlice = createSlice({
     syncStatus: 'idle',
     lastSyncTime: null,
     toastMessage: null,
+    readinessReport: null,
+    readinessSnapshots: getInitialReadinessSnapshots(),
+    readinessStatus: 'idle',
+    readinessError: null,
   },
   reducers: {
     toggleProblem: (state, action) => {
@@ -419,6 +499,29 @@ export const progressSlice = createSlice({
           state.revision[id].lastOutcome = 'manual'
         }
       }
+      persistState(state)
+    },
+
+    clearPatternProgress: (state, action) => {
+      const problems = action.payload || []
+      problems.forEach((p) => {
+        const id = typeof p === 'object' ? p.id : p
+        const slug = typeof p === 'object' ? p.slug : null
+        delete state.solved[id]
+        delete state.mastery[id]
+        delete state.revision[id]
+        if (slug) {
+          delete state.solved[slug]
+          delete state.mastery[slug]
+          delete state.revision[slug]
+        }
+        if (typeof p === 'object' && p.name) {
+          const clean = p.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')
+          delete state.solved[clean]
+          delete state.mastery[clean]
+          delete state.revision[clean]
+        }
+      })
       persistState(state)
     },
 
@@ -720,6 +823,25 @@ export const progressSlice = createSlice({
       })
       persistState(state)
     },
+
+    setReadinessReport: (state, action) => {
+      state.readinessReport = action.payload
+    },
+
+    addLocalReadinessSnapshot: (state, action) => {
+      const snapshot = action.payload
+      if (!snapshot) return
+      const list = state.readinessSnapshots || []
+      const last = list[list.length - 1]
+      if (
+        !last ||
+        last.overallScore !== snapshot.overallScore ||
+        Date.now() - new Date(last.calculatedAt).getTime() > 180000
+      ) {
+        state.readinessSnapshots = [...list.slice(-29), snapshot]
+        persistState(state)
+      }
+    },
   },
   extraReducers: (builder) => {
     // connectAndSync
@@ -765,6 +887,38 @@ export const progressSlice = createSlice({
     builder.addCase(autoSaveToCloud.rejected, (state) => {
       state.syncStatus = 'error'
     })
+
+    // fetchBackendReadiness
+    builder.addCase(fetchBackendReadiness.pending, (state) => {
+      state.readinessStatus = 'loading'
+    })
+    builder.addCase(fetchBackendReadiness.fulfilled, (state, action) => {
+      state.readinessStatus = 'succeeded'
+      if (action.payload) {
+        state.readinessReport = action.payload
+      }
+    })
+    builder.addCase(fetchBackendReadiness.rejected, (state, action) => {
+      state.readinessStatus = 'failed'
+      state.readinessError = action.error.message
+    })
+
+    // fetchHistoricalSnapshots
+    builder.addCase(fetchHistoricalSnapshots.fulfilled, (state, action) => {
+      if (Array.isArray(action.payload) && action.payload.length > 0) {
+        state.readinessSnapshots = action.payload
+        persistState(state)
+      }
+    })
+
+    // persistReadinessSnapshot
+    builder.addCase(persistReadinessSnapshot.fulfilled, (state, action) => {
+      if (action.payload) {
+        const list = state.readinessSnapshots || []
+        state.readinessSnapshots = [...list.slice(-29), action.payload]
+        persistState(state)
+      }
+    })
   },
 })
 
@@ -790,6 +944,9 @@ export const {
   clearToast,
   disconnectSync,
   mergeCloudState,
+  setReadinessReport,
+  addLocalReadinessSnapshot,
+  clearPatternProgress,
 } = progressSlice.actions
 
 // Toast helper routed via react-toastify
@@ -834,8 +991,12 @@ export const selectTotalSolved = (state) => {
 export const selectMastery = (state) => state.progress.mastery || {}
 export const selectProblemMastery = (id, slug) => (state) =>
   (state.progress.mastery && (state.progress.mastery[id] || (slug && state.progress.mastery[slug]))) ||
-  (state.progress.solved[id] || (slug && state.progress.solved[slug]) ? 'independent' : 'none')
+  (state.progress.solved[id] || (slug && state.progress.solved[slug]) ? 'unverified' : 'none')
 export const selectRevision = (state) => state.progress.revision || {}
+export const selectProblemRevision = (id, slug) => (state) =>
+  state.progress.revision
+    ? state.progress.revision[id] || (slug ? state.progress.revision[slug] : null) || null
+    : null
 export const selectActiveTab = (state) => state.progress.activeTab || 'all'
 export const selectInterviewModalOpen = (state) => state.progress.interviewModalOpen
 export const selectExtensionModalOpen = (state) => state.progress.extensionModalOpen
@@ -847,5 +1008,8 @@ export const selectSyncKey = (state) => state.progress.syncKey
 export const selectSyncStatus = (state) => state.progress.syncStatus
 export const selectLastSyncTime = (state) => state.progress.lastSyncTime
 export const selectToast = (state) => state.progress.toastMessage
+export const selectReadinessReport = (state) => state.progress.readinessReport
+export const selectReadinessSnapshots = (state) => state.progress.readinessSnapshots || []
+export const selectReadinessStatus = (state) => state.progress.readinessStatus
 
 export default progressSlice.reducer

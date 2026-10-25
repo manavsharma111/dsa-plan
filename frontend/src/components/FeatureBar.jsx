@@ -11,6 +11,7 @@ import {
   selectInterviewHistory,
 } from '../store/progressSlice'
 import { patternsData } from '../data/patternsData'
+import { calculateClientReadinessReport } from '../utils/readinessEngine'
 
 export default function FeatureBar() {
   const dispatch = useDispatch()
@@ -46,6 +47,18 @@ export default function FeatureBar() {
     if (mastery[id] === 'hint') hintCount++
   })
 
+  // Calculate client readiness report for dynamic tab badge
+  const readinessReport = React.useMemo(() => {
+    return calculateClientReadinessReport({
+      solved,
+      mastery,
+      revision,
+      interviews: interviewHistory,
+    })
+  }, [solved, mastery, revision, interviewHistory])
+
+  const readinessScore = readinessReport.overallScore
+
   const updateIndicator = React.useCallback(() => {
     requestAnimationFrame(() => {
       const container = containerRef.current
@@ -67,7 +80,7 @@ export default function FeatureBar() {
 
   React.useEffect(() => {
     updateIndicator()
-  }, [updateIndicator, dueCount, hintCount, interviewHistory.length])
+  }, [updateIndicator, dueCount, hintCount, interviewHistory.length, readinessScore])
 
   React.useEffect(() => {
     const handleResize = () => updateIndicator()
@@ -94,6 +107,24 @@ export default function FeatureBar() {
       id: 'all',
       label: 'All 28 Patterns',
       icon: '📑',
+    },
+    {
+      id: 'readiness',
+      label: 'Interview Readiness',
+      icon: '🎓',
+      badge: (
+        <span
+          className={`font-mono text-[10px] px-1.5 py-0.2 rounded-full font-bold transition-colors duration-250 ${
+            activeTab === 'readiness'
+              ? 'bg-emerald-400 text-emerald-950'
+              : readinessScore !== null
+                ? 'bg-emerald-100 text-emerald-800'
+                : 'bg-amber-100 text-amber-800'
+          }`}
+        >
+          {readinessScore !== null ? `${readinessScore}%` : 'Benchmark'}
+        </span>
+      ),
     },
     {
       id: 'revision',

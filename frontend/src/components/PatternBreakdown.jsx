@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { selectSolved } from '../store/progressSlice'
 import { patternsData } from '../data/patternsData'
@@ -7,22 +7,27 @@ export default function PatternBreakdown() {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const solvedMap = useSelector(selectSolved)
 
-  // Compute pattern-wise stats
-  let masteredCount = 0
-  const patternStats = patternsData.map((pattern) => {
-    const total = pattern.problems.length
-    const done = pattern.problems.filter((p) => solvedMap[p.id]).length
-    const pct = total > 0 ? Math.round((done / total) * 100) : 0
-    const isCompleted = done === total && total > 0
-    if (isCompleted) masteredCount++
-    return {
-      ...pattern,
-      total,
-      done,
-      pct,
-      isCompleted,
-    }
-  })
+  // Compute pattern-wise stats with memoization
+  const { patternStats, masteredCount } = useMemo(() => {
+    let mastered = 0
+    const stats = patternsData.map((pattern) => {
+      const total = pattern.problems.length
+      const done = pattern.problems.filter(
+        (p) => solvedMap[p.id] || (p.slug && solvedMap[p.slug])
+      ).length
+      const pct = total > 0 ? Math.round((done / total) * 100) : 0
+      const isCompleted = done === total && total > 0
+      if (isCompleted) mastered++
+      return {
+        ...pattern,
+        total,
+        done,
+        pct,
+        isCompleted,
+      }
+    })
+    return { patternStats: stats, masteredCount: mastered }
+  }, [solvedMap])
 
   const handleScrollToPattern = (e, id) => {
     e.preventDefault()

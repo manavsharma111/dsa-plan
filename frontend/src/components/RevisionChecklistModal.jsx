@@ -278,22 +278,33 @@ export default function RevisionChecklistModal() {
         <div className="p-4 sm:p-5 border-b border-paper-border/80 bg-paper-surface-2 flex items-start justify-between gap-3 flex-shrink-0">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap mb-1">
-              <span className="font-mono text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-core/10 text-core border border-core/20">
+              <span className="font-mono text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-core/10 text-core border border-core/25 whitespace-nowrap">
                 Spaced Revision Checklist
               </span>
-              <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-paper-border/60 text-paper-dim">
-                {currentStageInfo.title}
+              <span
+                className={`font-mono text-[10.5px] font-bold px-2.5 py-0.5 rounded-full border shadow-2xs whitespace-nowrap flex items-center gap-1 ${
+                  {
+                    1: 'bg-amber-100 text-amber-900 border-amber-300',
+                    2: 'bg-blue-100 text-blue-900 border-blue-300',
+                    3: 'bg-purple-100 text-purple-900 border-purple-300',
+                    4: 'bg-orange-100 text-orange-900 border-orange-300',
+                    5: 'bg-emerald-100 text-emerald-900 border-emerald-300',
+                  }[currentStageInfo?.stage || 1] || 'bg-amber-100 text-amber-900 border-amber-300'
+                }`}
+              >
+                <span>🗓️</span>
+                <span>{currentStageInfo.title}</span>
               </span>
               {currentMastery === 'mastered' ? (
-                <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">
+                <span className="font-mono text-[10.5px] px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold whitespace-nowrap shadow-2xs">
                   ⚡ Mastered
                 </span>
               ) : currentMastery === 'hint' ? (
-                <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold">
+                <span className="font-mono text-[10.5px] px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 font-bold whitespace-nowrap shadow-2xs">
                   💡 Hint Needed
                 </span>
               ) : (
-                <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-bold">
+                <span className="font-mono text-[10.5px] px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-900 border border-blue-300 font-bold whitespace-nowrap shadow-2xs">
                   🧠 Solved Solo
                 </span>
               )}
@@ -787,28 +798,37 @@ export default function RevisionChecklistModal() {
                 }
                 className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between relative ${
                   recommendedOutcome === 'efficient'
-                    ? 'border-emerald-500 bg-emerald-50 ring-2 ring-emerald-400/40 shadow-xs'
-                    : 'border-emerald-300 bg-emerald-50/70 hover:bg-emerald-100'
+                    ? 'border-emerald-500 bg-emerald-50/90 ring-2 ring-emerald-400/40 shadow-xs'
+                    : 'border-emerald-300/80 bg-emerald-50/50 hover:bg-emerald-100/70'
                 }`}
               >
                 <div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-emerald-900 flex items-center gap-1.5">
-                      <span>⚡ Solved without help</span>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-mono text-xs font-bold text-emerald-950 flex items-center gap-1.5">
+                      <span>⚡</span>
+                      <span>Solved without help</span>
                       {recommendedOutcome === 'efficient' && (
-                        <span className="text-[9px] bg-emerald-600 text-white px-1.5 py-0.2 rounded font-bold uppercase tracking-wider">
-                          ★ Recommended
-                        </span>
+                        <span className="text-emerald-700 text-xs font-bold" title="Recommended">★</span>
                       )}
                     </span>
-                    <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-900">
+                    <span className="font-mono text-[10.5px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-200 text-emerald-950 whitespace-nowrap shrink-0 shadow-2xs">
                       +7 days
                     </span>
                   </div>
-                  <p className="text-[11px] text-emerald-800/80 mt-1">
+                  <p className="text-[11px] text-emerald-900/80 mt-1 leading-relaxed">
                     Approach was crystal clear; solved optimally without any hints.
                   </p>
                 </div>
+                {recommendedOutcome === 'efficient' && (
+                  <div className="mt-2.5 pt-1.5 border-t border-emerald-300/50 flex items-center justify-between">
+                    <span className="inline-flex items-center gap-1 text-[9.5px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-emerald-600 text-white shadow-2xs">
+                      ★ Recommended
+                    </span>
+                    <span className="text-[10px] font-mono text-emerald-900/80 font-medium">
+                      Based on checklist
+                    </span>
+                  </div>
+                )}
               </button>
 
               {/* Option 2: Slow Solve */}
@@ -819,28 +839,37 @@ export default function RevisionChecklistModal() {
                 }
                 className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between relative ${
                   recommendedOutcome === 'slow'
-                    ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-400/40 shadow-xs'
-                    : 'border-blue-300 bg-blue-50/70 hover:bg-blue-100'
+                    ? 'border-blue-500 bg-blue-50/90 ring-2 ring-blue-400/40 shadow-xs'
+                    : 'border-blue-300/80 bg-blue-50/50 hover:bg-blue-100/70'
                 }`}
               >
                 <div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-blue-900 flex items-center gap-1.5">
-                      <span>⏱️ Took too much time</span>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-mono text-xs font-bold text-blue-950 flex items-center gap-1.5">
+                      <span>⏱️</span>
+                      <span>Took too much time</span>
                       {recommendedOutcome === 'slow' && (
-                        <span className="text-[9px] bg-blue-600 text-white px-1.5 py-0.2 rounded font-bold uppercase tracking-wider">
-                          ★ Recommended
-                        </span>
+                        <span className="text-blue-700 text-xs font-bold" title="Recommended">★</span>
                       )}
                     </span>
-                    <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-200 text-blue-900">
+                    <span className="font-mono text-[10.5px] font-bold px-2.5 py-0.5 rounded-full bg-blue-200 text-blue-950 whitespace-nowrap shrink-0 shadow-2xs">
                       +3 days
                     </span>
                   </div>
-                  <p className="text-[11px] text-blue-800/80 mt-1">
+                  <p className="text-[11px] text-blue-900/80 mt-1 leading-relaxed">
                     Solved successfully, but recall was slow. Needs speed practice.
                   </p>
                 </div>
+                {recommendedOutcome === 'slow' && (
+                  <div className="mt-2.5 pt-1.5 border-t border-blue-300/50 flex items-center justify-between">
+                    <span className="inline-flex items-center gap-1 text-[9.5px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-blue-600 text-white shadow-2xs">
+                      ★ Recommended
+                    </span>
+                    <span className="text-[10px] font-mono text-blue-900/80 font-medium">
+                      Based on checklist
+                    </span>
+                  </div>
+                )}
               </button>
 
               {/* Option 3: Hint Needed */}
@@ -849,28 +878,37 @@ export default function RevisionChecklistModal() {
                 onClick={() => handleSelectOutcome('hint', 'Needed a hint', 'Next day (+1d)')}
                 className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between relative ${
                   recommendedOutcome === 'hint'
-                    ? 'border-amber-500 bg-amber-50 ring-2 ring-amber-400/40 shadow-xs'
-                    : 'border-amber-300 bg-amber-50/70 hover:bg-amber-100'
+                    ? 'border-amber-500 bg-amber-50/90 ring-2 ring-amber-400/40 shadow-xs'
+                    : 'border-amber-300/80 bg-amber-50/50 hover:bg-amber-100/70'
                 }`}
               >
                 <div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-amber-900 flex items-center gap-1.5">
-                      <span>💡 Needed a hint / peek</span>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-mono text-xs font-bold text-amber-950 flex items-center gap-1.5">
+                      <span>💡</span>
+                      <span>Needed a hint / peek</span>
                       {recommendedOutcome === 'hint' && (
-                        <span className="text-[9px] bg-amber-600 text-white px-1.5 py-0.2 rounded font-bold uppercase tracking-wider">
-                          ★ Recommended
-                        </span>
+                        <span className="text-amber-700 text-xs font-bold" title="Recommended">★</span>
                       )}
                     </span>
-                    <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200 text-amber-900">
+                    <span className="font-mono text-[10.5px] font-bold px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-950 whitespace-nowrap shrink-0 shadow-2xs">
                       Next day
                     </span>
                   </div>
-                  <p className="text-[11px] text-amber-800/80 mt-1">
+                  <p className="text-[11px] text-amber-900/80 mt-1 leading-relaxed">
                     Had to inspect hints or syntax. Re-attempt tomorrow independently.
                   </p>
                 </div>
+                {recommendedOutcome === 'hint' && (
+                  <div className="mt-2.5 pt-1.5 border-t border-amber-300/50 flex items-center justify-between">
+                    <span className="inline-flex items-center gap-1 text-[9.5px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-amber-600 text-white shadow-2xs">
+                      ★ Recommended
+                    </span>
+                    <span className="text-[10px] font-mono text-amber-900/80 font-medium">
+                      Based on checklist
+                    </span>
+                  </div>
+                )}
               </button>
 
               {/* Option 4: Solution Walkthrough */}
@@ -881,28 +919,37 @@ export default function RevisionChecklistModal() {
                 }
                 className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between relative ${
                   recommendedOutcome === 'solution'
-                    ? 'border-orange-500 bg-orange-50 ring-2 ring-orange-400/40 shadow-xs'
-                    : 'border-orange-300 bg-orange-50/70 hover:bg-orange-100'
+                    ? 'border-orange-500 bg-orange-50/90 ring-2 ring-orange-400/40 shadow-xs'
+                    : 'border-orange-300/80 bg-orange-50/50 hover:bg-orange-100/70'
                 }`}
               >
                 <div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-orange-900 flex items-center gap-1.5">
-                      <span>📖 Viewed full solution</span>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-mono text-xs font-bold text-orange-950 flex items-center gap-1.5">
+                      <span>📖</span>
+                      <span>Viewed full solution</span>
                       {recommendedOutcome === 'solution' && (
-                        <span className="text-[9px] bg-orange-600 text-white px-1.5 py-0.2 rounded font-bold uppercase tracking-wider">
-                          ★ Recommended
-                        </span>
+                        <span className="text-orange-700 text-xs font-bold" title="Recommended">★</span>
                       )}
                     </span>
-                    <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-200 text-orange-900">
+                    <span className="font-mono text-[10.5px] font-bold px-2.5 py-0.5 rounded-full bg-orange-200 text-orange-950 whitespace-nowrap shrink-0 shadow-2xs">
                       Next day
                     </span>
                   </div>
-                  <p className="text-[11px] text-orange-800/80 mt-1">
+                  <p className="text-[11px] text-orange-900/80 mt-1 leading-relaxed">
                     Viewed direct solution. Re-attempt from scratch tomorrow.
                   </p>
                 </div>
+                {recommendedOutcome === 'solution' && (
+                  <div className="mt-2.5 pt-1.5 border-t border-orange-300/50 flex items-center justify-between">
+                    <span className="inline-flex items-center gap-1 text-[9.5px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-orange-600 text-white shadow-2xs">
+                      ★ Recommended
+                    </span>
+                    <span className="text-[10px] font-mono text-orange-900/80 font-medium">
+                      Based on checklist
+                    </span>
+                  </div>
+                )}
               </button>
 
               {/* Option 5: Repeat Mistake */}
@@ -915,17 +962,18 @@ export default function RevisionChecklistModal() {
                     'Next day + in 3 days'
                   )
                 }
-                className="p-3 rounded-xl border border-rose-300 bg-rose-50/70 hover:bg-rose-100 text-left transition-all cursor-pointer group sm:col-span-2"
+                className="p-3 rounded-xl border border-rose-300/80 bg-rose-50/60 hover:bg-rose-100/80 text-left transition-all cursor-pointer group sm:col-span-2"
               >
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs font-bold text-rose-900 flex items-center gap-1.5">
-                    <span>⚠️ Repeated same mistake</span>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-mono text-xs font-bold text-rose-950 flex items-center gap-1.5">
+                    <span>⚠️</span>
+                    <span>Repeated same mistake</span>
                   </span>
-                  <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-200 text-rose-900">
+                  <span className="font-mono text-[10.5px] font-bold px-2.5 py-0.5 rounded-full bg-rose-200 text-rose-950 whitespace-nowrap shrink-0 shadow-2xs">
                     Next day + Reset stage
                   </span>
                 </div>
-                <p className="text-[11px] text-rose-800/80 mt-1">
+                <p className="text-[11px] text-rose-900/80 mt-1 leading-relaxed">
                   Repeated the same pitfall. Interval reset: understand the gap tomorrow, then
                   re-test in 3 days.
                 </p>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   selectSolved,
@@ -12,58 +12,67 @@ import {
 } from '../store/progressSlice'
 import { patternsData } from '../data/patternsData'
 
+// Pre-build static problem lookup map once at module initialization
+const PROBLEM_LOOKUP_MAP = {}
+patternsData.forEach((pat) => {
+  pat.problems.forEach((p) => {
+    const item = { ...p, patternTitle: pat.title }
+    PROBLEM_LOOKUP_MAP[p.id] = item
+    if (p.slug) PROBLEM_LOOKUP_MAP[p.slug] = item
+  })
+})
+
 export default function SpacedRevisionSection() {
   const dispatch = useDispatch()
   const solved = useSelector(selectSolved)
   const revision = useSelector(selectRevision)
   const mastery = useSelector(selectMastery)
 
-  // Map all problems by id and slug for instant lookup
-  const problemMap = {}
-  patternsData.forEach((pat) => {
-    pat.problems.forEach((p) => {
-      const item = { ...p, patternTitle: pat.title }
-      problemMap[p.id] = item
-      if (p.slug) problemMap[p.slug] = item
+  // Compute revision categories with memoization
+  const { dueProblems, upcomingProblems, graduatedProblems } = useMemo(() => {
+    const now = Date.now()
+    const due = []
+    const upcoming = []
+    const graduated = []
+    const seenProblemIds = new Set()
+
+    Object.keys(solved).forEach((id) => {
+      if (!solved[id]) return
+      const prob = PROBLEM_LOOKUP_MAP[id]
+      if (!prob || seenProblemIds.has(prob.id)) return
+      seenProblemIds.add(prob.id)
+
+      const rev = revision[prob.id] || (prob.slug && revision[prob.slug]) || { stage: 1, nextDue: now }
+      const currentMastery = mastery[prob.id] || (prob.slug && mastery[prob.slug]) || 'independent'
+
+      const item = {
+        ...prob,
+        stage: rev.stage || 1,
+        count: rev.count || 1,
+        lastRevised: rev.lastRevised,
+        nextDue: rev.nextDue,
+        currentMastery,
+      }
+
+      if (rev.stage >= 5 && rev.nextDue > now) {
+        graduated.push(item)
+      } else if (rev.nextDue <= now) {
+        due.push(item)
+      } else {
+        upcoming.push(item)
+      }
     })
-  })
 
-  const now = Date.now()
-  const dueProblems = []
-  const upcomingProblems = []
-  const graduatedProblems = []
-  const seenProblemIds = new Set()
+    // Sort due problems: earliest due first
+    due.sort((a, b) => a.nextDue - b.nextDue)
+    upcoming.sort((a, b) => a.nextDue - b.nextDue)
 
-  Object.keys(solved).forEach((id) => {
-    if (!solved[id]) return
-    const prob = problemMap[id]
-    if (!prob || seenProblemIds.has(prob.id)) return
-    seenProblemIds.add(prob.id)
-
-    const rev = revision[prob.id] || (prob.slug && revision[prob.slug]) || { stage: 1, nextDue: now }
-    const currentMastery = mastery[prob.id] || (prob.slug && mastery[prob.slug]) || 'independent'
-
-    const item = {
-      ...prob,
-      stage: rev.stage || 1,
-      count: rev.count || 1,
-      lastRevised: rev.lastRevised,
-      nextDue: rev.nextDue,
-      currentMastery,
+    return {
+      dueProblems: due,
+      upcomingProblems: upcoming,
+      graduatedProblems: graduated,
     }
-
-    if (rev.stage >= 5 && rev.nextDue > now) {
-      graduatedProblems.push(item)
-    } else if (rev.nextDue <= now) {
-      dueProblems.push(item)
-    } else {
-      upcomingProblems.push(item)
-    }
-  })
-
-  // Sort due problems: earliest due first
-  dueProblems.sort((a, b) => a.nextDue - b.nextDue)
-  upcomingProblems.sort((a, b) => a.nextDue - b.nextDue)
+  }, [solved, revision, mastery])
 
   const handleOpenChecklist = (prob) => {
     dispatch(setRevisionModalProblem(prob))

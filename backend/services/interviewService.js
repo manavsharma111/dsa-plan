@@ -1,5 +1,5 @@
-import Interview from '../models/Interview.js'
-import { APP_CONSTANTS } from '../config/constants.js'
+const Interview = require('../models/Interview')
+const { APP_CONSTANTS } = require('../config/constants')
 
 class InterviewService {
   async saveInterviewSession(syncKey, interview) {
@@ -119,4 +119,4 @@ class InterviewService {
   }
 }
 
-export default new InterviewService()
+module.exports = new InterviewService()

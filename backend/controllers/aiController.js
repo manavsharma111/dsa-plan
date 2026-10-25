@@ -1,5 +1,5 @@
-import aiService from '../services/aiService.js'
-import { APP_CONSTANTS } from '../config/constants.js'
+const aiService = require('../services/aiService')
+const { APP_CONSTANTS } = require('../config/constants')
 
 class AiController {
   async review(req, res, next) {
@@ -22,4 +22,4 @@ class AiController {
   }
 }
 
-export default new AiController()
+module.exports = new AiController()

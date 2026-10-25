@@ -1,7 +1,7 @@
-import { connectDB, isDbConnected } from '../config/db.js'
-import { APP_CONSTANTS } from '../config/constants.js'
+const { connectDB, isDbConnected } = require('../config/db')
+const { APP_CONSTANTS } = require('../config/constants')
 
-export async function dbCheck(req, res, next) {
+async function dbCheck(req, res, next) {
   try {
     if (!isDbConnected()) {
       await connectDB()
@@ -16,3 +16,5 @@ export async function dbCheck(req, res, next) {
     })
   }
 }
+
+module.exports = { dbCheck }

@@ -1,5 +1,5 @@
-import express from 'express'
-import interviewController from '../controllers/interviewController.js'
+const express = require('express')
+const interviewController = require('../controllers/interviewController')
 
 const router = express.Router()
 
@@ -15,4 +15,4 @@ router.get('/:id', interviewController.getById)
 // DELETE /api/interviews/:id - Delete interview session by id
 router.delete('/:id', interviewController.remove)
 
-export default router
+module.exports = router

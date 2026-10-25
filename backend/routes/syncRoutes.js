@@ -1,5 +1,5 @@
-import express from 'express'
-import syncController from '../controllers/syncController.js'
+const express = require('express')
+const syncController = require('../controllers/syncController')
 
 const router = express.Router()
 
@@ -12,4 +12,4 @@ router.post('/push', syncController.push)
 // POST /api/sync/extension-submission - Auto capture from Chrome extension
 router.post('/extension-submission', syncController.extensionSubmission)
 
-export default router
+module.exports = router

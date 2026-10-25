@@ -1,8 +1,8 @@
-import Progress from '../models/Progress.js'
-import Interview from '../models/Interview.js'
-import PatternAnalytics from '../models/PatternAnalytics.js'
-import { APP_CONSTANTS } from '../config/constants.js'
-import { resolveProblem } from '../config/problemCatalog.js'
+const Progress = require('../models/Progress')
+const Interview = require('../models/Interview')
+const PatternAnalytics = require('../models/PatternAnalytics')
+const { APP_CONSTANTS } = require('../config/constants')
+const { resolveProblem } = require('../config/problemCatalog')
 
 class SyncService {
   async pullUserProgress(syncKey) {
@@ -133,36 +133,47 @@ class SyncService {
     if (canonicalId) solved[canonicalId] = true
     if (problemSlug) solved[problemSlug] = true
 
+    // Solve independence is marked as 'unverified' unless user explicitly recorded it
     if (!mastery[targetKey]) {
-      mastery[targetKey] = 'independent'
+      mastery[targetKey] = 'unverified'
     }
     if (canonicalId && !mastery[canonicalId]) {
-      mastery[canonicalId] = 'independent'
+      mastery[canonicalId] = 'unverified'
     }
 
-    const currentRev = (canonicalId && revision[canonicalId]) || revision[targetKey] || { stage: 1, count: 0 }
-    const nextStage = Math.min((currentRev.stage || 0) + 1, 5)
+    const currentRev = (canonicalId && revision[canonicalId]) || revision[targetKey] || { stage: 0, count: 0 }
+    const previousHistory = Array.isArray(currentRev.history) ? currentRev.history : []
+
+    // Deduplication strategy: if same problem was submitted within the last 60 seconds, treat as duplicate attempt
+    const lastEntry = previousHistory[previousHistory.length - 1]
+    const isDuplicateRecent = lastEntry && (now - (lastEntry.date || 0) < 60000)
+
+    const nextStage = isDuplicateRecent ? (currentRev.stage || 1) : Math.min((currentRev.stage || 0) + 1, 5)
     const daysToAdd = [1, 3, 7, 14, 28][nextStage - 1] || 7
 
     const historyEntry = {
       date: now,
-      stage: currentRev.stage || 1,
+      stage: nextStage,
       outcome: 'extension_auto_capture',
-      timeSpent: runtime,
-      notes: `Auto-captured from ${platform}. Runtime: ${runtime} (${beatsPercentile}). Memory: ${memory}.`,
+      timeSpent: runtime || 'Accepted',
+      notes: `Auto-captured from ${platform} (External Judge Accepted). Runtime: ${runtime || 'N/A'}${beatsPercentile ? ` (${beatsPercentile})` : ''}. Memory: ${memory || 'N/A'}.`,
       codeSnippet: code ? code.slice(0, 10000) : '',
       platform,
     }
 
+    const updatedHistory = isDuplicateRecent
+      ? [...previousHistory.slice(0, -1), historyEntry]
+      : [...previousHistory.slice(-9), historyEntry]
+
     const revPayload = {
       stage: nextStage,
-      count: (currentRev.count || 0) + 1,
+      count: isDuplicateRecent ? currentRev.count : (currentRev.count || 0) + 1,
       lastRevised: now,
       nextDue: now + daysToAdd * 86400000,
       lastOutcome: 'extension_auto',
       codeSnippet: code ? code.slice(0, 10000) : currentRev.codeSnippet || '',
       notes: historyEntry.notes,
-      history: [...(currentRev.history || []).slice(-9), historyEntry],
+      history: updatedHistory,
     }
 
     revision[targetKey] = revPayload
@@ -196,4 +207,4 @@ class SyncService {
   }
 }
 
-export default new SyncService()
+module.exports = new SyncService()

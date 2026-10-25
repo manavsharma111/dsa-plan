@@ -1,5 +1,5 @@
-import analyticsService from '../services/analyticsService.js'
-import { APP_CONSTANTS } from '../config/constants.js'
+const analyticsService = require('../services/analyticsService')
+const { APP_CONSTANTS } = require('../config/constants')
 
 class AnalyticsController {
   async save(req, res, next) {
@@ -42,4 +42,4 @@ class AnalyticsController {
   }
 }
 
-export default new AnalyticsController()
+module.exports = new AnalyticsController()

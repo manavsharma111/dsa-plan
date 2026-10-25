@@ -1,5 +1,5 @@
-import interviewService from '../services/interviewService.js'
-import { APP_CONSTANTS } from '../config/constants.js'
+const interviewService = require('../services/interviewService')
+const { APP_CONSTANTS } = require('../config/constants')
 
 class InterviewController {
   async save(req, res, next) {
@@ -63,4 +63,4 @@ class InterviewController {
   }
 }
 
-export default new InterviewController()
+module.exports = new InterviewController()

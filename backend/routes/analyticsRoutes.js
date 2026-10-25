@@ -1,5 +1,5 @@
-import express from 'express'
-import analyticsController from '../controllers/analyticsController.js'
+const express = require('express')
+const analyticsController = require('../controllers/analyticsController')
 
 const router = express.Router()
 
@@ -9,4 +9,4 @@ router.post('/patterns', analyticsController.save)
 // GET /api/analytics/patterns - Get pattern metrics matrix
 router.get('/patterns', analyticsController.get)
 
-export default router
+module.exports = router

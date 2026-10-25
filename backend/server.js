@@ -1,12 +1,12 @@
-import express from 'express'
-import cors from 'cors'
-import { ENV } from './config/env.js'
-import { connectDB, disconnectDB, isDbConnected } from './config/db.js'
-import { APP_CONSTANTS } from './config/constants.js'
-import apiRoutes from './routes/apiRoutes.js'
-import { dbCheck } from './middlewares/dbCheck.js'
-import { errorHandler } from './middlewares/errorHandler.js'
-import { requestLogger } from './middlewares/requestLogger.js'
+const express = require('express')
+const cors = require('cors')
+const { ENV } = require('./config/env')
+const { connectDB, disconnectDB, isDbConnected } = require('./config/db')
+const { APP_CONSTANTS } = require('./config/constants')
+const apiRoutes = require('./routes/apiRoutes')
+const { dbCheck } = require('./middlewares/dbCheck')
+const { errorHandler } = require('./middlewares/errorHandler')
+const { requestLogger } = require('./middlewares/requestLogger')
 
 const app = express()
 app.disable('x-powered-by')
@@ -99,4 +99,4 @@ process.on('SIGTERM', () => handleGracefulShutdown('SIGTERM'))
 
 startServer()
 
-export default app
+module.exports = app

@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+const mongoose = require('mongoose')
 
 const ProgressSchema = new mongoose.Schema(
   {
@@ -31,5 +31,5 @@ const ProgressSchema = new mongoose.Schema(
   }
 )
 
-export default mongoose.models.Progress ||
-  mongoose.model('Progress', ProgressSchema)
+module.exports =
+  mongoose.models.Progress || mongoose.model('Progress', ProgressSchema)

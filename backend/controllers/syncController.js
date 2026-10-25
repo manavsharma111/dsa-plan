@@ -1,5 +1,5 @@
-import syncService from '../services/syncService.js'
-import { APP_CONSTANTS } from '../config/constants.js'
+const syncService = require('../services/syncService')
+const { APP_CONSTANTS } = require('../config/constants')
 
 class SyncController {
   async pull(req, res, next) {
@@ -39,4 +39,4 @@ class SyncController {
   }
 }
 
-export default new SyncController()
+module.exports = new SyncController()
