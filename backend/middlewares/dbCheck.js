@@ -12,7 +12,10 @@ async function dbCheck(req, res, next) {
     return res.status(APP_CONSTANTS.HTTP_STATUS.SERVICE_UNAVAILABLE).json({
       success: false,
       error: 'Database connection unavailable',
-      details: error.message,
+      details:
+        process.env.NODE_ENV === 'production'
+          ? 'Service temporarily unavailable'
+          : error.message,
     })
   }
 }

@@ -17,6 +17,7 @@
     "dotenv": "^18.0.9",
     "express": "^5.3.0",
     "mongoose": "^9.11.4",
+    "nexforge-cli": "^1.1.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-redux": "^9.1.2",

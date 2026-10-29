@@ -479,7 +479,7 @@ PORT=5000
 NODE_ENV=development
 
 # MongoDB Atlas Database URI
-MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/dsa_tracker?retryWrites=true&w=majority
+MONGODB_URI=your_mongodb_connection_string_here
 
 # Frontend URL (for CORS)
 FRONTEND_URI=http://localhost:5173
